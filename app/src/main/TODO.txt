@@ -1,0 +1,31 @@
+Aplikacja ma za zadanie dodawać notatki co do eksloatacji samochodu.
+
+Dane zapisywane:
+-nazwa/marka samochodu przebieg(aktualizowany na bierząco), spalanie
+
+Zasada działania.
+1. Na początku ma być lista samochodów. Widoczny FAB z plusem, który pozwala dodać nowy samochód albo poprostu notatkę.
+ (zastanowić się nad użyciem obu przypadków)
+
+ Jeżeli notatka to tylko nazwa notatki -> potem przechodzi się do okna z polem tekstowym do wprowadzania.
+ Ikona notatki dodawana do głównego menu.
+
+ Jeżeli samochód dodajemy ikonę samochodu, pola mają się pojawić: Marka, model, rocznik, przebieg, pseudonim (zastanowić się),
+  pierwsza rejestracja oraz VIN ale to opcjonalnie
+  - W menu wyświetlamy markę, model, rocznik, obecny przebieg
+
+2. Po kliknięciu w samochód pojawia nam się menu header z danymi samochodu, jego średnie spalanie na podstawie wpisów użytkownika
+ oraz lista notatek pododawanych (TabLayout do rozdzielenia sekcji potrzebnych).
+    Ma być widoczny FAB z plusem do dodania nowego przebiegu, kosztów, oraz zatankowania paliwa.
+
+3. Menu dodawania kosztów:
+    Powinno posiadać nazwę kosztu, kwotę, datę oraz miejsce na zapisanie co kosztowało, najlepije za pomocą dodawanych pól z kwotą z boku.
+
+    W przypadku paliwa dodajemy bottom sheet dialoga z datą, rodzajem paliwa, ilościa i kosztem za to paliwo.
+
+4. Jeżeli się uda to podpiąć wszystko firebase oraz oczywiście sprawdzić ewentualne koszty
+
+Styl apki ma być oparty na material design
+Aplikacja ma wszytskie dane zapisywać w bazie danych lokalnie na urządzeniu, ma mieć koina do DI z bazą itd.
+Zastanowić się nad pobieraniem z REST API jakiegoś darmowego marki i modelu samochodu aby użytkownik mógł wyszukać samemu
+https://api.car2db.com/ tutaj jest jedno, trzeba tylko contibute zrobić

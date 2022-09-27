@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainViewFragment">
+
+    <fragment
+        android:id="@+id/mainViewFragment"
+        android:name="pl.kamilbaziak.carcostnotebook.ui.mainviewfragment.MainViewFragment"
+        android:label="MainViewFragment"
+        tools:layout="@layout/fragment_main_view">
+        <action
+            android:id="@+id/action_mainViewFragment_to_carDetailsFragment"
+            app:destination="@id/carDetailsFragment" />
+        <action
+            android:id="@+id/action_mainViewFragment_to_addNewCarFragment"
+            app:destination="@id/addNewCarFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addNewCarFragment"
+        android:name="pl.kamilbaziak.carcostnotebook.ui.addnewcarfragment.AddNewCarFragment"
+        android:label="AddNewCarFragment"
+        tools:layout="@layout/fragment_add_new_car"/>
+    <fragment
+        android:id="@+id/carDetailsFragment"
+        android:name="pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.CarDetailsFragment"
+        android:label="CarDetailsFragment"
+        tools:layout="@layout/fragment_car_details">
+        <argument
+            android:name="car"
+            app:argType="pl.kamilbaziak.carcostnotebook.model.Car" />
+    </fragment>
+</navigation>
