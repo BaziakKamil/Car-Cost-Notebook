@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/mainViewFragment"
         android:name="pl.kamilbaziak.carcostnotebook.ui.mainviewfragment.MainViewFragment"
-        android:label="MainViewFragment"
+        android:label="@string/app_name"
         tools:layout="@layout/fragment_main_view">
         <action
             android:id="@+id/action_mainViewFragment_to_carDetailsFragment"
@@ -20,15 +20,22 @@
     <fragment
         android:id="@+id/addNewCarFragment"
         android:name="pl.kamilbaziak.carcostnotebook.ui.addnewcarfragment.AddNewCarFragment"
-        android:label="AddNewCarFragment"
-        tools:layout="@layout/fragment_add_new_car"/>
+        android:label="@string/add_new_car"
+        tools:layout="@layout/fragment_add_new_car" />
     <fragment
         android:id="@+id/carDetailsFragment"
         android:name="pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.CarDetailsFragment"
-        android:label="CarDetailsFragment"
+        android:label="{title}"
         tools:layout="@layout/fragment_car_details">
         <argument
             android:name="car"
             app:argType="pl.kamilbaziak.carcostnotebook.model.Car" />
+        <argument
+            android:name="odometer"
+            app:argType="pl.kamilbaziak.carcostnotebook.model.Odometer"
+            app:nullable="true" />
+        <argument
+            android:name="title"
+            app:argType="string" />
     </fragment>
 </navigation>

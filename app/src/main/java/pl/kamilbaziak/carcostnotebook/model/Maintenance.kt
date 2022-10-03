@@ -1,12 +1,32 @@
 package pl.kamilbaziak.carcostnotebook.model
 
-import java.util.*
+import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
+import pl.kamilbaziak.carcostnotebook.Constants.MAINTENANCE_TABLE
+import pl.kamilbaziak.carcostnotebook.empty
+import java.text.DateFormat
 
+@Entity(tableName = MAINTENANCE_TABLE)
+@Parcelize
 data class Maintenance(
-    val id: Int,
+    @PrimaryKey(autoGenerate = true)
+    val id: Long,
+    val carId: Long,
     val name: String,
-    val odometer: String,
-    val date: Date,
-    val dueDate: Date,
+    val odometerId: Long,
+    val created: Long,
+    val dueDate: Long?,
+    val notifyWhenDue: Boolean?,
     val description: String
-)
+): Parcelable {
+    val createdDateFormatted: String
+        get() = DateFormat.getTimeInstance().format(created)
+
+    val dueDateFormatted: String
+        get() =  when(dueDate !=  null) {
+            true -> DateFormat.getTimeInstance().format(dueDate)
+            else -> String.empty()
+        }
+}

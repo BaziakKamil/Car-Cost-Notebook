@@ -30,7 +30,7 @@ class CarAdapter(private val listener: OnItemClickListener): ListAdapter<Car, Ca
                     val position = adapterPosition
                     if(position != RecyclerView.NO_POSITION)
                     {
-                        val task = getItem(position)
+                        listener.onItemClicked(getItem(position))
                     }
                 }
             }
@@ -39,7 +39,10 @@ class CarAdapter(private val listener: OnItemClickListener): ListAdapter<Car, Ca
         fun bind(car: Car)
         {
             binding.apply {
-
+                textCarBrand.text = car.brand
+                textCarModel.text = car.model
+                textCarYear.text = car.year.toString()
+                textCarLicencePlate.text = car.licensePlate
             }
         }
     }

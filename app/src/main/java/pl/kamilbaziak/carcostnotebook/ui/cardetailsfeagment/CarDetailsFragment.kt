@@ -31,6 +31,6 @@ class CarDetailsFragment: Fragment(R.layout.fragment_car_details) {
     ) = binding.run {
         super.onViewCreated(view, savedInstanceState)
 
-        textCarName.text = car.name
+        textCarName.text = "${car.brand} ${car.model}"
     }
 }

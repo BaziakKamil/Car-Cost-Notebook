@@ -6,6 +6,6 @@ import pl.kamilbaziak.carcostnotebook.ui.mainviewfragment.MainViewViewModel
 
 val mainViewModelModule = module {
     viewModel {
-        MainViewViewModel(get())
+        MainViewViewModel(get(), get())
     }
 }

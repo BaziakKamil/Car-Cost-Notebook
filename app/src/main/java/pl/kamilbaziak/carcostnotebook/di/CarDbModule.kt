@@ -16,9 +16,17 @@ val carDatabase = module {
         .fallbackToDestructiveMigration()
         .build()
 
-    fun provideDao(database: CarDatabase) =
-        database.carDao
+    fun provideCarDao(database: CarDatabase) = database.carDao
+
+    fun provideMaintenanceDao(database: CarDatabase) = database.maintenanceDao
+
+    fun provideOdometerDao(database: CarDatabase) = database.odometerDao
+
+    fun provideTankFillDao(database: CarDatabase) = database.tankFillDao
 
     single { provideDatabase(androidApplication()) }
-    single { provideDao(get()) }
+    single { provideCarDao(get()) }
+    single { provideMaintenanceDao(get()) }
+    single { provideOdometerDao(get()) }
+    single { provideTankFillDao(get()) }
 }

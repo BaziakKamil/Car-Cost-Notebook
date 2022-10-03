@@ -5,19 +5,19 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 import pl.kamilbaziak.carcostnotebook.Constants.CAR_TABLE
-import pl.kamilbaziak.carcostnotebook.enums.EngineType
-import pl.kamilbaziak.carcostnotebook.enums.UnitType
+import pl.kamilbaziak.carcostnotebook.enums.EngineEnum
+import pl.kamilbaziak.carcostnotebook.enums.UnitEnum
 
 @Entity(tableName = CAR_TABLE)
 @Parcelize
 data class Car(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
-    val name: String,
+    val id: Long,
     val brand: String,
     val model: String,
-    val engineType: EngineType,
-    val odometer: Double,
-    val unit: UnitType,
+    val year: Int,
+    val licensePlate: String,
+    val engineEnum: EngineEnum,
+    val unit: UnitEnum,
     val description: String
 ): Parcelable

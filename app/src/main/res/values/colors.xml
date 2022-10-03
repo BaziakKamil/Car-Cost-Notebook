@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="fab_icon_color">#FFFFFFFF</color>
+    <color name="tab_background_color">#BFBFBF</color>
 </resources>

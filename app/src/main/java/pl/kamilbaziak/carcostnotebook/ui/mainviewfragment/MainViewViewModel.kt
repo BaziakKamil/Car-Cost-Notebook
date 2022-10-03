@@ -7,10 +7,13 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import pl.kamilbaziak.carcostnotebook.database.CarDao
+import pl.kamilbaziak.carcostnotebook.database.OdometerDao
 import pl.kamilbaziak.carcostnotebook.model.Car
+import pl.kamilbaziak.carcostnotebook.model.Odometer
 
 class MainViewViewModel(
-    private val carDao: CarDao
+    private val carDao: CarDao,
+    private val odometerDao: OdometerDao
 ) : ViewModel() {
 
     private val _cars = carDao.getAllCars()
@@ -18,14 +21,6 @@ class MainViewViewModel(
 
     private val mainViewChannel = Channel<MainViewEvent>()
     val mainViewEvent = mainViewChannel.receiveAsFlow()
-
-    fun addCar(car: Car) = viewModelScope.launch {
-        carDao.addCar(car)
-    }
-
-    fun updateCar(car: Car) = viewModelScope.launch {
-        carDao.updateCar(car)
-    }
 
     fun deleteCar(car: Car) = viewModelScope.launch {
         carDao.deleteCar(car)
@@ -36,12 +31,16 @@ class MainViewViewModel(
     }
 
     fun onCarClick(car: Car) = viewModelScope.launch {
-        mainViewChannel.send(MainViewEvent.NavigateToCarDetails(car))
+        mainViewChannel.send(MainViewEvent.NavigateToCarDetails(car, odometerDao.getCarOdometer(car.id)))
     }
 
     sealed class MainViewEvent {
 
-        data class NavigateToCarDetails(val car: Car): MainViewEvent()
-        object AddnewCar: MainViewEvent()
+        data class NavigateToCarDetails(
+            val car: Car,
+            val odometer: Odometer?
+        ) : MainViewEvent()
+
+        object AddnewCar : MainViewEvent()
     }
 }

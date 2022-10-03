@@ -12,7 +12,7 @@ interface CarDao {
     fun getAllCars(): LiveData<List<Car>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addCar(car: Car)
+    suspend fun addCar(car: Car): Long
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateCar(car: Car)

@@ -5,5 +5,5 @@ import org.koin.dsl.module
 import pl.kamilbaziak.carcostnotebook.ui.addnewcarfragment.AddNewCarViewModel
 
 val addNewCarViewModelModule = module {
-    viewModel { AddNewCarViewModel(get()) }
+    viewModel { AddNewCarViewModel(get(), get()) }
 }

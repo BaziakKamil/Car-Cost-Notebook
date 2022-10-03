@@ -1,12 +1,18 @@
 <resources>
     <string name="app_name">Car Cost Notebook</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="car_name">Car name:</string>
-    <string name="car_brand">Car brand:</string>
-    <string name="car_model">Car model:</string>
-    <string name="engine_type">Engine type:</string>
-    <string name="odometer">Odometer:</string>
-    <string name="insert_car_name">Insert car name</string>
+
+    <string name="car_brand">Car brand</string>
+    <string name="car_model">Car model</string>
+    <string name="engine_type">Engine type</string>
+    <string name="odometer">Odometer</string>
+    <string name="unit">Odometer unit</string>
+    <string name="insert_car_brand">Insert car brand</string>
+    <string name="insert_car_model">Insert car model</string>
     <string name="insert_car_mileage">Insert car mileage</string>
+    <string name="choose_engine_type">Choose engine type</string>
+    <string name="choose_odometer_unit">Choose odometer unit</string>
+    <string name="production_year">Production year</string>
+    <string name="license_plate">License-plate</string>
+    <string name="description">Description</string>
+    <string name="add_new_car">Add new car</string>
 </resources>

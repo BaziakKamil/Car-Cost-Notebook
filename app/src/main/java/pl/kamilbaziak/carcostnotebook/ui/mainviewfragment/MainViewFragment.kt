@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.coroutines.flow.collect
 import org.koin.android.ext.android.inject
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentMainViewBinding
@@ -58,7 +57,11 @@ class MainViewFragment: Fragment(R.layout.fragment_main_view), CarAdapter.OnItem
                             MainViewFragmentDirections.actionMainViewFragmentToAddNewCarFragment()
                         )
                     is MainViewViewModel.MainViewEvent.NavigateToCarDetails -> findNavController().navigate(
-                        MainViewFragmentDirections.actionMainViewFragmentToCarDetailsFragment(event.car)
+                        MainViewFragmentDirections.actionMainViewFragmentToCarDetailsFragment(
+                            event.car,
+                            event.odometer,
+                            "${event.car.brand} ${event.car.model}"
+                        )
                     )
                 }
             }
