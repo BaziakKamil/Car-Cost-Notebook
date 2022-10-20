@@ -20,7 +20,7 @@ data class TankFill(
     val computerReading: Double,
     val petrolStation: String,
     val created: Long
-): Parcelable {
+) : Parcelable {
     val createdDateFormatted: String
         get() = DateFormat.getTimeInstance().format(created)
 }

@@ -20,12 +20,12 @@ data class Maintenance(
     val dueDate: Long?,
     val notifyWhenDue: Boolean?,
     val description: String
-): Parcelable {
+) : Parcelable {
     val createdDateFormatted: String
         get() = DateFormat.getTimeInstance().format(created)
 
     val dueDateFormatted: String
-        get() =  when(dueDate !=  null) {
+        get() = when (dueDate != null) {
             true -> DateFormat.getTimeInstance().format(dueDate)
             else -> String.empty()
         }

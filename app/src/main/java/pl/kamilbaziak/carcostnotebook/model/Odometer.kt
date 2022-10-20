@@ -6,7 +6,6 @@ import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 import pl.kamilbaziak.carcostnotebook.Constants.ODOMETER_TABLE
 import java.text.DateFormat
-import java.util.Date
 
 @Entity(tableName = ODOMETER_TABLE)
 @Parcelize
@@ -16,7 +15,7 @@ data class Odometer(
     val carId: Long,
     val input: Double,
     val created: Long
-): Parcelable {
+) : Parcelable {
     val createdDateFormatted: String
         get() = DateFormat.getTimeInstance().format(created)
 }

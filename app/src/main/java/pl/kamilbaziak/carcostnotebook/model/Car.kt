@@ -20,4 +20,4 @@ data class Car(
     val engineEnum: EngineEnum,
     val unit: UnitEnum,
     val description: String
-): Parcelable
+) : Parcelable

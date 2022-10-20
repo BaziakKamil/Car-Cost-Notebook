@@ -8,36 +8,32 @@ import androidx.recyclerview.widget.RecyclerView
 import pl.kamilbaziak.carcostnotebook.databinding.ViewCarDetailsBinding
 import pl.kamilbaziak.carcostnotebook.model.Car
 
-class CarAdapter(private val listener: OnItemClickListener): ListAdapter<Car, CarAdapter.CarViewHolder>(DiffCallback())
-{
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarViewHolder
-    {
+class CarAdapter(
+    private val listener: OnItemClickListener
+) : ListAdapter<Car, CarAdapter.CarViewHolder>(DiffCallback()) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarViewHolder {
         val binding = ViewCarDetailsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CarViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: CarViewHolder, position: Int)
-    {
+    override fun onBindViewHolder(holder: CarViewHolder, position: Int) {
         val currentItem = getItem(position)
         holder.bind(currentItem)
     }
 
-    inner class CarViewHolder(private val binding: ViewCarDetailsBinding): RecyclerView.ViewHolder(binding.root)
-    {
+    inner class CarViewHolder(private val binding: ViewCarDetailsBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
             binding.apply {
-                root.setOnClickListener{
+                root.setOnClickListener {
                     val position = adapterPosition
-                    if(position != RecyclerView.NO_POSITION)
-                    {
+                    if (position != RecyclerView.NO_POSITION) {
                         listener.onItemClicked(getItem(position))
                     }
                 }
             }
         }
 
-        fun bind(car: Car)
-        {
+        fun bind(car: Car) {
             binding.apply {
                 textCarBrand.text = car.brand
                 textCarModel.text = car.model
@@ -47,8 +43,7 @@ class CarAdapter(private val listener: OnItemClickListener): ListAdapter<Car, Ca
         }
     }
 
-    class DiffCallback: DiffUtil.ItemCallback<Car>()
-    {
+    class DiffCallback : DiffUtil.ItemCallback<Car>() {
         override fun areItemsTheSame(oldItem: Car, newItem: Car) =
             oldItem.id == newItem.id
 
@@ -56,7 +51,7 @@ class CarAdapter(private val listener: OnItemClickListener): ListAdapter<Car, Ca
             oldItem == newItem
     }
 
-    interface OnItemClickListener{
+    interface OnItemClickListener {
         fun onItemClicked(car: Car)
     }
 }

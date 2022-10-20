@@ -7,7 +7,7 @@ import pl.kamilbaziak.carcostnotebook.di.addNewCarViewModelModule
 import pl.kamilbaziak.carcostnotebook.di.carDatabase
 import pl.kamilbaziak.carcostnotebook.di.mainViewModelModule
 
-class MainApplication: Application() {
+class MainApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()

@@ -13,7 +13,7 @@ import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentMainViewBinding
 import pl.kamilbaziak.carcostnotebook.model.Car
 
-class MainViewFragment: Fragment(R.layout.fragment_main_view), CarAdapter.OnItemClickListener {
+class MainViewFragment : Fragment(R.layout.fragment_main_view), CarAdapter.OnItemClickListener {
 
     private val viewModel: MainViewViewModel by inject()
     private val binding: FragmentMainViewBinding by lazy {
@@ -32,7 +32,7 @@ class MainViewFragment: Fragment(R.layout.fragment_main_view), CarAdapter.OnItem
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?
-    )  = binding.run {
+    ) = binding.run {
         super.onViewCreated(view, savedInstanceState)
 
         recycler.apply {
@@ -51,7 +51,7 @@ class MainViewFragment: Fragment(R.layout.fragment_main_view), CarAdapter.OnItem
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.mainViewEvent.collect { event ->
-                when(event) {
+                when (event) {
                     MainViewViewModel.MainViewEvent.AddnewCar ->
                         findNavController().navigate(
                             MainViewFragmentDirections.actionMainViewFragmentToAddNewCarFragment()

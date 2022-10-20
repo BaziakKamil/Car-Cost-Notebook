@@ -9,7 +9,7 @@ import androidx.navigation.fragment.navArgs
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentCarDetailsBinding
 
-class CarDetailsFragment: Fragment(R.layout.fragment_car_details) {
+class CarDetailsFragment : Fragment(R.layout.fragment_car_details) {
 
     private val args: CarDetailsFragmentArgs by navArgs()
     private val car by lazy {

@@ -10,7 +10,6 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
-import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
 import org.koin.android.ext.android.inject
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentAddNewCarBinding
@@ -48,17 +47,21 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car) {
     ) = binding.run {
         super.onViewCreated(view, savedInstanceState)
 
-        (textInputEngineType.editText as MaterialAutoCompleteTextView).setSimpleItems(buildList {
-            EngineEnum.values().map {
-                add(it.name)
-            }
-        }.toTypedArray())
+        (textInputEngineType.editText as MaterialAutoCompleteTextView).setSimpleItems(
+            buildList {
+                EngineEnum.values().map {
+                    add(it.name)
+                }
+            }.toTypedArray()
+        )
 
-        (textInputUnit.editText as MaterialAutoCompleteTextView).setSimpleItems(buildList {
-            UnitEnum.values().map {
-                add(it.name)
-            }
-        }.toTypedArray())
+        (textInputUnit.editText as MaterialAutoCompleteTextView).setSimpleItems(
+            buildList {
+                UnitEnum.values().map {
+                    add(it.name)
+                }
+            }.toTypedArray()
+        )
 
         fabAddCar.setOnClickListener {
             saveCar()
