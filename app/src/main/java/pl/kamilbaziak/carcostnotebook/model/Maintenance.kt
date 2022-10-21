@@ -15,6 +15,7 @@ data class Maintenance(
     val id: Long,
     val carId: Long,
     val name: String,
+    val price: Double?,
     val odometerId: Long,
     val created: Long,
     val dueDate: Long?,

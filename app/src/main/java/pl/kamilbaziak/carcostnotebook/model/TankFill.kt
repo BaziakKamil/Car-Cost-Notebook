@@ -16,6 +16,7 @@ data class TankFill(
     val carId: Long,
     val petrolEnum: PetrolEnum,
     val quantity: Int,
+    val petrolPrice: Double,
     val odometerId: Long,
     val computerReading: Double,
     val petrolStation: String,

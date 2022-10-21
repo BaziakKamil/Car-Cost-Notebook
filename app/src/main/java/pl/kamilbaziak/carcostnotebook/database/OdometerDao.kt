@@ -3,7 +3,6 @@ package pl.kamilbaziak.carcostnotebook.database
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import pl.kamilbaziak.carcostnotebook.Constants
-import pl.kamilbaziak.carcostnotebook.model.Car
 import pl.kamilbaziak.carcostnotebook.model.Odometer
 
 @Dao

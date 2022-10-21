@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 import pl.kamilbaziak.carcostnotebook.Constants.CAR_TABLE
 import pl.kamilbaziak.carcostnotebook.enums.EngineEnum
+import pl.kamilbaziak.carcostnotebook.enums.PetrolUnitEnum
 import pl.kamilbaziak.carcostnotebook.enums.UnitEnum
 
 @Entity(tableName = CAR_TABLE)
@@ -18,6 +19,7 @@ data class Car(
     val year: Int,
     val licensePlate: String,
     val engineEnum: EngineEnum,
+    val petrolUnit: PetrolUnitEnum,
     val unit: UnitEnum,
     val description: String
 ) : Parcelable

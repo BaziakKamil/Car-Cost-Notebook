@@ -10,4 +10,7 @@
 
     <color name="fab_icon_color">#FFFFFFFF</color>
     <color name="tab_background_color">#BFBFBF</color>
+    <color name="icons_background_color">#BFBFBF</color>
+    <color name="text_color">#0B0B0B</color>
+    <color name="text_caption_color">#2C2C2C</color>
 </resources>

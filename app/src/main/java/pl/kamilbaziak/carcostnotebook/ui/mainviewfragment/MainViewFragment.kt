@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -43,6 +44,7 @@ class MainViewFragment : Fragment(R.layout.fragment_main_view), CarAdapter.OnIte
 
         viewModel.cars.observe(viewLifecycleOwner) {
             adapter.submitList(it)
+            noCarView.root.isVisible = it.isEmpty()
         }
 
         fabAddCar.setOnClickListener {
