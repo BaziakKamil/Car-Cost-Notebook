@@ -6,13 +6,14 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import pl.kamilbaziak.carcostnotebook.databinding.ViewCarDetailsBinding
+import pl.kamilbaziak.carcostnotebook.databinding.ViewMainViewRowBinding
 import pl.kamilbaziak.carcostnotebook.model.Car
 
 class CarAdapter(
     private val listener: OnItemClickListener
 ) : ListAdapter<Car, CarAdapter.CarViewHolder>(DiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarViewHolder {
-        val binding = ViewCarDetailsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ViewMainViewRowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CarViewHolder(binding)
     }
 
@@ -21,7 +22,7 @@ class CarAdapter(
         holder.bind(currentItem)
     }
 
-    inner class CarViewHolder(private val binding: ViewCarDetailsBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class CarViewHolder(private val binding: ViewMainViewRowBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
             binding.apply {
                 root.setOnClickListener {

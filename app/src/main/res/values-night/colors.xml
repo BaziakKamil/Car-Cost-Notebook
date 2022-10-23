@@ -6,5 +6,6 @@
     <color name="icons_background_color">#222222</color>
     <color name="text_color">#F0F0F0</color>
     <color name="text_caption_color">#B5B5B5</color>
+    <color name="car_background_color">#B4252525</color>
 
 </resources>
