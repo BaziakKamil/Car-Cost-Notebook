@@ -11,8 +11,11 @@ interface OdometerDao {
     @Query("SELECT * FROM ${Constants.ODOMETER_TABLE}")
     fun getOdometerData(): LiveData<List<Odometer>>
 
+    @Query("SELECT * FROM ${Constants.ODOMETER_TABLE} WHERE carId = :carId")
+    fun getOdometerForCar(carId: Long): LiveData<List<Odometer>>
+
     @Query("SELECT * FROM ${Constants.ODOMETER_TABLE} WHERE carId = :carId ORDER BY created DESC LIMIT 1")
-    suspend fun getCarOdometer(carId: Long): Odometer?
+    suspend fun getLastCarOdometer(carId: Long): Odometer?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addOdometer(odometer: Odometer)

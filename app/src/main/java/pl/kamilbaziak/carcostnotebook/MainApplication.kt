@@ -3,9 +3,8 @@ package pl.kamilbaziak.carcostnotebook
 import android.app.Application
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
-import pl.kamilbaziak.carcostnotebook.di.addNewCarViewModelModule
 import pl.kamilbaziak.carcostnotebook.di.carDatabase
-import pl.kamilbaziak.carcostnotebook.di.mainViewModelModule
+import pl.kamilbaziak.carcostnotebook.di.viewModelsModule
 
 class MainApplication : Application() {
 
@@ -15,8 +14,7 @@ class MainApplication : Application() {
             androidContext(this@MainApplication)
             modules(
                 carDatabase,
-                mainViewModelModule,
-                addNewCarViewModelModule
+                viewModelsModule
             )
         }
     }

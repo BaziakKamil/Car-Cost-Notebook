@@ -14,12 +14,11 @@ import org.koin.android.ext.android.inject
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentAddNewCarBinding
 import pl.kamilbaziak.carcostnotebook.enums.EngineEnum
-import pl.kamilbaziak.carcostnotebook.enums.PetrolEnum
 import pl.kamilbaziak.carcostnotebook.enums.PetrolUnitEnum
 import pl.kamilbaziak.carcostnotebook.enums.UnitEnum
 import pl.kamilbaziak.carcostnotebook.model.Car
 
-class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car) {
+class AddNewCarFragment : Fragment() {
 
     private val binding by lazy {
         FragmentAddNewCarBinding.inflate(layoutInflater)

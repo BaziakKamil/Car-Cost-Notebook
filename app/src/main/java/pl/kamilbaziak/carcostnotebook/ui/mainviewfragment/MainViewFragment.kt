@@ -14,7 +14,7 @@ import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentMainViewBinding
 import pl.kamilbaziak.carcostnotebook.model.Car
 
-class MainViewFragment : Fragment(R.layout.fragment_main_view), CarAdapter.OnItemClickListener {
+class MainViewFragment : Fragment(), CarAdapter.OnItemClickListener {
 
     private val viewModel: MainViewViewModel by inject()
     private val binding: FragmentMainViewBinding by lazy {

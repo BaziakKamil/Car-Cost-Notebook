@@ -3,6 +3,7 @@
 
     <string name="car_brand">Car brand</string>
     <string name="car_model">Car model</string>
+    <string name="petrol">Petrol</string>
     <string name="petrol_type">Petrol type</string>
     <string name="petrol_unit">Petrol unit</string>
     <string name="odometer">Odometer</string>
@@ -19,6 +20,8 @@
     <string name="add_new_car">Add new car</string>
     <string name="no_car_added_yet">No car added yet</string>
     <string name="add">Add</string>
-    <string name="add_maintenance">Maintenance</string>
-    <string name="add_odometer_reading">Odometer reading</string>
+    <string name="petrol_fill">Petrol fill</string>
+    <string name="maintenance">Maintenance</string>
+    <string name="odometer_reading">Odometer reading</string>
+    <string name="add_odometer_reading">Add odometer reading</string>
 </resources>
