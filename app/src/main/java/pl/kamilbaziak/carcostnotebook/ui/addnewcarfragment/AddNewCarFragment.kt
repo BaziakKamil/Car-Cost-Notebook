@@ -11,6 +11,9 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
 import org.koin.android.ext.android.inject
+import pl.kamilbaziak.carcostnotebook.EnumUtils.getEngineTypeFromName
+import pl.kamilbaziak.carcostnotebook.EnumUtils.getPetrolUnitFromName
+import pl.kamilbaziak.carcostnotebook.EnumUtils.getUnitTypeFromName
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentAddNewCarBinding
 import pl.kamilbaziak.carcostnotebook.enums.EngineEnum
@@ -148,21 +151,6 @@ class AddNewCarFragment : Fragment() {
         view: MaterialAutoCompleteTextView,
         list: List<String>
     ) = view.setSimpleItems(list.toTypedArray())
-
-    private fun getEngineTypeFromName(name: String): EngineEnum =
-        EngineEnum.values().find {
-            it.name == name
-        }!!
-
-    private fun getPetrolUnitFromName(name: String): PetrolUnitEnum =
-        PetrolUnitEnum.values().find {
-            it.name == name
-        }!!
-
-    private fun getUnitTypeFromName(name: String): UnitEnum =
-        UnitEnum.values().find {
-            it.name == name
-        }!!
 
     private fun showSnackbar(message: String) =
         Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG)

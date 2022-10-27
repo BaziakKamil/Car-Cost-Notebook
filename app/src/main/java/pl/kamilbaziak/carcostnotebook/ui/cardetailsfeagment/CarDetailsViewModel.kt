@@ -1,4 +1,4 @@
-package pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.petroltab
+package pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment
 
 import androidx.lifecycle.ViewModel
 import pl.kamilbaziak.carcostnotebook.database.OdometerDao

@@ -32,7 +32,11 @@ class CarDetailsFragment : Fragment() {
     private val viewPagerAdapter by lazy {
         ViewPagerAdapter(childFragmentManager, lifecycle).apply {
             addFragment(PetrolFragment(), getString(R.string.petrol), R.drawable.ic_petrol)
-            addFragment(OdometerFragment(), getString(R.string.odometer), R.drawable.ic_odometer)
+            addFragment(
+                OdometerFragment.newInstance(car.id, car.unit),
+                getString(R.string.odometer),
+                R.drawable.ic_odometer
+            )
             addFragment(MaintenanceFragment(), getString(R.string.maintenance), R.drawable.ic_maintenance)
         }
     }

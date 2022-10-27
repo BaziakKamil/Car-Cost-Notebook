@@ -14,6 +14,10 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.kamilbaziak.carcostnotebook.databinding.DialogOdometerBinding
+import pl.kamilbaziak.carcostnotebook.hasLetters
+import pl.kamilbaziak.carcostnotebook.model.Odometer
+import java.util.Date
+import java.util.Locale
 
 class OdometerDialog : BottomSheetDialogFragment() {
 
@@ -34,16 +38,6 @@ class OdometerDialog : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = binding.run {
         super.onViewCreated(view, savedInstanceState)
 
-        textInputOdometer.editText?.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                buttonDone.isActivated = !s.isNullOrEmpty()
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        })
-
         textInputCalendar.editText?.setOnClickListener {
             MaterialDatePicker.Builder.datePicker()
                 .setTitleText("Select date")
@@ -51,14 +45,27 @@ class OdometerDialog : BottomSheetDialogFragment() {
                 .show(childFragmentManager, "TTT")
         }
 
-        buttonDone.setOnClickListener { dismiss() }
+        buttonDone.setOnClickListener {
+            validate(textInputOdometer.editText?.text.toString())
+        }
         buttonCancel.setOnClickListener { dismiss() }
         imageClose.setOnClickListener { dismiss() }
     }
 
+    private fun validate(odometer: String?) {
+        if(odometer.isNullOrEmpty()) {
+            return
+        }
+        if(odometer.hasLetters()) {
+            return
+        }
+        viewModel.addOdometer(Odometer(0, carId!!, odometer.toDouble(), Date().time))
+        dismiss()
+    }
+
     companion object {
         const val TAG = "OdometerDialog.TAG"
-        const val CAR_ID_EXTRA = "CAR_ID_EXTRA"
+        const val CAR_ID_EXTRA = "OdometerDialog.CAR_ID_EXTRA"
 
         fun show(
             fragmentManager: FragmentManager,

@@ -14,4 +14,9 @@
         <item name="strokeColor">@color/icons_background_color</item>
     </style>
 
+    <style name="TextApperance16" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
 </resources>
