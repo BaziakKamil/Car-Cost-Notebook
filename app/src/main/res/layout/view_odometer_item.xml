@@ -1,28 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
-    style="@style/Widget.Material3.CardView.Elevated">
+    app:cardCornerRadius="18dp">
 
-    <TextView
-        android:id="@+id/text_odometer"
-        android:layout_width="wrap_content"
+    <FrameLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:padding="16dp"
-        android:textColor="@color/text_color"
-        style="@style/TextApperance16"
-        tools:text="234590 km"/>
+        android:layout_margin="4dp">
 
-    <TextView
-        android:id="@+id/text_date"
-        android:padding="16dp"
-        style="@style/TextApperance16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        tools:text="26 Maja 2022"/>
-</FrameLayout>
+        <TextView
+            android:id="@+id/text_odometer"
+            style="@style/TextApperance16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:padding="16dp"
+            android:textColor="@color/text_color"
+            tools:text="234590 km" />
+
+        <TextView
+            android:id="@+id/text_date"
+            style="@style/TextApperance16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:padding="16dp"
+            tools:text="26 Maja 2022" />
+    </FrameLayout>
+</androidx.cardview.widget.CardView>

@@ -5,16 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.tabs.TabLayoutMediator
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentCarDetailsBinding
 import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.maintenancetab.MaintenanceFragment
 import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.odometertab.OdometerFragment
-import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.petroltab.PetrolFragment
+import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.petroltab.TankFillFragment
 import pl.kamilbaziak.carcostnotebook.ui.odometerdialog.OdometerDialog
 
 class CarDetailsFragment : Fragment() {
@@ -26,18 +27,29 @@ class CarDetailsFragment : Fragment() {
     private val binding by lazy {
         FragmentCarDetailsBinding.inflate(layoutInflater)
     }
+    private val viewModel: CarDetailsViewModel by viewModel {
+        parametersOf(car.id)
+    }
     private val animFadeIn = AlphaAnimation(0.0f, 1.0f).apply { duration = 300 }
-    private val animFadeOut = AlphaAnimation(1.0f, 0.0f).apply { duration = 80 }
+    private val animFadeOut = AlphaAnimation(1.0f, 0.0f).apply { duration = 50 }
 
     private val viewPagerAdapter by lazy {
         ViewPagerAdapter(childFragmentManager, lifecycle).apply {
-            addFragment(PetrolFragment(), getString(R.string.petrol), R.drawable.ic_petrol)
+            addFragment(
+                TankFillFragment.newInstance(car.id, car.petrolUnit),
+                getString(R.string.petrol),
+                R.drawable.ic_petrol
+            )
             addFragment(
                 OdometerFragment.newInstance(car.id, car.unit),
                 getString(R.string.odometer),
                 R.drawable.ic_odometer
             )
-            addFragment(MaintenanceFragment(), getString(R.string.maintenance), R.drawable.ic_maintenance)
+            addFragment(
+                MaintenanceFragment.newInstance(car.id),
+                getString(R.string.maintenance),
+                R.drawable.ic_maintenance
+            )
         }
     }
 
@@ -68,12 +80,25 @@ class CarDetailsFragment : Fragment() {
         }
 
         fabAddContainer.fabAddOdometer.setOnClickListener {
-            Toast.makeText(requireContext(), "asasa", Toast.LENGTH_LONG).show()
             OdometerDialog.show(childFragmentManager, car.id)
             extendAddFab(false)
         }
 
-        textCarName.text = "${car.brand} ${car.model}"
+        viewModel.apply {
+            tankFillCount.observe(viewLifecycleOwner) {
+                tabLayout.getTabAt(0)!!.orCreateBadge.number = it.size
+            }
+
+            odometerCount.observe(viewLifecycleOwner) {
+                tabLayout.getTabAt(1)!!.orCreateBadge.number = it.size
+            }
+
+            maintenanceCount.observe(viewLifecycleOwner) {
+                tabLayout.getTabAt(2)!!.orCreateBadge.number = it.size
+            }
+        }
+
+        return@run
     }
 
     private fun extendAddFab(extend: Boolean) = binding.run {
@@ -85,7 +110,7 @@ class CarDetailsFragment : Fragment() {
                 true -> {
                     textMaintenance.startAnimation(animFadeIn)
                     textAddOdometer.startAnimation(animFadeIn)
-                    textAddOdometer.startAnimation(animFadeIn)
+                    textPetrol.startAnimation(animFadeIn)
                     fabAdd.extend()
                     fabAddMaintenance.show()
                     fabAddOdometer.show()

@@ -1,5 +1,6 @@
 package pl.kamilbaziak.carcostnotebook
 
+import pl.kamilbaziak.carcostnotebook.enums.PetrolUnitEnum
 import pl.kamilbaziak.carcostnotebook.enums.UnitEnum
 
 private const val EMPTY = ""
@@ -15,7 +16,18 @@ fun String.hasLetters(): Boolean {
     }
     return false
 }
-fun UnitEnum.shortcut(): String = when(this) {
+
+fun UnitEnum.shortcut(): String = when (this) {
     UnitEnum.Kilometers -> "km"
     UnitEnum.Miles -> "mi"
 }
+
+fun PetrolUnitEnum.shortcut(): String = when (this) {
+    PetrolUnitEnum.Liter -> "l"
+    PetrolUnitEnum.Galon -> "gal"
+    PetrolUnitEnum.kWh -> "kWh"
+    PetrolUnitEnum.kg -> "kg"
+}
+
+fun Long.toDate(): String = DateUtils.formatDateFromLong(this)
+fun Long.toTime(): String = DateUtils.formatTimeFromLong(this)

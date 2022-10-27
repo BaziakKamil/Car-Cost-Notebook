@@ -1,23 +1,22 @@
 package pl.kamilbaziak.carcostnotebook.ui.odometerdialog
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.datepicker.MaterialStyledDatePickerDialog
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.databinding.DialogOdometerBinding
 import pl.kamilbaziak.carcostnotebook.hasLetters
 import pl.kamilbaziak.carcostnotebook.model.Odometer
+import pl.kamilbaziak.carcostnotebook.toDate
 import java.util.Date
-import java.util.Locale
 
 class OdometerDialog : BottomSheetDialogFragment() {
 
@@ -28,6 +27,9 @@ class OdometerDialog : BottomSheetDialogFragment() {
         arguments?.getLong(CAR_ID_EXTRA)
     }
     private val viewModel: OdometerDialogViewModel by inject()
+    private val dateDialog = MaterialDatePicker.Builder.datePicker()
+        .setTitleText(R.string.choose_date)
+        .build()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,11 +40,16 @@ class OdometerDialog : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = binding.run {
         super.onViewCreated(view, savedInstanceState)
 
+        dateDialog.addOnPositiveButtonClickListener {
+            viewModel.changePickedDate(it)
+        }
+
         textInputCalendar.editText?.setOnClickListener {
-            MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Select date")
-                .build()
-                .show(childFragmentManager, "TTT")
+            dateDialog.show(childFragmentManager, DATE_PICKER_TAG)
+        }
+
+        viewModel.pickedDate.observe(viewLifecycleOwner) {
+            textInputCalendar.editText?.setText(it.toDate())
         }
 
         buttonDone.setOnClickListener {
@@ -53,18 +60,26 @@ class OdometerDialog : BottomSheetDialogFragment() {
     }
 
     private fun validate(odometer: String?) {
-        if(odometer.isNullOrEmpty()) {
+        if (odometer.isNullOrEmpty()) {
             return
         }
-        if(odometer.hasLetters()) {
+        if (odometer.hasLetters()) {
             return
         }
-        viewModel.addOdometer(Odometer(0, carId!!, odometer.toDouble(), Date().time))
+        viewModel.addOdometer(
+            Odometer(
+                0,
+                carId!!,
+                odometer.toDouble(),
+                viewModel.pickedDate.value ?: Date().time
+            )
+        )
         dismiss()
     }
 
     companion object {
         const val TAG = "OdometerDialog.TAG"
+        const val DATE_PICKER_TAG = "OdometerDialog.DATE_PICKER_TAG"
         const val CAR_ID_EXTRA = "OdometerDialog.CAR_ID_EXTRA"
 
         fun show(

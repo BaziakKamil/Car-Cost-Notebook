@@ -24,4 +24,8 @@
     <string name="maintenance">Maintenance</string>
     <string name="odometer_reading">Odometer reading</string>
     <string name="add_odometer_reading">Add odometer reading</string>
+    <string name="odometer_item_value">%.1f %.2s</string>
+    <string name="choose_date">Choose date</string>
+    <string name="done">Done</string>
+    <string name="cancel">Cancel</string>
 </resources>

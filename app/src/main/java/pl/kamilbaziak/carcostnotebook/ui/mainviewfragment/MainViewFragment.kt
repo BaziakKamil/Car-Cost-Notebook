@@ -62,7 +62,7 @@ class MainViewFragment : Fragment(), CarAdapter.OnItemClickListener {
                         MainViewFragmentDirections.actionMainViewFragmentToCarDetailsFragment(
                             event.car,
                             event.odometer,
-                            "${event.car.brand} ${event.car.model}"
+                            "${event.car.brand} ${event.car.model} ${event.car.year}"
                         )
                     )
                 }

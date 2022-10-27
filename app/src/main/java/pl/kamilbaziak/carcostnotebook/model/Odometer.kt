@@ -15,7 +15,4 @@ data class Odometer(
     val carId: Long,
     val input: Double,
     val created: Long
-) : Parcelable {
-    val createdDateFormatted: String
-        get() = DateFormat.getTimeInstance().format(created)
-}
+) : Parcelable

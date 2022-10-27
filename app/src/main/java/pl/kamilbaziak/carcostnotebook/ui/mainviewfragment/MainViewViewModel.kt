@@ -31,7 +31,12 @@ class MainViewViewModel(
     }
 
     fun onCarClick(car: Car) = viewModelScope.launch {
-        mainViewChannel.send(MainViewEvent.NavigateToCarDetails(car, odometerDao.getLastCarOdometer(car.id)))
+        mainViewChannel.send(
+            MainViewEvent.NavigateToCarDetails(
+                car,
+                odometerDao.getLastCarOdometer(car.id).value
+            )
+        )
     }
 
     sealed class MainViewEvent {

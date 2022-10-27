@@ -6,4 +6,6 @@ object Constants {
     const val MAINTENANCE_TABLE = "maintenance_table"
     const val TANK_FILL_TABLE = "tank_fill_table"
     const val ODOMETER_TABLE = "odometer_table"
+    const val DATE_FORMAT = "dd MMMM yyyy"
+    const val TIME_FORMAT = "hh:mm"
 }

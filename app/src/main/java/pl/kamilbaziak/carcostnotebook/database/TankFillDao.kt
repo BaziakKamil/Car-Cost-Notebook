@@ -8,8 +8,8 @@ import pl.kamilbaziak.carcostnotebook.model.TankFill
 @Dao
 interface TankFillDao {
 
-    @Query("SELECT * FROM ${Constants.TANK_FILL_TABLE}")
-    fun getTankFillData(): LiveData<List<TankFill>>
+    @Query("SELECT * FROM ${Constants.TANK_FILL_TABLE} WHERE carId = :carId ORDER BY created DESC")
+    fun getTankFillData(carId: Long): LiveData<List<TankFill>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addTankFill(tankFill: TankFill)
