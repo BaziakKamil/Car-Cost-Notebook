@@ -66,6 +66,7 @@ class CarDetailsFragment : Fragment() {
         fabAddContainer.fabAddOdometer.setOnClickListener {
             Toast.makeText(requireContext(), "asasa", Toast.LENGTH_LONG).show()
             OdometerDialog.show(childFragmentManager, car.id)
+            extendAddFab(false)
         }
 
         textCarName.text = "${car.brand} ${car.model}"

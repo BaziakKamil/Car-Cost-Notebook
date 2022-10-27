@@ -9,19 +9,21 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.datepicker.MaterialDatePicker
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.kamilbaziak.carcostnotebook.databinding.DialogOdometerBinding
 
-class OdometerDialog : DialogFragment() {
+class OdometerDialog : BottomSheetDialogFragment() {
 
     private val binding by lazy {
         DialogOdometerBinding.inflate(layoutInflater)
     }
-    private val odometerDialogViewModel: OdometerDialogViewModel by viewModel()
     private val carId by lazy {
         arguments?.getLong(CAR_ID_EXTRA)
     }
+    private val viewModel: OdometerDialogViewModel by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,7 +35,9 @@ class OdometerDialog : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         textInputOdometer.editText?.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) { buttonDone.isActivated = !s.isNullOrEmpty() }
+            override fun afterTextChanged(s: Editable?) {
+                buttonDone.isActivated = !s.isNullOrEmpty()
+            }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -49,6 +53,7 @@ class OdometerDialog : DialogFragment() {
 
         buttonDone.setOnClickListener { dismiss() }
         buttonCancel.setOnClickListener { dismiss() }
+        imageClose.setOnClickListener { dismiss() }
     }
 
     companion object {
@@ -58,13 +63,8 @@ class OdometerDialog : DialogFragment() {
         fun show(
             fragmentManager: FragmentManager,
             carId: Long
-        ) {
-            OdometerDialog().also {
-                it.arguments = bundleOf(CAR_ID_EXTRA to carId)
-            }.show(
-                fragmentManager,
-                TAG
-            )
-        }
+        ) = OdometerDialog().apply {
+            arguments = bundleOf(CAR_ID_EXTRA to carId)
+        }.show(fragmentManager, TAG)
     }
 }

@@ -11,6 +11,6 @@ val viewModelsModule = module {
 
     viewModel { MainViewViewModel(get(), get()) }
     viewModel { AddNewCarViewModel(get(), get()) }
-    viewModel { OdometerDialogViewModel(get()) }
     viewModel { CarDetailsViewModel(get()) }
+    viewModel { OdometerDialogViewModel(get()) }
 }
