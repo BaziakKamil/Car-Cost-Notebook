@@ -18,7 +18,7 @@ interface OdometerDao {
     fun getLastCarOdometer(carId: Long): LiveData<Odometer?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addOdometer(odometer: Odometer)
+    suspend fun addOdometer(odometer: Odometer): Long
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateOdometer(odometer: Odometer)

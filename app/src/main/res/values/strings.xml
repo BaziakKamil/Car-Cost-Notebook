@@ -28,4 +28,14 @@
     <string name="choose_date">Choose date</string>
     <string name="done">Done</string>
     <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="add_tank_fill_details">Add tank fill details</string>
+    <string name="petrol_quantity">Petrol quantity</string>
+    <string name="computer_l_km">Computer l/km</string>
+    <string name="petrol_price">Petrol price</string>
+    <string name="petrol_station">Petrol station</string>
+    <string name="name">Name</string>
+    <string name="price">Price</string>
+    <string name="due_date">Due date</string>
+    <string name="choose_due_date">Choose due date</string>
 </resources>

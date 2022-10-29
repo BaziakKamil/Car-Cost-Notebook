@@ -8,9 +8,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.datepicker.MaterialStyledDatePickerDialog
 import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.databinding.DialogOdometerBinding
 import pl.kamilbaziak.carcostnotebook.hasLetters
@@ -59,6 +57,7 @@ class OdometerDialog : BottomSheetDialogFragment() {
         imageClose.setOnClickListener { dismiss() }
     }
 
+    //todo validation with snackbar messages
     private fun validate(odometer: String?) {
         if (odometer.isNullOrEmpty()) {
             return

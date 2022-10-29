@@ -16,7 +16,9 @@ import pl.kamilbaziak.carcostnotebook.databinding.FragmentCarDetailsBinding
 import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.maintenancetab.MaintenanceFragment
 import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.odometertab.OdometerFragment
 import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.petroltab.TankFillFragment
+import pl.kamilbaziak.carcostnotebook.ui.maintenancedialog.MaintenanceDialog
 import pl.kamilbaziak.carcostnotebook.ui.odometerdialog.OdometerDialog
+import pl.kamilbaziak.carcostnotebook.ui.tankfilldialog.TankFillDialog
 
 class CarDetailsFragment : Fragment() {
 
@@ -79,9 +81,21 @@ class CarDetailsFragment : Fragment() {
             extendAddFab(!fabAddContainer.fabAdd.isExtended)
         }
 
-        fabAddContainer.fabAddOdometer.setOnClickListener {
-            OdometerDialog.show(childFragmentManager, car.id)
-            extendAddFab(false)
+        fabAddContainer.apply {
+            fabAddOdometer.setOnClickListener {
+                OdometerDialog.show(childFragmentManager, car.id)
+                extendAddFab(false)
+            }
+
+            fabAddMaintenance.setOnClickListener {
+                MaintenanceDialog.show(childFragmentManager, car.id)
+                extendAddFab(false)
+            }
+
+            fabAddPetrol.setOnClickListener {
+                TankFillDialog.show(childFragmentManager, car.id)
+                extendAddFab(false)
+            }
         }
 
         viewModel.apply {

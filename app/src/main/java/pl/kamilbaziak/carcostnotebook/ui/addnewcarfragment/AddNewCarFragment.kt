@@ -14,6 +14,7 @@ import org.koin.android.ext.android.inject
 import pl.kamilbaziak.carcostnotebook.EnumUtils.getEngineTypeFromName
 import pl.kamilbaziak.carcostnotebook.EnumUtils.getPetrolUnitFromName
 import pl.kamilbaziak.carcostnotebook.EnumUtils.getUnitTypeFromName
+import pl.kamilbaziak.carcostnotebook.EnumUtils.setEnumValuesToMaterialSpinner
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentAddNewCarBinding
 import pl.kamilbaziak.carcostnotebook.enums.EngineEnum
@@ -146,11 +147,6 @@ class AddNewCarFragment : Fragment() {
         textInputPetrolUnit.error = null
         textInputUnit.error = null
     }
-
-    private fun setEnumValuesToMaterialSpinner(
-        view: MaterialAutoCompleteTextView,
-        list: List<String>
-    ) = view.setSimpleItems(list.toTypedArray())
 
     private fun showSnackbar(message: String) =
         Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG)

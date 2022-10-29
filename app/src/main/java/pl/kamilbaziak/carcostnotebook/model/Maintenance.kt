@@ -16,9 +16,9 @@ data class Maintenance(
     val carId: Long,
     val name: String,
     val price: Double?,
-    val odometerId: Long,
+    val odometerId: Long?,
     val created: Long,
     val dueDate: Long?,
     val notifyWhenDue: Boolean?,
-    val description: String
+    val description: String?
 ) : Parcelable

@@ -7,16 +7,20 @@ import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.CarDetailsViewModel
 import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.maintenancetab.MaintenanceViewModel
 import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.odometertab.OdometerViewModel
 import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.petroltab.TankFillViewModel
+import pl.kamilbaziak.carcostnotebook.ui.maintenancedialog.MaintenanceDialogViewModel
 import pl.kamilbaziak.carcostnotebook.ui.mainviewfragment.MainViewViewModel
 import pl.kamilbaziak.carcostnotebook.ui.odometerdialog.OdometerDialogViewModel
+import pl.kamilbaziak.carcostnotebook.ui.tankfilldialog.TankFillDialogViewModel
 
 val viewModelsModule = module {
 
     viewModel { MainViewViewModel(get(), get()) }
     viewModel { AddNewCarViewModel(get(), get()) }
     viewModel { parameters -> CarDetailsViewModel(get(), get(), get(), parameters[0]) }
-    viewModel { OdometerDialogViewModel(get()) }
     viewModel { parameters -> TankFillViewModel(get(), parameters[0]) }
     viewModel { parameters -> OdometerViewModel(get(), parameters[0]) }
     viewModel { parameters -> MaintenanceViewModel(get(), parameters[0]) }
+    viewModel { TankFillDialogViewModel(get(), get()) }
+    viewModel { OdometerDialogViewModel(get()) }
+    viewModel { MaintenanceDialogViewModel(get(), get()) }
 }
