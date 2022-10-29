@@ -154,12 +154,11 @@
         app:layout_constraintStart_toStartOf="parent"
         android:hint="@string/petrol_station"
         app:layout_constraintTop_toBottomOf="@+id/container_odometer_and_computer_reading"
-        app:startIconDrawable="@drawable/ic_date">
+        app:startIconDrawable="@drawable/ic_petrol">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:focusable="false"
             android:inputType="text"
             android:singleLine="true" />
 

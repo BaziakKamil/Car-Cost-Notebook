@@ -50,6 +50,10 @@ class MaintenanceDialog : BottomSheetDialogFragment() {
             dateDialog.show(childFragmentManager, DATE_PICKER_TAG)
         }
 
+        textInputDueDate.editText?.setOnClickListener {
+            dueDateDialog.show(childFragmentManager, DATE_PICKER_TAG)
+        }
+
         viewModel.apply {
             pickedDate.observe(viewLifecycleOwner) {
                 textInputCalendar.editText?.setText(it.toDate())
@@ -97,6 +101,7 @@ class MaintenanceDialog : BottomSheetDialogFragment() {
     companion object {
         const val TAG = "MaintenanceDialog.TAG"
         const val DATE_PICKER_TAG = "MaintenanceDialog.DATE_PICKER_TAG"
+        const val DUE_DATE_PICKER_TAG = "MaintenanceDialog.DUE_DATE_PICKER_TAG"
         const val CAR_ID_EXTRA = "MaintenanceDialog.CAR_ID_EXTRA"
 
         fun show(

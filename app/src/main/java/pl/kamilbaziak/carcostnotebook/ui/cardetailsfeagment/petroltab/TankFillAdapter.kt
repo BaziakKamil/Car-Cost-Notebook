@@ -51,7 +51,7 @@ class TankFillAdapter(
             bindining.apply {
                 textOdometer.text = root.context.getString(
                     R.string.odometer_item_value,
-                    tankFill.quantity,
+                    tankFill.quantity.toDouble(),
                     unit.shortcut()
                 )
                 textDate.text = tankFill.created.toDate()
