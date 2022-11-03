@@ -23,3 +23,5 @@ data class Car(
     val unit: UnitEnum,
     val description: String
 ) : Parcelable
+
+fun Car.name() = "${this.brand} ${this.model}"

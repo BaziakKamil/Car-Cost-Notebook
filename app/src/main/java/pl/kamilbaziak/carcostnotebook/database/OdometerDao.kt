@@ -25,4 +25,7 @@ interface OdometerDao {
 
     @Delete
     suspend fun deleteOdometer(odometer: Odometer)
+
+    @Query("DELETE FROM ${Constants.MAINTENANCE_TABLE} WHERE carId = :carId")
+    suspend fun deleteOdometer(carId: Long)
 }

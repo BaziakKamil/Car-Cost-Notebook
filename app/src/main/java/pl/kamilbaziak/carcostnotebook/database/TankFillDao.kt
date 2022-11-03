@@ -19,4 +19,7 @@ interface TankFillDao {
 
     @Delete
     suspend fun deleteTankFill(tankFill: TankFill)
+
+    @Query("DELETE FROM ${Constants.MAINTENANCE_TABLE} WHERE carId = :carId")
+    suspend fun deleteTankFill(carId: Long)
 }

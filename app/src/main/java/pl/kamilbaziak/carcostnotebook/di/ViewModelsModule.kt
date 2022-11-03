@@ -14,7 +14,7 @@ import pl.kamilbaziak.carcostnotebook.ui.tankfilldialog.TankFillDialogViewModel
 
 val viewModelsModule = module {
 
-    viewModel { MainViewViewModel(get(), get()) }
+    viewModel { MainViewViewModel(get(), get(), get(), get()) }
     viewModel { AddNewCarViewModel(get(), get()) }
     viewModel { parameters -> CarDetailsViewModel(get(), get(), get(), parameters[0]) }
     viewModel { parameters -> TankFillViewModel(get(), parameters[0]) }

@@ -19,4 +19,7 @@ interface MaintenanceDao {
 
     @Delete
     suspend fun deleteMaintenance(maintenance: Maintenance)
+
+    @Query("DELETE FROM ${Constants.MAINTENANCE_TABLE} WHERE carId = :carId")
+    suspend fun deleteMaintenance(carId: Long)
 }

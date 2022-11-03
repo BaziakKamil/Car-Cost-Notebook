@@ -1,5 +1,6 @@
 package pl.kamilbaziak.carcostnotebook.ui.mainviewfragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,19 +10,26 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import org.koin.android.ext.android.inject
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentMainViewBinding
 import pl.kamilbaziak.carcostnotebook.model.Car
+import pl.kamilbaziak.carcostnotebook.model.name
 
-class MainViewFragment : Fragment(), CarAdapter.OnItemClickListener {
+class MainViewFragment : Fragment() {
 
     private val viewModel: MainViewViewModel by inject()
     private val binding: FragmentMainViewBinding by lazy {
         FragmentMainViewBinding.inflate(layoutInflater)
     }
     private val adapter: CarAdapter by lazy {
-        CarAdapter(this)
+        CarAdapter(
+            { viewModel.onCarClick(it) },
+            { viewModel.onCarEdit(it) },
+            { viewModel.onCarDelete(it) }
+        )
     }
 
     override fun onCreateView(
@@ -54,7 +62,7 @@ class MainViewFragment : Fragment(), CarAdapter.OnItemClickListener {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.mainViewEvent.collect { event ->
                 when (event) {
-                    MainViewViewModel.MainViewEvent.AddnewCar ->
+                    MainViewViewModel.MainViewEvent.AddNewCar ->
                         findNavController().navigate(
                             MainViewFragmentDirections.actionMainViewFragmentToAddNewCarFragment()
                         )
@@ -65,6 +73,13 @@ class MainViewFragment : Fragment(), CarAdapter.OnItemClickListener {
                             "${event.car.brand} ${event.car.model} ${event.car.year}"
                         )
                     )
+                    is MainViewViewModel.MainViewEvent.ShowCarEditDialogScreen ->
+                        showSnackbar("${event.car.model} edit mode")
+                    is MainViewViewModel.MainViewEvent.ShowCarDeleteDialogMessage -> {
+                        showDeleteDialog(event.car)
+                    }
+                    is MainViewViewModel.MainViewEvent.ShowDeleteErrorSnackbar ->
+                        showSnackbar(getString(R.string.error_during_delete_process))
                 }
             }
         }
@@ -72,7 +87,25 @@ class MainViewFragment : Fragment(), CarAdapter.OnItemClickListener {
         return@run
     }
 
-    override fun onItemClicked(car: Car) {
-        viewModel.onCarClick(car)
+    @SuppressLint("StringFormatInvalid")
+    private fun showDeleteDialog(car: Car) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(R.string.delete_car, car.name()))
+            .setMessage("This cannot be undone. Are You sure?")
+            .setNegativeButton(R.string.cancel) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setPositiveButton(R.string.accept) { dialog, _ ->
+                viewModel.deleteCar()
+                dialog.dismiss()
+            }
+            .show()
     }
+
+    private fun showSnackbar(message: String) =
+        Snackbar.make(
+            requireView(),
+            message,
+            Snackbar.LENGTH_LONG
+        ).show()
 }

@@ -1,16 +1,24 @@
 package pl.kamilbaziak.carcostnotebook.ui.mainviewfragment
 
+import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.databinding.ViewMainViewItemBinding
 import pl.kamilbaziak.carcostnotebook.model.Car
+import pl.kamilbaziak.carcostnotebook.model.Maintenance
 
 class CarAdapter(
-    private val listener: OnItemClickListener
+    private val adapterClick: (Car) -> Unit,
+    private val editCar: (Car) -> Unit,
+    private val deleteCar: (Car) -> Unit
 ) : ListAdapter<Car, CarAdapter.CarViewHolder>(DiffCallback()) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarViewHolder {
         val binding = ViewMainViewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CarViewHolder(binding)
@@ -22,12 +30,39 @@ class CarAdapter(
     }
 
     inner class CarViewHolder(private val binding: ViewMainViewItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        private val popMenu = PopupMenu(binding.root.context, binding.root).apply {
+            setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.delete -> {
+                        if (adapterPosition != RecyclerView.NO_POSITION) {
+                            deleteCar(getItem(adapterPosition))
+                        }
+                        true
+                    }
+                    R.id.edit -> {
+                        if (adapterPosition != RecyclerView.NO_POSITION) {
+                            editCar(getItem(adapterPosition))
+                        }
+                        true
+                    }
+                    else -> false
+                }
+            }
+            inflate(R.menu.more_menu)
+            gravity = Gravity.END
+        }
+
         init {
             binding.apply {
-                root.setOnClickListener {
-                    val position = adapterPosition
-                    if (position != RecyclerView.NO_POSITION) {
-                        listener.onItemClicked(getItem(position))
+                root.apply {
+                    setOnClickListener {
+                        if (adapterPosition != RecyclerView.NO_POSITION) {
+                            adapterClick(getItem(adapterPosition))
+                        }
+                    }
+                    setOnLongClickListener {
+                        popMenu.show()
+                        true
                     }
                 }
             }
@@ -39,6 +74,7 @@ class CarAdapter(
                 textCarModel.text = car.model
                 textCarYear.text = car.year.toString()
                 textCarLicencePlate.text = car.licensePlate
+                imageMore.setOnClickListener { popMenu.show() }
             }
         }
     }
@@ -49,9 +85,5 @@ class CarAdapter(
 
         override fun areContentsTheSame(oldItem: Car, newItem: Car): Boolean =
             oldItem == newItem
-    }
-
-    interface OnItemClickListener {
-        fun onItemClicked(car: Car)
     }
 }
