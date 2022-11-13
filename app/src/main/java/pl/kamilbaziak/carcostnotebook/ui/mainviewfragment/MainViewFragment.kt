@@ -14,6 +14,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import org.koin.android.ext.android.inject
 import pl.kamilbaziak.carcostnotebook.R
+import pl.kamilbaziak.carcostnotebook.TextUtils
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentMainViewBinding
 import pl.kamilbaziak.carcostnotebook.model.Car
 import pl.kamilbaziak.carcostnotebook.model.name
@@ -74,12 +75,12 @@ class MainViewFragment : Fragment() {
                         )
                     )
                     is MainViewViewModel.MainViewEvent.ShowCarEditDialogScreen ->
-                        showSnackbar("${event.car.model} edit mode")
+                        TextUtils.showSnackbar(requireView(),"${event.car.model} edit mode")
                     is MainViewViewModel.MainViewEvent.ShowCarDeleteDialogMessage -> {
                         showDeleteDialog(event.car)
                     }
                     is MainViewViewModel.MainViewEvent.ShowDeleteErrorSnackbar ->
-                        showSnackbar(getString(R.string.error_during_delete_process))
+                        TextUtils.showSnackbar(requireView(), getString(R.string.error_during_delete_process))
                 }
             }
         }
@@ -91,7 +92,7 @@ class MainViewFragment : Fragment() {
     private fun showDeleteDialog(car: Car) {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(R.string.delete_car, car.name()))
-            .setMessage("This cannot be undone. Are You sure?")
+            .setMessage(getString(R.string.cannot_be_undone))
             .setNegativeButton(R.string.cancel) { dialog, _ ->
                 dialog.dismiss()
             }
@@ -101,11 +102,4 @@ class MainViewFragment : Fragment() {
             }
             .show()
     }
-
-    private fun showSnackbar(message: String) =
-        Snackbar.make(
-            requireView(),
-            message,
-            Snackbar.LENGTH_LONG
-        ).show()
 }

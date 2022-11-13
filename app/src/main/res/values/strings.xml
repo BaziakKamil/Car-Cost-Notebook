@@ -43,4 +43,5 @@
     <string name="error_during_delete_process">Error occurred during delete process</string>
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
+    <string name="cannot_be_undone">This cannot be undone. Are You sure?</string>
 </resources>

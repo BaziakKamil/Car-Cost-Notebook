@@ -7,9 +7,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import pl.kamilbaziak.carcostnotebook.TextUtils
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentMaintenanceBinding
 import pl.kamilbaziak.carcostnotebook.model.Maintenance
 
@@ -39,6 +41,23 @@ class MaintenanceFragment : Fragment() {
             adapter = this@MaintenanceFragment.adapter
             layoutManager = LinearLayoutManager(requireContext())
             setHasFixedSize(false)
+        }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.maintenanceEvent.collect { event ->
+                when (event) {
+                    MaintenanceViewModel.MaintenanceEvent.ShowMaintenanceSavedConfirmationMessage ->
+                        TextUtils.showSnackbar(requireView(), "Maintenance added correctly")
+                    is MaintenanceViewModel.MaintenanceEvent.ShowUndoDeleteMaintenanceMessage ->
+                        TextUtils.showSnackbarWithAction(
+                            requireView(),
+                            "Maintenance ${event.maintenance.name} deleted",
+                            "UNDO"
+                        ) {
+                            viewModel.onUndoDeleteMaintenance(event.maintenance)
+                        }
+                }
+            }
         }
 
         viewModel.maintenanceAll.observe(viewLifecycleOwner) {

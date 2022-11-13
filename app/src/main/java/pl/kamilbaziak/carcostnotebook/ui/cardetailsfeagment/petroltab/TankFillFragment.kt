@@ -7,10 +7,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import pl.kamilbaziak.carcostnotebook.EnumUtils.getPetrolUnitFromName
+import pl.kamilbaziak.carcostnotebook.TextUtils
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentTankFillBinding
 import pl.kamilbaziak.carcostnotebook.enums.PetrolUnitEnum
 import pl.kamilbaziak.carcostnotebook.model.TankFill
@@ -45,6 +47,23 @@ class TankFillFragment : Fragment() {
             adapter = this@TankFillFragment.adapter
             layoutManager = LinearLayoutManager(requireContext())
             setHasFixedSize(false)
+        }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.tankFillEvent.collect { event ->
+                when (event) {
+                    TankFillViewModel.TankFilEvent.ShowTankFillSavedConfirmationMessage ->
+                        TextUtils.showSnackbar(requireView(), "Tank fill added correctly")
+                    is TankFillViewModel.TankFilEvent.ShowUndoDeleteTankFillMessage ->
+                        TextUtils.showSnackbarWithAction(
+                            requireView(),
+                            "Tank fill deleted",
+                            "UNDO"
+                        ) {
+                            viewModel.onUndoDeleteTankFill(event.tankFill)
+                        }
+                }
+            }
         }
 
         viewModel.tankFillAll.observe(viewLifecycleOwner) {
