@@ -1,7 +1,6 @@
 package pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import pl.kamilbaziak.carcostnotebook.database.MaintenanceDao
 import pl.kamilbaziak.carcostnotebook.database.OdometerDao

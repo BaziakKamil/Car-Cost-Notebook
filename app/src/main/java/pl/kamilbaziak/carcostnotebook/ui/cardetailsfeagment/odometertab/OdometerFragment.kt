@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import pl.kamilbaziak.carcostnotebook.EnumUtils.getUnitTypeFromName
+import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.TextUtils
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentOdometerBinding
 import pl.kamilbaziak.carcostnotebook.enums.UnitEnum
@@ -53,12 +54,12 @@ class OdometerFragment : Fragment() {
             viewModel.odometerEvent.collect { event ->
                 when (event) {
                     OdometerViewModel.OdometerEvent.ShowOdometerSavedConfirmationMessage ->
-                        TextUtils.showSnackbar(requireView(), "Odometer added correctly")
+                        TextUtils.showSnackbar(requireView(), getString(R.string.odometer_added_correctly))
                     is OdometerViewModel.OdometerEvent.ShowUndoDeleteOdometerMessage ->
                         TextUtils.showSnackbarWithAction(
                             requireView(),
-                            "Odometer deleted",
-                            "UNDO"
+                            getString(R.string.odometer_deleted),
+                            getString(R.string.undo)
                         ) {
                             viewModel.onUndoDeleteOdometer(event.odometer)
                         }

@@ -5,14 +5,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import pl.kamilbaziak.carcostnotebook.database.CarDao
 import pl.kamilbaziak.carcostnotebook.database.OdometerDao
 import pl.kamilbaziak.carcostnotebook.database.TankFillDao
 import pl.kamilbaziak.carcostnotebook.enums.PetrolEnum
+import pl.kamilbaziak.carcostnotebook.enums.UnitEnum
 import pl.kamilbaziak.carcostnotebook.model.Odometer
 import pl.kamilbaziak.carcostnotebook.model.TankFill
 import java.util.Date
 
 class TankFillDialogViewModel(
+    private val carDao: CarDao,
     private val tankFillDao: TankFillDao,
     private val odometerDao: OdometerDao
 ) : ViewModel() {
@@ -27,11 +30,12 @@ class TankFillDialogViewModel(
     fun addTankFill(
         carId: Long,
         petrolEnum: PetrolEnum,
-        quantity: Int,
+        quantity: Double,
         petrolPrice: Double?,
-        odometer: Double?,
+        distanceFromLastFill: Double?,
+        odometer: Double,
         computerReading: Double?,
-        petrolStation: String?
+        petrolStation: String
     ) = viewModelScope.launch {
         tankFillDao.addTankFill(
             TankFill(
@@ -40,11 +44,16 @@ class TankFillDialogViewModel(
                 petrolEnum,
                 quantity,
                 petrolPrice,
-                odometer?.let {
-                    odometerDao.addOdometer(
-                        Odometer(0, carId, it, pickedDate.value ?: Date().time)
+                distanceFromLastFill,
+                odometerDao.addOdometer(
+                    Odometer(
+                        0,
+                        carId,
+                        odometer,
+                        carDao.getCarById(carId)?.unit ?: UnitEnum.Kilometers,
+                        pickedDate.value ?: Date().time
                     )
-                },
+                ),
                 computerReading,
                 petrolStation,
                 pickedDate.value!!

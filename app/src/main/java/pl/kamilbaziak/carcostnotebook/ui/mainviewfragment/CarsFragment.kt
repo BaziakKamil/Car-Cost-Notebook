@@ -11,7 +11,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import org.koin.android.ext.android.inject
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.TextUtils
@@ -19,9 +18,9 @@ import pl.kamilbaziak.carcostnotebook.databinding.FragmentMainViewBinding
 import pl.kamilbaziak.carcostnotebook.model.Car
 import pl.kamilbaziak.carcostnotebook.model.name
 
-class MainViewFragment : Fragment() {
+class CarsFragment : Fragment() {
 
-    private val viewModel: MainViewViewModel by inject()
+    private val viewModel: CarsViewModel by inject()
     private val binding: FragmentMainViewBinding by lazy {
         FragmentMainViewBinding.inflate(layoutInflater)
     }
@@ -46,7 +45,7 @@ class MainViewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         recycler.apply {
-            adapter = this@MainViewFragment.adapter
+            adapter = this@CarsFragment.adapter
             layoutManager = LinearLayoutManager(requireContext())
             setHasFixedSize(true)
         }
@@ -63,23 +62,23 @@ class MainViewFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.mainViewEvent.collect { event ->
                 when (event) {
-                    MainViewViewModel.MainViewEvent.AddNewCar ->
+                    CarsViewModel.MainViewEvent.AddNewCar ->
                         findNavController().navigate(
                             MainViewFragmentDirections.actionMainViewFragmentToAddNewCarFragment()
                         )
-                    is MainViewViewModel.MainViewEvent.NavigateToCarDetails -> findNavController().navigate(
+                    is CarsViewModel.MainViewEvent.NavigateToCarDetails -> findNavController().navigate(
                         MainViewFragmentDirections.actionMainViewFragmentToCarDetailsFragment(
                             event.car,
                             event.odometer,
                             "${event.car.brand} ${event.car.model} ${event.car.year}"
                         )
                     )
-                    is MainViewViewModel.MainViewEvent.ShowCarEditDialogScreen ->
+                    is CarsViewModel.MainViewEvent.ShowCarEditDialogScreen ->
                         TextUtils.showSnackbar(requireView(),"${event.car.model} edit mode")
-                    is MainViewViewModel.MainViewEvent.ShowCarDeleteDialogMessage -> {
+                    is CarsViewModel.MainViewEvent.ShowCarDeleteDialogMessage -> {
                         showDeleteDialog(event.car)
                     }
-                    is MainViewViewModel.MainViewEvent.ShowDeleteErrorSnackbar ->
+                    is CarsViewModel.MainViewEvent.ShowDeleteErrorSnackbar ->
                         TextUtils.showSnackbar(requireView(), getString(R.string.error_during_delete_process))
                 }
             }

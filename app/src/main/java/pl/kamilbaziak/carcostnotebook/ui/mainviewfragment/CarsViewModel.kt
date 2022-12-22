@@ -14,7 +14,7 @@ import pl.kamilbaziak.carcostnotebook.database.TankFillDao
 import pl.kamilbaziak.carcostnotebook.model.Car
 import pl.kamilbaziak.carcostnotebook.model.Odometer
 
-class MainViewViewModel(
+class CarsViewModel(
     private val carDao: CarDao,
     private val odometerDao: OdometerDao,
     private val maintenanceDao: MaintenanceDao,

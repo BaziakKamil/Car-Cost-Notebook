@@ -24,6 +24,7 @@ class AddNewCarViewModel(
                 0,
                 carDao.addCar(car),
                 odometer,
+                car.unit,
                 System.currentTimeMillis()
             )
         )

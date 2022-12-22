@@ -2,6 +2,7 @@ package pl.kamilbaziak.carcostnotebook
 
 import pl.kamilbaziak.carcostnotebook.enums.PetrolUnitEnum
 import pl.kamilbaziak.carcostnotebook.enums.UnitEnum
+import java.text.DecimalFormat
 
 private const val EMPTY = ""
 private const val SPACE = " "
@@ -31,3 +32,5 @@ fun PetrolUnitEnum.shortcut(): String = when (this) {
 
 fun Long.toDate(): String = DateUtils.formatDateFromLong(this)
 fun Long.toTime(): String = DateUtils.formatTimeFromLong(this)
+
+fun Double.toTwoDigits(): String = DecimalFormat("#.##").format(this)

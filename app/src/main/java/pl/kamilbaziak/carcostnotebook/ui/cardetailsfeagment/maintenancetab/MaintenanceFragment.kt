@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.TextUtils
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentMaintenanceBinding
 import pl.kamilbaziak.carcostnotebook.model.Maintenance
@@ -47,12 +48,12 @@ class MaintenanceFragment : Fragment() {
             viewModel.maintenanceEvent.collect { event ->
                 when (event) {
                     MaintenanceViewModel.MaintenanceEvent.ShowMaintenanceSavedConfirmationMessage ->
-                        TextUtils.showSnackbar(requireView(), "Maintenance added correctly")
+                        TextUtils.showSnackbar(requireView(), getString(R.string.maintenance_added_correctly))
                     is MaintenanceViewModel.MaintenanceEvent.ShowUndoDeleteMaintenanceMessage ->
                         TextUtils.showSnackbarWithAction(
                             requireView(),
-                            "Maintenance ${event.maintenance.name} deleted",
-                            "UNDO"
+                            getString(R.string.maintenace_deleted, event.maintenance.name),
+                            getString(R.string.undo)
                         ) {
                             viewModel.onUndoDeleteMaintenance(event.maintenance)
                         }

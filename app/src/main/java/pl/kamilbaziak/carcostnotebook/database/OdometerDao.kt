@@ -8,14 +8,14 @@ import pl.kamilbaziak.carcostnotebook.model.Odometer
 @Dao
 interface OdometerDao {
 
-    @Query("SELECT * FROM ${Constants.ODOMETER_TABLE}")
-    fun getOdometerData(): LiveData<List<Odometer>>
-
     @Query("SELECT * FROM ${Constants.ODOMETER_TABLE} WHERE carId = :carId ORDER BY created DESC")
     fun getAllOdometerForCar(carId: Long): LiveData<List<Odometer>>
 
     @Query("SELECT * FROM ${Constants.ODOMETER_TABLE} WHERE carId = :carId ORDER BY created DESC LIMIT 1")
     fun getLastCarOdometer(carId: Long): LiveData<Odometer?>
+
+    @Query("SELECT * FROM ${Constants.ODOMETER_TABLE} WHERE id = :odometerId")
+    suspend fun getOdometerById(odometerId: Long): Odometer?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addOdometer(odometer: Odometer): Long
@@ -26,6 +26,6 @@ interface OdometerDao {
     @Delete
     suspend fun deleteOdometer(odometer: Odometer)
 
-    @Query("DELETE FROM ${Constants.MAINTENANCE_TABLE} WHERE carId = :carId")
+    @Query("DELETE FROM ${Constants.ODOMETER_TABLE} WHERE carId = :carId")
     suspend fun deleteOdometer(carId: Long)
 }

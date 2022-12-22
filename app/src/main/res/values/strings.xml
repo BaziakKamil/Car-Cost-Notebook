@@ -24,7 +24,13 @@
     <string name="maintenance">Maintenance</string>
     <string name="odometer_reading">Odometer reading</string>
     <string name="add_odometer_reading">Add odometer reading</string>
-    <string name="odometer_item_value">%.1f %.2s</string>
+    <string name="odometer_item_value">%1s %2$s</string>
+    <string name="petrol_amount">%1$s %2$s</string>
+    <string name="petrol_amount_and_price_value">%1$s %2$s price: %3$s %4$s</string>
+    <string name="total">Total: %1$s %2$s</string>
+    <string name="from_computed">From computer: %1$s %2$s</string>
+    <string name="from_last_fill">From last fill: %1$s %2$s</string>
+    <string name="distance_driven">Distance driven: %1$s %2$s</string>
     <string name="choose_date">Choose date</string>
     <string name="done">Done</string>
     <string name="cancel">Cancel</string>
@@ -39,9 +45,17 @@
     <string name="due_date">Due date</string>
     <string name="choose_due_date">Choose due date</string>
     <string name="accept">Accept</string>
-    <string name="delete_car">Delete $.1s?</string>
+    <string name="delete_car">Delete %1$s?</string>
     <string name="error_during_delete_process">Error occurred during delete process</string>
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
     <string name="cannot_be_undone">This cannot be undone. Are You sure?</string>
+    <string name="odometer_deleted">Odometer deleted</string>
+    <string name="undo">UNDO</string>
+    <string name="odometer_added_correctly">Odometer added correctly</string>
+    <string name="maintenance_added_correctly">Maintenance added correctly</string>
+    <string name="maintenace_deleted">Maintenance %1$s deleted</string>
+    <string name="tank_fill_added_correctly">Tank fill added correctly</string>
+    <string name="tank_fill_deleted">Tank fill deleted</string>
+    <string name="distance_from_last_tank_fill">Distance from last tank fill</string>
 </resources>

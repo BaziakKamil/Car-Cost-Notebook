@@ -14,7 +14,6 @@ import pl.kamilbaziak.carcostnotebook.EnumUtils
 import pl.kamilbaziak.carcostnotebook.EnumUtils.getPetrolEnumFromName
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.databinding.DialogTankfillBinding
-import pl.kamilbaziak.carcostnotebook.enums.EngineEnum
 import pl.kamilbaziak.carcostnotebook.enums.PetrolEnum
 import pl.kamilbaziak.carcostnotebook.toDate
 
@@ -64,6 +63,7 @@ class TankFillDialog : BottomSheetDialogFragment() {
                 textInputPetrolType.editText?.text.toString(),
                 textInputPetrolQuantity.editText?.text.toString(),
                 textInputPetrolPrice.editText?.text.toString(),
+                textInputDistanceFromLastFill.editText?.text.toString(),
                 textInputOdometer.editText?.text.toString(),
                 textInputComputerReading.editText?.text.toString(),
                 textInputPetrolStation.editText?.text.toString()
@@ -73,31 +73,58 @@ class TankFillDialog : BottomSheetDialogFragment() {
         imageClose.setOnClickListener { dismiss() }
     }
 
-    //todo validation with snackbar messages
     private fun validate(
         petrolType: String?,
         petrolQuantity: String?,
         petrolPrice: String?,
+        distanceFromLastFill: String?,
         odometer: String?,
         computerReading: String?,
         petrolStation: String?
     ) {
-        if (petrolQuantity.isNullOrEmpty()) {
-            return
-        }
-        if (petrolPrice.isNullOrEmpty()) {
-            return
-        }
+        resetInputErrors()
+        if (!validateData(petrolQuantity, petrolPrice, odometer, petrolStation)) return
+
         viewModel.addTankFill(
             carId!!,
             getPetrolEnumFromName(petrolType),
-            petrolQuantity.toInt(),
-            petrolPrice.toDouble(),
-            odometer?.toDouble(),
-            computerReading?.toDouble(),
-            petrolStation
+            petrolQuantity!!.toDouble(),
+            petrolPrice!!.toDouble(),
+            if(distanceFromLastFill.isNullOrEmpty()) 0.0 else distanceFromLastFill.toDouble(),
+            odometer!!.toDouble(),
+            if(computerReading.isNullOrEmpty()) 0.0 else computerReading.toDouble(),
+            petrolStation!!
         )
         dismiss()
+    }
+
+    private fun validateData(
+        petrolQuantity: String?,
+        petrolPrice: String?,
+        odometer: String?,
+        petrolStation: String?
+    ): Boolean {
+        binding.apply {
+            if (petrolQuantity.isNullOrEmpty()) {
+                textInputPetrolQuantity.error = "Enter petrol quantity"
+            } else if (petrolPrice.isNullOrEmpty()) {
+                textInputPetrolPrice.error = "Enter petrol price"
+            } else if (odometer.isNullOrEmpty()) {
+                textInputOdometer.error = "Enter odometer value"
+            } else if (petrolStation.isNullOrEmpty()) {
+                textInputPetrolStation.error = "Enter petrol station name"
+            } else {
+                return true
+            }
+            return false
+        }
+    }
+
+    private fun resetInputErrors() = binding.apply {
+        textInputPetrolQuantity.error = null
+        textInputPetrolPrice.error = null
+        textInputOdometer.error = null
+        textInputPetrolStation.error = null
     }
 
     companion object {

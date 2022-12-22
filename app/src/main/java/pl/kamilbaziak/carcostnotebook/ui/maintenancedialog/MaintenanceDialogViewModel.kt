@@ -5,13 +5,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import pl.kamilbaziak.carcostnotebook.database.CarDao
 import pl.kamilbaziak.carcostnotebook.database.MaintenanceDao
 import pl.kamilbaziak.carcostnotebook.database.OdometerDao
+import pl.kamilbaziak.carcostnotebook.enums.UnitEnum
 import pl.kamilbaziak.carcostnotebook.model.Maintenance
 import pl.kamilbaziak.carcostnotebook.model.Odometer
 import java.util.Date
 
 class MaintenanceDialogViewModel(
+    private val carDao: CarDao,
     private val maintenanceDao: MaintenanceDao,
     private val odometerDao: OdometerDao
 ) : ViewModel() {
@@ -46,7 +49,13 @@ class MaintenanceDialogViewModel(
                     price,
                     odometer?.let {
                         odometerDao.addOdometer(
-                            Odometer(0, carId, odometer, pickedDate.value ?: Date().time)
+                            Odometer(
+                                0,
+                                carId,
+                                odometer,
+                                carDao.getCarById(carId)?.unit ?: UnitEnum.Kilometers,
+                                pickedDate.value ?: Date().time
+                            )
                         )
                     },
                     pickedDate.value ?: Date().time,

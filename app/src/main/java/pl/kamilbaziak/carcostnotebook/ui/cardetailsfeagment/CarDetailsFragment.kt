@@ -82,18 +82,21 @@ class CarDetailsFragment : Fragment() {
         }
 
         fabAddContainer.apply {
+            fabAddPetrol.setOnClickListener {
+                viewPager.setCurrentItem(0, true)
+                TankFillDialog.show(childFragmentManager, car.id)
+                extendAddFab(false)
+            }
+
             fabAddOdometer.setOnClickListener {
+                viewPager.setCurrentItem(1, true)
                 OdometerDialog.show(childFragmentManager, car.id)
                 extendAddFab(false)
             }
 
             fabAddMaintenance.setOnClickListener {
+                viewPager.setCurrentItem(2, true)
                 MaintenanceDialog.show(childFragmentManager, car.id)
-                extendAddFab(false)
-            }
-
-            fabAddPetrol.setOnClickListener {
-                TankFillDialog.show(childFragmentManager, car.id)
                 extendAddFab(false)
             }
         }

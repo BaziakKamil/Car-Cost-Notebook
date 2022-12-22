@@ -9,6 +9,8 @@ import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.datepicker.MaterialDatePicker
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.databinding.DialogOdometerBinding
 import pl.kamilbaziak.carcostnotebook.hasLetters
@@ -24,7 +26,9 @@ class OdometerDialog : BottomSheetDialogFragment() {
     private val carId by lazy {
         arguments?.getLong(CAR_ID_EXTRA)
     }
-    private val viewModel: OdometerDialogViewModel by inject()
+    private val viewModel: OdometerDialogViewModel by viewModel {
+        parametersOf(carId)
+    }
     private val dateDialog = MaterialDatePicker.Builder.datePicker()
         .setTitleText(R.string.choose_date)
         .build()
@@ -65,14 +69,7 @@ class OdometerDialog : BottomSheetDialogFragment() {
         if (odometer.hasLetters()) {
             return
         }
-        viewModel.addOdometer(
-            Odometer(
-                0,
-                carId!!,
-                odometer.toDouble(),
-                viewModel.pickedDate.value ?: Date().time
-            )
-        )
+        viewModel.addOdometer(odometer.toDouble())
         dismiss()
     }
 

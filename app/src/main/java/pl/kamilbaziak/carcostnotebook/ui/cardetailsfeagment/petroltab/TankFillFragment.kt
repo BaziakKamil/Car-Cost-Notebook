@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import pl.kamilbaziak.carcostnotebook.EnumUtils.getPetrolUnitFromName
+import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.TextUtils
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentTankFillBinding
 import pl.kamilbaziak.carcostnotebook.enums.PetrolUnitEnum
@@ -22,10 +23,10 @@ class TankFillFragment : Fragment() {
     private val binding by lazy {
         FragmentTankFillBinding.inflate(layoutInflater)
     }
+    private val carId by lazy { arguments?.getLong(CAR_ID_EXTRA) }
     private val viewModel: TankFillViewModel by viewModel {
         parametersOf(carId)
     }
-    private val carId by lazy { arguments?.getLong(CAR_ID_EXTRA) }
     private val petrolUnit by lazy { arguments?.getString(PETROL_UNIT_EXTRA) }
     private val adapter by lazy {
         TankFillAdapter(
@@ -53,12 +54,15 @@ class TankFillFragment : Fragment() {
             viewModel.tankFillEvent.collect { event ->
                 when (event) {
                     TankFillViewModel.TankFilEvent.ShowTankFillSavedConfirmationMessage ->
-                        TextUtils.showSnackbar(requireView(), "Tank fill added correctly")
+                        TextUtils.showSnackbar(
+                            requireView(),
+                            getString(R.string.tank_fill_added_correctly)
+                        )
                     is TankFillViewModel.TankFilEvent.ShowUndoDeleteTankFillMessage ->
                         TextUtils.showSnackbarWithAction(
                             requireView(),
-                            "Tank fill deleted",
-                            "UNDO"
+                            getString(R.string.tank_fill_deleted),
+                            getString(R.string.undo)
                         ) {
                             viewModel.onUndoDeleteTankFill(event.tankFill)
                         }
@@ -67,6 +71,12 @@ class TankFillFragment : Fragment() {
         }
 
         viewModel.tankFillAll.observe(viewLifecycleOwner) {
+            if (it.isNotEmpty()) {
+                viewModel.setupTankFillData(it)
+            }
+        }
+
+        viewModel.tankFillMapped.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
     }
