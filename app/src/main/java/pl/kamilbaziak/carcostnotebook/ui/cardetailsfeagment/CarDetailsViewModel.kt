@@ -1,11 +1,9 @@
 package pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import pl.kamilbaziak.carcostnotebook.database.MaintenanceDao
 import pl.kamilbaziak.carcostnotebook.database.OdometerDao
 import pl.kamilbaziak.carcostnotebook.database.TankFillDao
-import pl.kamilbaziak.carcostnotebook.model.Odometer
 
 class CarDetailsViewModel(
     private val tankFillDao: TankFillDao,
@@ -13,9 +11,6 @@ class CarDetailsViewModel(
     private val maintenanceDao: MaintenanceDao,
     private val carId: Long
 ) : ViewModel() {
-
-    private val _lastOdometer = odometerDao.getLastCarOdometer(carId)
-    val lastOdometer: LiveData<Odometer?> = _lastOdometer
 
     private val _tankFillCount = tankFillDao.getTankFillData(carId)
     val tankFillCount = _tankFillCount

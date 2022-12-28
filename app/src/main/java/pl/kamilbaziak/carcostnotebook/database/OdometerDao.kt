@@ -12,7 +12,7 @@ interface OdometerDao {
     fun getAllOdometerForCar(carId: Long): LiveData<List<Odometer>>
 
     @Query("SELECT * FROM ${Constants.ODOMETER_TABLE} WHERE carId = :carId ORDER BY created DESC LIMIT 1")
-    fun getLastCarOdometer(carId: Long): LiveData<Odometer?>
+    suspend fun getLastCarOdometer(carId: Long): Odometer?
 
     @Query("SELECT * FROM ${Constants.ODOMETER_TABLE} WHERE id = :odometerId")
     suspend fun getOdometerById(odometerId: Long): Odometer?

@@ -1,4 +1,4 @@
-package pl.kamilbaziak.carcostnotebook.ui.mainviewfragment
+package pl.kamilbaziak.carcostnotebook.ui.carsfragment
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -50,7 +50,7 @@ class CarsViewModel(
         mainViewChannel.send(
             MainViewEvent.NavigateToCarDetails(
                 car,
-                odometerDao.getLastCarOdometer(car.id).value
+                odometerDao.getLastCarOdometer(car.id)
             )
         )
     }

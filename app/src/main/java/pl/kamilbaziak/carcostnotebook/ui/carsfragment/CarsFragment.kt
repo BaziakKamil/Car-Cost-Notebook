@@ -1,4 +1,4 @@
-package pl.kamilbaziak.carcostnotebook.ui.mainviewfragment
+package pl.kamilbaziak.carcostnotebook.ui.carsfragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -64,22 +64,32 @@ class CarsFragment : Fragment() {
                 when (event) {
                     CarsViewModel.MainViewEvent.AddNewCar ->
                         findNavController().navigate(
-                            MainViewFragmentDirections.actionMainViewFragmentToAddNewCarFragment()
+                            CarsFragmentDirections.actionMainViewFragmentToAddNewCarFragment(
+                                getString(R.string.add_new_car)
+                            )
                         )
                     is CarsViewModel.MainViewEvent.NavigateToCarDetails -> findNavController().navigate(
-                        MainViewFragmentDirections.actionMainViewFragmentToCarDetailsFragment(
+                        CarsFragmentDirections.actionMainViewFragmentToCarDetailsFragment(
                             event.car,
                             event.odometer,
                             "${event.car.brand} ${event.car.model} ${event.car.year}"
                         )
                     )
                     is CarsViewModel.MainViewEvent.ShowCarEditDialogScreen ->
-                        TextUtils.showSnackbar(requireView(),"${event.car.model} edit mode")
+                        findNavController().navigate(
+                            CarsFragmentDirections.actionMainViewFragmentToAddNewCarFragment(
+                                event.car.name(),
+                                event.car
+                            )
+                        )
                     is CarsViewModel.MainViewEvent.ShowCarDeleteDialogMessage -> {
                         showDeleteDialog(event.car)
                     }
                     is CarsViewModel.MainViewEvent.ShowDeleteErrorSnackbar ->
-                        TextUtils.showSnackbar(requireView(), getString(R.string.error_during_delete_process))
+                        TextUtils.showSnackbar(
+                            requireView(),
+                            getString(R.string.error_during_delete_process)
+                        )
                 }
             }
         }

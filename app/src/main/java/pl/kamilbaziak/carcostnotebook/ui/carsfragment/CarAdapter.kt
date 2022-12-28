@@ -1,4 +1,4 @@
-package pl.kamilbaziak.carcostnotebook.ui.mainviewfragment
+package pl.kamilbaziak.carcostnotebook.ui.carsfragment
 
 import android.view.Gravity
 import android.view.LayoutInflater

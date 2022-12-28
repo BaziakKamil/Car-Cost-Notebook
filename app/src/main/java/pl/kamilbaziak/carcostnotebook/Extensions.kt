@@ -2,6 +2,8 @@ package pl.kamilbaziak.carcostnotebook
 
 import pl.kamilbaziak.carcostnotebook.enums.PetrolUnitEnum
 import pl.kamilbaziak.carcostnotebook.enums.UnitEnum
+import pl.kamilbaziak.carcostnotebook.model.Car
+import pl.kamilbaziak.carcostnotebook.model.name
 import java.text.DecimalFormat
 
 private const val EMPTY = ""
