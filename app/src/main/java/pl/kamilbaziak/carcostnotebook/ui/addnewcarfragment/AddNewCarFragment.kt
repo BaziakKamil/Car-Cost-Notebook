@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
@@ -28,15 +30,28 @@ class AddNewCarFragment : Fragment() {
         FragmentAddNewCarBinding.inflate(layoutInflater)
     }
     private val viewModel: AddNewCarViewModel by inject()
+    private val args: AddNewCarFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         KeyboardVisibilityEvent.setEventListener(
             requireActivity()
         ) { isKeyboardShown ->
-            when (isKeyboardShown) {
-                true -> binding.fabAddCar.hide()
-                else -> binding.fabAddCar.show()
+            binding.apply {
+                when (isKeyboardShown) {
+                    true -> {
+                        fabAddCar.hide()
+                        if (args.car != null) {
+                            fabCancel.hide()
+                        }
+                    }
+                    else -> {
+                        fabAddCar.show()
+                        if (args.car != null) {
+                            fabCancel.show()
+                        }
+                    }
+                }
             }
         }
     }
@@ -52,6 +67,28 @@ class AddNewCarFragment : Fragment() {
         savedInstanceState: Bundle?
     ) = binding.run {
         super.onViewCreated(view, savedInstanceState)
+
+        args.car?.let { car ->
+            viewModel.getAllOdometer(car)
+            viewModel.getLastOdometer(car)
+            viewModel.odometerAll.observe(viewLifecycleOwner) {
+                textInputCarOdometer.isEnabled = it != null && it.size > 1
+            }
+            viewModel.odometer.observe(viewLifecycleOwner) {
+                if (it != null) {
+                    textInputCarOdometer.editText?.setText(it.input.toString())
+                    textInputUnit.editText?.setText(it.unit.name)
+                }
+            }
+
+            editMode(car)
+            fabCancel.apply {
+                isVisible = true
+                setOnClickListener { findNavController().popBackStack() }
+            }
+        }
+
+        activity?.actionBar?.title = args.title
 
         setEnumValuesToMaterialSpinner(
             textInputEngineType.editText as MaterialAutoCompleteTextView,
@@ -96,24 +133,52 @@ class AddNewCarFragment : Fragment() {
         return@run
     }
 
+    private fun editMode(car: Car) = binding.apply {
+        textInputCarBrand.editText?.setText(car.brand)
+        textInputCarModel.editText?.setText(car.model)
+        textInputCarYear.editText?.setText(car.year.toString())
+        textInputCarLicencePlate.editText?.setText(car.licensePlate)
+        textInputEngineType.editText?.setText(car.engineEnum.name)
+        textInputPetrolUnit.editText?.setText(car.petrolUnit.name)
+        textInputDescription.editText?.setText(car.description)
+    }
+
     private fun saveCar() {
         if (!validateData()) return
 
         binding.apply {
-            viewModel.addCar(
-                Car(
-                    0,
-                    textInputCarBrand.editText?.text.toString(),
-                    textInputCarModel.editText?.text.toString(),
-                    textInputCarYear.editText?.text.toString().toInt(),
-                    textInputCarLicencePlate.editText?.text.toString(),
-                    getEngineTypeFromName(textInputEngineType.editText?.text.toString()),
-                    getPetrolUnitFromName(textInputPetrolUnit.editText?.text.toString()),
-                    getUnitTypeFromName(textInputUnit.editText?.text.toString()),
-                    textInputDescription.editText?.text.toString()
-                ),
-                textInputCarOdometer.editText?.text.toString().toDouble()
-            )
+            if (args.car != null) {
+                viewModel.updateCar(
+                    Car(
+                        args.car?.id ?: 0,
+                        textInputCarBrand.editText?.text.toString(),
+                        textInputCarModel.editText?.text.toString(),
+                        textInputCarYear.editText?.text.toString().toInt(),
+                        textInputCarLicencePlate.editText?.text.toString(),
+                        getEngineTypeFromName(textInputEngineType.editText?.text.toString()),
+                        getPetrolUnitFromName(textInputPetrolUnit.editText?.text.toString()),
+                        getUnitTypeFromName(textInputUnit.editText?.text.toString()),
+                        textInputDescription.editText?.text.toString()
+                    ),
+                    viewModel.odometer.value,
+                    textInputCarOdometer.editText?.text.toString().toDouble()
+                )
+            } else {
+                viewModel.addCar(
+                    Car(
+                        0,
+                        textInputCarBrand.editText?.text.toString(),
+                        textInputCarModel.editText?.text.toString(),
+                        textInputCarYear.editText?.text.toString().toInt(),
+                        textInputCarLicencePlate.editText?.text.toString(),
+                        getEngineTypeFromName(textInputEngineType.editText?.text.toString()),
+                        getPetrolUnitFromName(textInputPetrolUnit.editText?.text.toString()),
+                        getUnitTypeFromName(textInputUnit.editText?.text.toString()),
+                        textInputDescription.editText?.text.toString()
+                    ),
+                    textInputCarOdometer.editText?.text.toString().toDouble()
+                )
+            }
         }
     }
 
