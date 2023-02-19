@@ -58,4 +58,5 @@
     <string name="tank_fill_added_correctly">Tank fill added correctly</string>
     <string name="tank_fill_deleted">Tank fill deleted</string>
     <string name="distance_from_last_tank_fill">Distance from last tank fill</string>
+    <string name="title_activity_compose">ComposeActivity</string>
 </resources>
