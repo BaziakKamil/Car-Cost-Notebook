@@ -22,7 +22,8 @@
         android:src="@drawable/ic_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:rippleColor="@color/fab_icon_color" />
+        app:rippleColor="@color/fab_icon_color"
+        android:contentDescription="@string/add_new_car" />
 
     <include
         android:id="@+id/no_car_view"

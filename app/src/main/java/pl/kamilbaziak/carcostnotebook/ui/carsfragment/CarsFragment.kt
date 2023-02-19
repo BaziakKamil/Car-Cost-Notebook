@@ -14,15 +14,15 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.android.ext.android.inject
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.TextUtils
-import pl.kamilbaziak.carcostnotebook.databinding.FragmentMainViewBinding
+import pl.kamilbaziak.carcostnotebook.databinding.FragmentCarBinding
 import pl.kamilbaziak.carcostnotebook.model.Car
 import pl.kamilbaziak.carcostnotebook.model.name
 
 class CarsFragment : Fragment() {
 
     private val viewModel: CarsViewModel by inject()
-    private val binding: FragmentMainViewBinding by lazy {
-        FragmentMainViewBinding.inflate(layoutInflater)
+    private val binding: FragmentCarBinding by lazy {
+        FragmentCarBinding.inflate(layoutInflater)
     }
     private val adapter: CarAdapter by lazy {
         CarAdapter(
