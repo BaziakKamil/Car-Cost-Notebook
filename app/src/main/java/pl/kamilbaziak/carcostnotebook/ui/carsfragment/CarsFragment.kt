@@ -10,15 +10,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.android.ext.android.inject
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.TextUtils
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentCarBinding
 import pl.kamilbaziak.carcostnotebook.model.Car
 import pl.kamilbaziak.carcostnotebook.model.name
+import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialog
 
-class CarsFragment : Fragment() {
+class CarsFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActions {
 
     private val viewModel: CarsViewModel by inject()
     private val binding: FragmentCarBinding by lazy {
@@ -97,18 +97,16 @@ class CarsFragment : Fragment() {
         return@run
     }
 
-    @SuppressLint("StringFormatInvalid")
     private fun showDeleteDialog(car: Car) {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.delete_car, car.name()))
-            .setMessage(getString(R.string.cannot_be_undone))
-            .setNegativeButton(R.string.cancel) { dialog, _ ->
-                dialog.dismiss()
-            }
-            .setPositiveButton(R.string.accept) { dialog, _ ->
-                viewModel.deleteCar()
-                dialog.dismiss()
-            }
-            .show()
+        MaterialAlertDialog.show(
+            childFragmentManager,
+            getString(R.string.delete_car, car.name()),
+            getString(R.string.cannot_be_undone),
+            getString(R.string.delete)
+        )
+    }
+
+    override fun onConfirm() {
+        viewModel.deleteCar()
     }
 }
