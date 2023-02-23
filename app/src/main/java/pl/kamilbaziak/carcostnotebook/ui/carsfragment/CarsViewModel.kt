@@ -37,6 +37,7 @@ class CarsViewModel(
                 maintenanceDao.deleteMaintenance(it.id)
                 tankFillDao.deleteTankFill(it.id)
             }
+            mainViewChannel.send(MainViewEvent.ShowSuccessDeleteCarMessage(deleteCar.value))
         } else {
             mainViewChannel.send(MainViewEvent.ShowDeleteErrorSnackbar)
         }
@@ -74,6 +75,7 @@ class CarsViewModel(
         object AddNewCar : MainViewEvent()
         data class ShowCarEditDialogScreen(val car: Car) : MainViewEvent()
         data class ShowCarDeleteDialogMessage(val car: Car) : MainViewEvent()
+        data class ShowSuccessDeleteCarMessage(val car: Car?) : MainViewEvent()
         object ShowDeleteErrorSnackbar : MainViewEvent()
     }
 }

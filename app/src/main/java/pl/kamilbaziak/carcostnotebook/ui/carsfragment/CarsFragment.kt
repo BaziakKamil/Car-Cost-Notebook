@@ -90,6 +90,14 @@ class CarsFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActions 
                             requireView(),
                             getString(R.string.error_during_delete_process)
                         )
+                    is CarsViewModel.MainViewEvent.ShowSuccessDeleteCarMessage ->
+                        TextUtils.showSnackbar(
+                            requireView(),
+                            getString(
+                                R.string.delete_car_success,
+                                event.car?.let { it.name() } ?: "no name"
+                            )
+                        )
                 }
             }
         }

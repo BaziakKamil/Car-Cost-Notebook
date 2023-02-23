@@ -45,7 +45,8 @@
     <string name="due_date">Due date</string>
     <string name="choose_due_date">Choose due date</string>
     <string name="accept">Accept</string>
-    <string name="delete_car">Delete %1$s?</string>
+    <string name="delete_car">Delete \"%1$s\"?</string>
+    <string name="delete_car_success">Car \"%1$s\" deleted successfully</string>
     <string name="error_during_delete_process">Error occurred during delete process</string>
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
