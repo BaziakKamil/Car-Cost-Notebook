@@ -54,7 +54,8 @@ class MaintenanceDialogViewModel(
                                 carId,
                                 odometer,
                                 carDao.getCarById(carId)?.unit ?: UnitEnum.Kilometers,
-                                pickedDate.value ?: Date().time
+                                pickedDate.value ?: Date().time,
+                                canBeDeleted = false
                             )
                         )
                     },

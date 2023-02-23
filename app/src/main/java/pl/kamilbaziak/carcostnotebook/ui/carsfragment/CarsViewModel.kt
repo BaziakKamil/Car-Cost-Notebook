@@ -30,17 +30,13 @@ class CarsViewModel(
     val mainViewEvent = mainViewChannel.receiveAsFlow()
 
     fun deleteCar() = viewModelScope.launch {
-        if (deleteCar.value != null) {
-            deleteCar.value?.let {
-                carDao.deleteCar(it)
-                odometerDao.deleteOdometer(it.id)
-                maintenanceDao.deleteMaintenance(it.id)
-                tankFillDao.deleteTankFill(it.id)
-            }
-            mainViewChannel.send(MainViewEvent.ShowSuccessDeleteCarMessage(deleteCar.value))
-        } else {
-            mainViewChannel.send(MainViewEvent.ShowDeleteErrorSnackbar)
-        }
+        deleteCar.value?.let {
+            carDao.deleteCar(it)
+            odometerDao.deleteOdometer(it.id)
+            maintenanceDao.deleteMaintenance(it.id)
+            tankFillDao.deleteTankFill(it.id)
+            mainViewChannel.send(MainViewEvent.ShowSuccessDeleteCarMessage(it))
+        } ?: mainViewChannel.send(MainViewEvent.ShowDeleteErrorSnackbar)
     }
 
     fun onAddNewCarClick() = viewModelScope.launch {

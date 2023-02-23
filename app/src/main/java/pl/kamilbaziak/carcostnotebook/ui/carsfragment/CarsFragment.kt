@@ -1,6 +1,5 @@
 package pl.kamilbaziak.carcostnotebook.ui.carsfragment
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +13,6 @@ import org.koin.android.ext.android.inject
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.TextUtils
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentCarBinding
-import pl.kamilbaziak.carcostnotebook.model.Car
 import pl.kamilbaziak.carcostnotebook.model.name
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialog
 
@@ -82,9 +80,13 @@ class CarsFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActions 
                                 event.car
                             )
                         )
-                    is CarsViewModel.MainViewEvent.ShowCarDeleteDialogMessage -> {
-                        showDeleteDialog(event.car)
-                    }
+                    is CarsViewModel.MainViewEvent.ShowCarDeleteDialogMessage ->
+                        MaterialAlertDialog.show(
+                            childFragmentManager,
+                            getString(R.string.delete_dialog_title, event.car.name()),
+                            getString(R.string.cannot_be_undone),
+                            getString(R.string.delete)
+                        )
                     is CarsViewModel.MainViewEvent.ShowDeleteErrorSnackbar ->
                         TextUtils.showSnackbar(
                             requireView(),
@@ -95,7 +97,7 @@ class CarsFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActions 
                             requireView(),
                             getString(
                                 R.string.delete_car_success,
-                                event.car?.let { it.name() } ?: "no name"
+                                event.car?.name() ?: "no name"
                             )
                         )
                 }
@@ -103,15 +105,6 @@ class CarsFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActions 
         }
 
         return@run
-    }
-
-    private fun showDeleteDialog(car: Car) {
-        MaterialAlertDialog.show(
-            childFragmentManager,
-            getString(R.string.delete_car, car.name()),
-            getString(R.string.cannot_be_undone),
-            getString(R.string.delete)
-        )
     }
 
     override fun onConfirm() {

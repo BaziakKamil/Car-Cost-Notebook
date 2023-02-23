@@ -1,20 +1,20 @@
 package pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.maintenancetab
 
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.databinding.ViewOdometerItemBinding
-import pl.kamilbaziak.carcostnotebook.enums.UnitEnum
 import pl.kamilbaziak.carcostnotebook.model.Maintenance
-import pl.kamilbaziak.carcostnotebook.model.Odometer
-import pl.kamilbaziak.carcostnotebook.shortcut
 import pl.kamilbaziak.carcostnotebook.toDate
 
 class MaintenanceAdapter(
-    private val adaperClick: (Maintenance) -> Unit
+    private val editMaintenance: (Maintenance) -> Unit,
+    private val deleteMaintenance: (Maintenance) -> Unit
 ) :
     ListAdapter<Maintenance, MaintenanceAdapter.MaintenanceViewHolder>(
         DiffCallback()
@@ -33,24 +33,46 @@ class MaintenanceAdapter(
         holder.bind(currentItem)
     }
 
-    inner class MaintenanceViewHolder(private val bidining: ViewOdometerItemBinding) :
-        RecyclerView.ViewHolder(bidining.root) {
-        init {
-            bidining.apply {
-                root.setOnClickListener {
-                    val position = adapterPosition
-                    if (position != RecyclerView.NO_POSITION) {
-                        val maintenance = getItem(position)
-                        adaperClick(maintenance)
+    inner class MaintenanceViewHolder(private val binding: ViewOdometerItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        private val popMenu = PopupMenu(binding.root.context, binding.root).apply {
+            setOnMenuItemClickListener {  item ->
+                when (item.itemId) {
+                    R.id.delete -> {
+                        if (adapterPosition != RecyclerView.NO_POSITION) {
+                            deleteMaintenance(getItem(adapterPosition))
+                        }
+                        true
                     }
+                    R.id.edit -> {
+                        if (adapterPosition != RecyclerView.NO_POSITION) {
+                            editMaintenance(getItem(adapterPosition))
+                        }
+                        true
+                    }
+                    else -> false
+                }
+            }
+            inflate(R.menu.more_menu)
+            gravity = Gravity.END
+        }
+
+        init {
+            binding.apply {
+                root.setOnLongClickListener {
+                   popMenu.show()
+                    true
                 }
             }
         }
 
         fun bind(maintenance: Maintenance) {
-            bidining.apply {
+            binding.apply {
                 textOdometer.text = maintenance.name
                 textDate.text = maintenance.created.toDate()
+                imageMore.setOnClickListener {
+                    popMenu.show()
+                }
             }
         }
     }

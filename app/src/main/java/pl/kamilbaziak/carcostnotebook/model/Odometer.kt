@@ -6,7 +6,6 @@ import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 import pl.kamilbaziak.carcostnotebook.Constants.ODOMETER_TABLE
 import pl.kamilbaziak.carcostnotebook.enums.UnitEnum
-import java.text.DateFormat
 
 @Entity(tableName = ODOMETER_TABLE)
 @Parcelize
@@ -16,5 +15,6 @@ data class Odometer(
     val carId: Long,
     val input: Double,
     val unit: UnitEnum,
-    val created: Long
+    val created: Long,
+    val canBeDeleted: Boolean
 ) : Parcelable

@@ -18,7 +18,7 @@ class TankFillViewModel(
     private val carId: Long
 ) : ViewModel() {
 
-    private val tankFillChannel = Channel<TankFilEvent>()
+    private val tankFillChannel = Channel<TankFillEvent>()
     val tankFillEvent = tankFillChannel.receiveAsFlow()
 
     private val _tankFillAll = tankFillDao.getTankFillData(carId)
@@ -27,12 +27,37 @@ class TankFillViewModel(
     private val _tankFillMapped = MutableLiveData<List<Pair<TankFill, Odometer?>>>()
     val tankFillMapped: LiveData<List<Pair<TankFill, Odometer?>>> = _tankFillMapped
 
-    fun onDeleteTankFill(tankFill: TankFill) = viewModelScope.launch {
-        tankFillDao.deleteTankFill(tankFill)
+    private val deleteTankFill = MutableLiveData<TankFill>()
+
+    fun onEditTankFill(tankFill: TankFill) = viewModelScope.launch {
+        //todo
     }
 
-    fun onUndoDeleteTankFill(tankFill: TankFill) = viewModelScope.launch {
+    fun deleteTankFill() = viewModelScope.launch {
+        deleteTankFill.value?.let { tankFill ->
+            tankFillDao.deleteTankFill(tankFill)
+            val pairedOdometer = odometerDao.getOdometerById(tankFill.odometerId)
+            pairedOdometer?.let { odometerDao.deleteOdometer(it) }
+            tankFillChannel.send(
+                TankFillEvent.ShowUndoDeleteTankFillMessage(
+                    tankFill,
+                    pairedOdometer
+                )
+            )
+        } ?: tankFillChannel.send(TankFillEvent.ShowDeleteErrorSnackbar)
+    }
+
+    fun onDeleteTankFill(tankFill: TankFill) = viewModelScope.launch {
+        deleteTankFill.value = tankFill
+        tankFillChannel.send(TankFillEvent.ShowTankFillDeleteDialogMessage)
+    }
+
+    fun onUndoDeleteTankFill(
+        tankFill: TankFill,
+        pairedOdometer: Odometer?
+    ) = viewModelScope.launch {
         tankFillDao.addTankFill(tankFill)
+        pairedOdometer?.let { odometerDao.addOdometer(pairedOdometer) }
     }
 
     fun setupTankFillData(list: List<TankFill>) = viewModelScope.launch {
@@ -42,8 +67,14 @@ class TankFillViewModel(
         }
     }
 
-    sealed class TankFilEvent {
-        data class ShowUndoDeleteTankFillMessage(val tankFill: TankFill) : TankFilEvent()
-        object ShowTankFillSavedConfirmationMessage : TankFilEvent()
+    sealed class TankFillEvent {
+        data class ShowTankFillEditDialogScreen(val tankFill: TankFill) : TankFillEvent()
+        object ShowTankFillDeleteDialogMessage : TankFillEvent()
+        object ShowDeleteErrorSnackbar : TankFillEvent()
+        data class ShowUndoDeleteTankFillMessage(
+            val tankFill: TankFill,
+            val pairedOdometer: Odometer?
+        ) : TankFillEvent()
+        object ShowTankFillSavedConfirmationMessage : TankFillEvent()
     }
 }

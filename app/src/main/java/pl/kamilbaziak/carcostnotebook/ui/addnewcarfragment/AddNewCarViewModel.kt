@@ -33,7 +33,8 @@ class AddNewCarViewModel(
                 carDao.addCar(car),
                 odometer,
                 car.unit,
-                System.currentTimeMillis()
+                System.currentTimeMillis(),
+                canBeDeleted = false
             )
         )
         _addNewCarChannel.send(AddNewCarEvent.NavigateBack)
@@ -49,7 +50,8 @@ class AddNewCarViewModel(
                     car.id,
                     newOdometerValue,
                     car.unit,
-                    System.currentTimeMillis()
+                    System.currentTimeMillis(),
+                    canBeDeleted = false
                 )
             )
         }

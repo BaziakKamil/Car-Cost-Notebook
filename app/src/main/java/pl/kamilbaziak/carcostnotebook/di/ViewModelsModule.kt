@@ -19,7 +19,7 @@ val viewModelsModule = module {
     viewModel { parameters -> CarDetailsViewModel(get(), get(), get(), parameters[0]) }
     viewModel { parameters -> TankFillViewModel(get(), get(), parameters[0]) }
     viewModel { parameters -> OdometerViewModel(get(), parameters[0]) }
-    viewModel { parameters -> MaintenanceViewModel(get(), parameters[0]) }
+    viewModel { parameters -> MaintenanceViewModel(get(), get(), parameters[0]) }
     viewModel { TankFillDialogViewModel(get(), get(), get()) }
     viewModel { parameters -> OdometerDialogViewModel(get(), get(), parameters[0]) }
     viewModel { MaintenanceDialogViewModel(get(), get(), get()) }

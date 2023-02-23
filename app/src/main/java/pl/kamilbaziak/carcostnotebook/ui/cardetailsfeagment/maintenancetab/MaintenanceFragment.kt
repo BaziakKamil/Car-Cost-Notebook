@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -14,9 +13,9 @@ import org.koin.core.parameter.parametersOf
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.TextUtils
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentMaintenanceBinding
-import pl.kamilbaziak.carcostnotebook.model.Maintenance
+import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialog
 
-class MaintenanceFragment : Fragment() {
+class MaintenanceFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActions {
 
     private val binding by lazy {
         FragmentMaintenanceBinding.inflate(layoutInflater)
@@ -26,7 +25,10 @@ class MaintenanceFragment : Fragment() {
     }
     private val carId by lazy { arguments?.getLong(CAR_ID_EXTRA) }
     private val adapter by lazy {
-        MaintenanceAdapter { adapterClick(it) }
+        MaintenanceAdapter(
+            { viewModel.onEditMaintenance(it) },
+            { viewModel.onDeleteMaintenance(it) }
+        )
     }
 
     override fun onCreateView(
@@ -48,15 +50,36 @@ class MaintenanceFragment : Fragment() {
             viewModel.maintenanceEvent.collect { event ->
                 when (event) {
                     MaintenanceViewModel.MaintenanceEvent.ShowMaintenanceSavedConfirmationMessage ->
-                        TextUtils.showSnackbar(requireView(), getString(R.string.maintenance_added_correctly))
-                    is MaintenanceViewModel.MaintenanceEvent.ShowUndoDeleteMaintenanceMessage ->
+                        TextUtils.showSnackbar(
+                            requireView(),
+                            getString(R.string.maintenance_added_correctly)
+                        )
+
+                    is MaintenanceViewModel.MaintenanceEvent.ShowCarEditDialogScreen -> TODO()
+                    is MaintenanceViewModel.MaintenanceEvent.ShowMaintenanceDeleteDialogMessage ->
+                        MaterialAlertDialog.show(
+                            childFragmentManager,
+                            getString(R.string.delete_dialog_title, event.maintenance.name),
+                            getString(R.string.delete_dialog_message),
+                            getString(R.string.delete)
+                        )
+                    is MaintenanceViewModel.MaintenanceEvent.ShowUndoDeleteMaintenanceMessage -> {
                         TextUtils.showSnackbarWithAction(
                             requireView(),
                             getString(R.string.maintenace_deleted, event.maintenance.name),
                             getString(R.string.undo)
                         ) {
-                            viewModel.onUndoDeleteMaintenance(event.maintenance)
+                            viewModel.onUndoDeleteMaintenance(
+                                event.maintenance,
+                                event.pairedOdometer
+                            )
                         }
+                    }
+                    is MaintenanceViewModel.MaintenanceEvent.ShowDeleteErrorSnackbar ->
+                        TextUtils.showSnackbar(
+                            requireView(),
+                            getString(R.string.error_during_delete_process)
+                        )
                 }
             }
         }
@@ -66,8 +89,8 @@ class MaintenanceFragment : Fragment() {
         }
     }
 
-    private fun adapterClick(maintenance: Maintenance) {
-        Toast.makeText(requireContext(), maintenance.name, Toast.LENGTH_LONG).show()
+    override fun onConfirm() {
+        viewModel.deleteMaintenance()
     }
 
     companion object {
