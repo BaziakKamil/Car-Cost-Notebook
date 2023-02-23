@@ -17,8 +17,9 @@ import pl.kamilbaziak.carcostnotebook.TextUtils
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentTankFillBinding
 import pl.kamilbaziak.carcostnotebook.enums.PetrolUnitEnum
 import pl.kamilbaziak.carcostnotebook.model.TankFill
+import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialog
 
-class TankFillFragment : Fragment() {
+class TankFillFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActions {
 
     private val binding by lazy {
         FragmentTankFillBinding.inflate(layoutInflater)
@@ -30,7 +31,8 @@ class TankFillFragment : Fragment() {
     private val petrolUnit by lazy { arguments?.getString(PETROL_UNIT_EXTRA) }
     private val adapter by lazy {
         TankFillAdapter(
-            { adapterClick(it) },
+            { viewModel.onEditTankFill(it) },
+            { viewModel.onDeleteTankFill(it) },
             getPetrolUnitFromName(petrolUnit)
         )
     }
@@ -53,19 +55,35 @@ class TankFillFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.tankFillEvent.collect { event ->
                 when (event) {
-                    TankFillViewModel.TankFilEvent.ShowTankFillSavedConfirmationMessage ->
+                    TankFillViewModel.TankFillEvent.ShowTankFillSavedConfirmationMessage ->
                         TextUtils.showSnackbar(
                             requireView(),
                             getString(R.string.tank_fill_added_correctly)
                         )
-                    is TankFillViewModel.TankFilEvent.ShowUndoDeleteTankFillMessage ->
+                    is TankFillViewModel.TankFillEvent.ShowUndoDeleteTankFillMessage ->
                         TextUtils.showSnackbarWithAction(
                             requireView(),
                             getString(R.string.tank_fill_deleted),
                             getString(R.string.undo)
                         ) {
-                            viewModel.onUndoDeleteTankFill(event.tankFill)
+                            viewModel.onUndoDeleteTankFill(
+                                event.tankFill,
+                                event.pairedOdometer
+                            )
                         }
+                    TankFillViewModel.TankFillEvent.ShowDeleteErrorSnackbar ->
+                        TextUtils.showSnackbar(
+                            requireView(),
+                            getString(R.string.error_during_delete_process)
+                        )
+                    is TankFillViewModel.TankFillEvent.ShowTankFillDeleteDialogMessage ->
+                        MaterialAlertDialog.show(
+                            childFragmentManager,
+                            getString(R.string.delete_dialog_title),
+                            getString(R.string.delete_dialog_message),
+                            getString(R.string.delete)
+                        )
+                    is TankFillViewModel.TankFillEvent.ShowTankFillEditDialogScreen -> TODO()
                 }
             }
         }
@@ -95,5 +113,9 @@ class TankFillFragment : Fragment() {
                 PETROL_UNIT_EXTRA to petrolUnit.name
             )
         }
+    }
+
+    override fun onConfirm() {
+        viewModel.deleteTankFill()
     }
 }

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -16,9 +15,9 @@ import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.TextUtils
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentOdometerBinding
 import pl.kamilbaziak.carcostnotebook.enums.UnitEnum
-import pl.kamilbaziak.carcostnotebook.model.Odometer
+import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialog
 
-class OdometerFragment : Fragment() {
+class OdometerFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActions {
 
     private val binding by lazy {
         FragmentOdometerBinding.inflate(layoutInflater)
@@ -30,7 +29,8 @@ class OdometerFragment : Fragment() {
     private val unit by lazy { arguments?.getString(UNIT_EXTRA) }
     private val adapter by lazy {
         OdometerAdapter(
-            { adapterClick(it) },
+            { viewModel.onEditOdometer(it) },
+            { viewModel.onDeleteOdometer(it) },
             getUnitTypeFromName(unit)
         )
     }
@@ -63,6 +63,19 @@ class OdometerFragment : Fragment() {
                         ) {
                             viewModel.onUndoDeleteOdometer(event.odometer)
                         }
+                    is OdometerViewModel.OdometerEvent.ShowDeleteErrorSnackbar ->
+                        TextUtils.showSnackbar(
+                            requireView(),
+                            getString(R.string.error_during_delete_process)
+                        )
+                    is OdometerViewModel.OdometerEvent.ShowOdometerDeleteDialogMessage ->
+                        MaterialAlertDialog.show(
+                            childFragmentManager,
+                            getString(R.string.delete_dialog_odometer_title),
+                            getString(R.string.delete_dialog_message),
+                            getString(R.string.delete)
+                        )
+                    is OdometerViewModel.OdometerEvent.ShowOdometerEditDialogScreen -> TODO()
                 }
             }
         }
@@ -70,10 +83,6 @@ class OdometerFragment : Fragment() {
         viewModel.odometerAll.observe(viewLifecycleOwner) { list ->
             adapter.submitList(list.sortedByDescending { it.created })
         }
-    }
-
-    private fun adapterClick(odometer: Odometer) {
-        Toast.makeText(requireContext(), "${odometer.input}", Toast.LENGTH_LONG).show()
     }
 
     companion object {
@@ -86,5 +95,9 @@ class OdometerFragment : Fragment() {
                 UNIT_EXTRA to unit.name
             )
         }
+    }
+
+    override fun onConfirm() {
+        viewModel.deleteOdometer()
     }
 }

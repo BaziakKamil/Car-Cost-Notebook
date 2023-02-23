@@ -45,11 +45,16 @@
     <string name="due_date">Due date</string>
     <string name="choose_due_date">Choose due date</string>
     <string name="accept">Accept</string>
-    <string name="delete_car">Delete %1$s?</string>
+    <string name="delete_dialog_title">Delete \"%1$s\"?</string>
+    <string name="delete_dialog_tank_fill_title">Delete tank fill?</string>
+    <string name="delete_dialog_odometer_title">Delete tank fill?</string>
+    <string name="delete_car_success">Car \"%1$s\" deleted successfully</string>
+    <string name="delete_maintenance_success">Maintenance deleted successfully</string>
     <string name="error_during_delete_process">Error occurred during delete process</string>
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
     <string name="cannot_be_undone">This cannot be undone. Are You sure?</string>
+    <string name="delete_dialog_message">Do you want to delete this?</string>
     <string name="odometer_deleted">Odometer deleted</string>
     <string name="undo">UNDO</string>
     <string name="odometer_added_correctly">Odometer added correctly</string>

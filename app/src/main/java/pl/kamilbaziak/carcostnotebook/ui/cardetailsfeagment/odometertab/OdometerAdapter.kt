@@ -1,7 +1,9 @@
 package pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.odometertab
 
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +15,8 @@ import pl.kamilbaziak.carcostnotebook.shortcut
 import pl.kamilbaziak.carcostnotebook.toDate
 
 class OdometerAdapter(
-    private val adaperClick: (Odometer) -> Unit,
+    private val editOdometer: (Odometer) -> Unit,
+    private val deleteOdometer: (Odometer) -> Unit,
     private val unit: UnitEnum
 ) :
     ListAdapter<Odometer, OdometerAdapter.OdometerViewHolder>(
@@ -33,28 +36,51 @@ class OdometerAdapter(
         holder.bind(currentItem)
     }
 
-    inner class OdometerViewHolder(private val bidining: ViewOdometerItemBinding) :
-        RecyclerView.ViewHolder(bidining.root) {
-        init {
-            bidining.apply {
-                root.setOnClickListener {
-                    val position = adapterPosition
-                    if (position != RecyclerView.NO_POSITION) {
-                        val odometer = getItem(position)
-                        adaperClick(odometer)
+    inner class OdometerViewHolder(private val binding: ViewOdometerItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        private val popMenu = PopupMenu(binding.root.context, binding.root).apply {
+            setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.delete -> {
+                        if (adapterPosition != RecyclerView.NO_POSITION) {
+                            deleteOdometer(getItem(adapterPosition))
+                        }
+                        true
                     }
+                    R.id.edit -> {
+                        if (adapterPosition != RecyclerView.NO_POSITION) {
+                            editOdometer(getItem(adapterPosition))
+                        }
+                        true
+                    }
+                    else -> false
+                }
+            }
+            inflate(R.menu.more_menu)
+            gravity = Gravity.END
+        }
+
+        init {
+            binding.apply {
+                root.setOnLongClickListener {
+                    popMenu.show()
+                    true
                 }
             }
         }
 
         fun bind(odometer: Odometer) {
-            bidining.apply {
+            binding.apply {
+                popMenu.menu.getItem(1).isVisible = odometer.canBeDeleted
                 textOdometer.text = root.context.getString(
                     R.string.odometer_item_value,
-                    odometer.input,
+                    odometer.input.toString(),
                     unit.shortcut()
                 )
                 textDate.text = odometer.created.toDate()
+                imageMore.setOnClickListener {
+                    popMenu.show()
+                }
             }
         }
     }

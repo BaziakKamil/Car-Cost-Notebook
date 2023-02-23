@@ -1,7 +1,9 @@
 package pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.petroltab
 
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +18,8 @@ import pl.kamilbaziak.carcostnotebook.toDate
 import pl.kamilbaziak.carcostnotebook.toTwoDigits
 
 class TankFillAdapter(
-    private val adapterClick: (TankFill) -> Unit,
+    private val editTankFill: (TankFill) -> Unit,
+    private val deleteTankFill: (TankFill) -> Unit,
     private val unit: PetrolUnitEnum,
 ) :
     ListAdapter<Pair<TankFill, Odometer?>, TankFillAdapter.TankFillViewHolder>(
@@ -38,14 +41,33 @@ class TankFillAdapter(
 
     inner class TankFillViewHolder(private val binding: ViewTankFillItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        private val popMenu = PopupMenu(binding.root.context, binding.root).apply {
+            setOnMenuItemClickListener {  item ->
+                when (item.itemId) {
+                    R.id.delete -> {
+                        if (adapterPosition != RecyclerView.NO_POSITION) {
+                            deleteTankFill(getItem(adapterPosition).first)
+                        }
+                        true
+                    }
+                    R.id.edit -> {
+                        if (adapterPosition != RecyclerView.NO_POSITION) {
+                            editTankFill(getItem(adapterPosition).first)
+                        }
+                        true
+                    }
+                    else -> false
+                }
+            }
+            inflate(R.menu.more_menu)
+            gravity = Gravity.END
+        }
+
         init {
             binding.apply {
-                root.setOnClickListener {
-                    val position = adapterPosition
-                    if (position != RecyclerView.NO_POSITION) {
-                        val tankFill = getItem(position)
-                        adapterClick(tankFill.first)
-                    }
+                root.setOnLongClickListener {
+                    popMenu.show()
+                    true
                 }
             }
         }
@@ -113,6 +135,9 @@ class TankFillAdapter(
                         mileageUnit
                     )
                 } ?: "-"
+                imageMore.setOnClickListener {
+                    popMenu.show()
+                }
             }
         }
 
