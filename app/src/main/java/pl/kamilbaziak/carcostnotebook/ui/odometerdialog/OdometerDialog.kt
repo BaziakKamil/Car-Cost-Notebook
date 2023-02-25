@@ -8,7 +8,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.datepicker.MaterialDatePicker
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import pl.kamilbaziak.carcostnotebook.R
@@ -16,7 +15,6 @@ import pl.kamilbaziak.carcostnotebook.databinding.DialogOdometerBinding
 import pl.kamilbaziak.carcostnotebook.hasLetters
 import pl.kamilbaziak.carcostnotebook.model.Odometer
 import pl.kamilbaziak.carcostnotebook.toDate
-import java.util.Date
 
 class OdometerDialog : BottomSheetDialogFragment() {
 
@@ -24,7 +22,10 @@ class OdometerDialog : BottomSheetDialogFragment() {
         DialogOdometerBinding.inflate(layoutInflater)
     }
     private val carId by lazy {
-        arguments?.getLong(CAR_ID_EXTRA)
+        arguments?.getLong(EXTRA_CAR_ID)
+    }
+    private val odometer by lazy {
+        arguments?.get(EXTRA_ODOMETER) as? Odometer
     }
     private val viewModel: OdometerDialogViewModel by viewModel {
         parametersOf(carId)
@@ -41,6 +42,11 @@ class OdometerDialog : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = binding.run {
         super.onViewCreated(view, savedInstanceState)
+
+        odometer?.let {
+            textInputOdometer.editText?.setText(it.input.toString())
+            viewModel.changePickedDate(it.created)
+        }
 
         dateDialog.addOnPositiveButtonClickListener {
             viewModel.changePickedDate(it)
@@ -62,27 +68,34 @@ class OdometerDialog : BottomSheetDialogFragment() {
     }
 
     //todo validation with snackbar messages
-    private fun validate(odometer: String?) {
-        if (odometer.isNullOrEmpty()) {
+    private fun validate(odometerTxt: String?) {
+        if (odometerTxt.isNullOrEmpty()) {
             return
         }
-        if (odometer.hasLetters()) {
+        if (odometerTxt.hasLetters()) {
             return
         }
-        viewModel.addOdometer(odometer.toDouble())
+        odometer?.let {
+            viewModel.updateOdometer(odometerTxt.toDouble(), it)
+        } ?: viewModel.addOdometer(odometerTxt.toDouble())
         dismiss()
     }
 
     companion object {
         const val TAG = "OdometerDialog.TAG"
         const val DATE_PICKER_TAG = "OdometerDialog.DATE_PICKER_TAG"
-        const val CAR_ID_EXTRA = "OdometerDialog.CAR_ID_EXTRA"
+        const val EXTRA_CAR_ID = "OdometerDialog.EXTRA_CAR_ID"
+        const val EXTRA_ODOMETER = "OdometerDialog.EXTRA_ODOMETER"
 
         fun show(
             fragmentManager: FragmentManager,
-            carId: Long
+            carId: Long?,
+            odometer: Odometer? = null
         ) = OdometerDialog().apply {
-            arguments = bundleOf(CAR_ID_EXTRA to carId)
+            arguments = bundleOf(
+                EXTRA_CAR_ID to carId,
+                EXTRA_ODOMETER to odometer
+            )
         }.show(fragmentManager, TAG)
     }
 }

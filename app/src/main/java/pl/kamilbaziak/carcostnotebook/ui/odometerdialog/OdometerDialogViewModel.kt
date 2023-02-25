@@ -24,6 +24,18 @@ class OdometerDialogViewModel(
         _pickedDate.value = long
     }
 
+    fun updateOdometer(
+        newOdometerValue: Double,
+        odometer: Odometer
+    ) = viewModelScope.launch {
+        odometerDao.updateOdometer(
+            odometer.copy(
+                input = newOdometerValue,
+                created = _pickedDate.value ?: Date().time
+            )
+        )
+    }
+
     fun addOdometer(odometer: Double) = viewModelScope.launch {
         odometerDao.addOdometer(
             Odometer(
