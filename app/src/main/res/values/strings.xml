@@ -23,7 +23,6 @@
     <string name="petrol_fill">Petrol fill</string>
     <string name="maintenance">Maintenance</string>
     <string name="odometer_reading">Odometer reading</string>
-    <string name="add_odometer_reading">Add odometer reading</string>
     <string name="odometer_item_value">%1s %2$s</string>
     <string name="petrol_amount">%1$s %2$s</string>
     <string name="petrol_amount_and_price_value">%1$s %2$s price: %3$s %4$s</string>
@@ -36,6 +35,11 @@
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="add_tank_fill_details">Add tank fill details</string>
+    <string name="edit_tank_fill_details">Edit tank fill details</string>
+    <string name="add_maintenance_details">Add maintenance details</string>
+    <string name="edit_maintenance_details">Edit maintenance details</string>
+    <string name="add_odometer_reading">Add odometer reading</string>
+    <string name="edit_odometer_reading">Edit odometer reading</string>
     <string name="petrol_quantity">Petrol quantity</string>
     <string name="computer_l_km">Computer l/km</string>
     <string name="petrol_price">Petrol price</string>

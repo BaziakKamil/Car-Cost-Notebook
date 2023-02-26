@@ -44,6 +44,7 @@ class OdometerDialog : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         odometer?.let {
+            textTitle.text = getString(R.string.edit_odometer_reading)
             textInputOdometer.editText?.setText(it.input.toString())
             viewModel.changePickedDate(it.created)
         }
