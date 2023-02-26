@@ -13,6 +13,7 @@ import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.databinding.DialogMaintenanceBinding
 import pl.kamilbaziak.carcostnotebook.model.Maintenance
 import pl.kamilbaziak.carcostnotebook.toDate
+import pl.kamilbaziak.carcostnotebook.toTwoDigits
 
 class MaintenanceDialog : BottomSheetDialogFragment() {
 
@@ -47,7 +48,7 @@ class MaintenanceDialog : BottomSheetDialogFragment() {
             viewModel.changePickedDate(it.created)
             viewModel.changePickedDueDate(it.dueDate)
             textInputName.editText?.setText(it.name)
-            textInputPrice.editText?.setText(it.price.toString())
+            textInputPrice.editText?.setText(it.price?.toTwoDigits())
             textInputDescription.editText?.setText(it.description)
             it.odometerId?.let { odometer -> viewModel.getOdometerForMaintenance(odometer) }
         }
@@ -81,7 +82,7 @@ class MaintenanceDialog : BottomSheetDialogFragment() {
 
             odometerForMaintenance.observe(viewLifecycleOwner) {
                 if (it != null) {
-                    textInputOdometer.editText?.setText(it.input.toString())
+                    textInputOdometer.editText?.setText(it.input.toTwoDigits())
                 }
             }
         }
@@ -108,20 +109,13 @@ class MaintenanceDialog : BottomSheetDialogFragment() {
         if (name.isNullOrEmpty()) {
             return
         }
-        maintenance?.let {
-            viewModel.editMaintenance(
-                name,
-                price?.toDouble(),
-                odometer?.toDouble(),
-                description,
-                it
-            )
-        } ?: viewModel.addMaintenance(
+        viewModel.addMaintenance(
             carId!!,
             name,
             price?.toDouble(),
             odometer?.toDouble(),
-            description
+            description,
+            maintenance
         )
         dismiss()
     }

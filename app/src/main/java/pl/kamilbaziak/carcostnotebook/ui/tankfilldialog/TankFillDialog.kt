@@ -15,14 +15,17 @@ import pl.kamilbaziak.carcostnotebook.EnumUtils.getPetrolEnumFromName
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.databinding.DialogTankfillBinding
 import pl.kamilbaziak.carcostnotebook.enums.PetrolEnum
+import pl.kamilbaziak.carcostnotebook.model.TankFill
 import pl.kamilbaziak.carcostnotebook.toDate
+import pl.kamilbaziak.carcostnotebook.toTwoDigits
 
 class TankFillDialog : BottomSheetDialogFragment() {
 
     private val binding by lazy {
         DialogTankfillBinding.inflate(layoutInflater)
     }
-    private val carId by lazy { arguments?.getLong(CAR_ID_EXTRA) }
+    private val carId by lazy { arguments?.getLong(EXTRA_CAR_ID) }
+    private val tankFill by lazy { arguments?.get(EXTRA_TANK_FILL) as? TankFill }
     private val viewModel: TankFillDialogViewModel by inject()
     private val dateDialog = MaterialDatePicker.Builder.datePicker()
         .setTitleText(R.string.choose_date)
@@ -36,6 +39,17 @@ class TankFillDialog : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = binding.run {
         super.onViewCreated(view, savedInstanceState)
+
+        tankFill?.let {
+            textInputPetrolType.editText?.setText(it.petrolEnum.name)
+            textInputPetrolQuantity.editText?.setText(it.quantity.toTwoDigits())
+            textInputPetrolPrice.editText?.setText(it.petrolPrice?.toTwoDigits())
+            viewModel.getOdometerForTankFill(it.odometerId)
+            textInputComputerReading.editText?.setText(it.computerReading?.toTwoDigits())
+            textInputPetrolStation.editText?.setText(it.petrolStation)
+            textInputDistanceFromLastFill.editText?.setText(it.distanceFromLastTankFill?.toTwoDigits())
+            viewModel.changePickedDate(it.created)
+        }
 
         EnumUtils.setEnumValuesToMaterialSpinner(
             textInputPetrolType.editText as MaterialAutoCompleteTextView,
@@ -54,8 +68,15 @@ class TankFillDialog : BottomSheetDialogFragment() {
             dateDialog.show(childFragmentManager, DATE_PICKER_TAG)
         }
 
-        viewModel.pickedDate.observe(viewLifecycleOwner) {
-            textInputCalendar.editText?.setText(it.toDate())
+        viewModel.apply {
+            pickedDate.observe(viewLifecycleOwner) {
+                textInputCalendar.editText?.setText(it.toDate())
+            }
+            odometerForTankFill.observe(viewLifecycleOwner) {
+                if (it != null) {
+                    textInputOdometer.editText?.setText(it.input.toTwoDigits())
+                }
+            }
         }
 
         buttonDone.setOnClickListener {
@@ -90,10 +111,11 @@ class TankFillDialog : BottomSheetDialogFragment() {
             getPetrolEnumFromName(petrolType),
             petrolQuantity!!.toDouble(),
             petrolPrice!!.toDouble(),
-            if(distanceFromLastFill.isNullOrEmpty()) 0.0 else distanceFromLastFill.toDouble(),
+            if (distanceFromLastFill.isNullOrEmpty()) 0.0 else distanceFromLastFill.toDouble(),
             odometer!!.toDouble(),
-            if(computerReading.isNullOrEmpty()) 0.0 else computerReading.toDouble(),
-            petrolStation!!
+            if (computerReading.isNullOrEmpty()) 0.0 else computerReading.toDouble(),
+            petrolStation!!,
+            tankFill
         )
         dismiss()
     }
@@ -130,13 +152,18 @@ class TankFillDialog : BottomSheetDialogFragment() {
     companion object {
         const val TAG = "TankFillDialog.TAG"
         const val DATE_PICKER_TAG = "TankFillDialog.DATE_PICKER_TAG"
-        const val CAR_ID_EXTRA = "TankFillDialog.CAR_ID_EXTRA"
+        const val EXTRA_CAR_ID = "TankFillDialog.EXTRA_CAR_ID"
+        const val EXTRA_TANK_FILL = "TankFillDialog.EXTRA_TANK_FILL"
 
         fun show(
             fragmentManager: FragmentManager,
-            carId: Long
+            carId: Long?,
+            tankFill: TankFill? = null
         ) = TankFillDialog().apply {
-            arguments = bundleOf(CAR_ID_EXTRA to carId)
+            arguments = bundleOf(
+                EXTRA_CAR_ID to carId,
+                EXTRA_TANK_FILL to tankFill
+            )
         }.show(fragmentManager, TAG)
     }
 }

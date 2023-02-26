@@ -15,6 +15,7 @@ import pl.kamilbaziak.carcostnotebook.databinding.DialogOdometerBinding
 import pl.kamilbaziak.carcostnotebook.hasLetters
 import pl.kamilbaziak.carcostnotebook.model.Odometer
 import pl.kamilbaziak.carcostnotebook.toDate
+import pl.kamilbaziak.carcostnotebook.toTwoDigits
 
 class OdometerDialog : BottomSheetDialogFragment() {
 
@@ -45,7 +46,7 @@ class OdometerDialog : BottomSheetDialogFragment() {
 
         odometer?.let {
             textTitle.text = getString(R.string.edit_odometer_reading)
-            textInputOdometer.editText?.setText(it.input.toString())
+            textInputOdometer.editText?.setText(it.input.toTwoDigits())
             viewModel.changePickedDate(it.created)
         }
 

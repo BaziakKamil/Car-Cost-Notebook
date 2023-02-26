@@ -23,6 +23,7 @@ import pl.kamilbaziak.carcostnotebook.enums.EngineEnum
 import pl.kamilbaziak.carcostnotebook.enums.PetrolUnitEnum
 import pl.kamilbaziak.carcostnotebook.enums.UnitEnum
 import pl.kamilbaziak.carcostnotebook.model.Car
+import pl.kamilbaziak.carcostnotebook.toTwoDigits
 
 class AddNewCarFragment : Fragment() {
 
@@ -76,7 +77,7 @@ class AddNewCarFragment : Fragment() {
             }
             viewModel.odometer.observe(viewLifecycleOwner) {
                 if (it != null) {
-                    textInputCarOdometer.editText?.setText(it.input.toString())
+                    textInputCarOdometer.editText?.setText(it.input.toTwoDigits())
                     textInputUnit.editText?.setText(it.unit.name)
                 }
             }

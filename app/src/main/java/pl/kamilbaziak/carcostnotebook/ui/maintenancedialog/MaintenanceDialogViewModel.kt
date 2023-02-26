@@ -45,10 +45,13 @@ class MaintenanceDialogViewModel(
         name: String,
         price: Double?,
         odometer: Double?,
-        description: String?
+        description: String?,
+        maintenance: Maintenance?
     ) =
         viewModelScope.launch {
-            maintenanceDao.addMaintenance(
+            maintenance?.let {
+                editMaintenance(name, price, odometer, description, it)
+            } ?: maintenanceDao.addMaintenance(
                 Maintenance(
                     0,
                     carId,
@@ -74,7 +77,7 @@ class MaintenanceDialogViewModel(
             )
         }
 
-    fun editMaintenance(
+    private fun editMaintenance(
         name: String,
         price: Double?,
         odometer: Double?,
