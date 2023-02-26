@@ -12,7 +12,7 @@
         style="@style/MaterialAlertDialog.Material3.Title.Text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/add_tank_fill_details"
+        android:text="@string/add_maintenance_details"
         app:layout_constraintEnd_toStartOf="@+id/image_close"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

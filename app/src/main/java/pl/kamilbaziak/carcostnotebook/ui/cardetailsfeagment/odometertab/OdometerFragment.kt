@@ -16,6 +16,7 @@ import pl.kamilbaziak.carcostnotebook.TextUtils
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentOdometerBinding
 import pl.kamilbaziak.carcostnotebook.enums.UnitEnum
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialog
+import pl.kamilbaziak.carcostnotebook.ui.odometerdialog.OdometerDialog
 
 class OdometerFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActions {
 
@@ -75,7 +76,8 @@ class OdometerFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActi
                             getString(R.string.delete_dialog_message),
                             getString(R.string.delete)
                         )
-                    is OdometerViewModel.OdometerEvent.ShowOdometerEditDialogScreen -> TODO()
+                    is OdometerViewModel.OdometerEvent.ShowOdometerEditDialogScreen ->
+                        OdometerDialog.show(childFragmentManager, carId, event.odometer)
                 }
             }
         }

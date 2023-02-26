@@ -18,6 +18,7 @@ import pl.kamilbaziak.carcostnotebook.databinding.FragmentTankFillBinding
 import pl.kamilbaziak.carcostnotebook.enums.PetrolUnitEnum
 import pl.kamilbaziak.carcostnotebook.model.TankFill
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialog
+import pl.kamilbaziak.carcostnotebook.ui.tankfilldialog.TankFillDialog
 
 class TankFillFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActions {
 
@@ -83,7 +84,12 @@ class TankFillFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActi
                             getString(R.string.delete_dialog_message),
                             getString(R.string.delete)
                         )
-                    is TankFillViewModel.TankFillEvent.ShowTankFillEditDialogScreen -> TODO()
+                    is TankFillViewModel.TankFillEvent.ShowTankFillEditDialogScreen ->
+                        TankFillDialog.show(
+                            childFragmentManager,
+                            carId,
+                            event.tankFill
+                        )
                 }
             }
         }

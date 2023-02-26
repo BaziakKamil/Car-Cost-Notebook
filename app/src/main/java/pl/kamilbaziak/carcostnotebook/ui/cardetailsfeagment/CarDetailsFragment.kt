@@ -43,14 +43,14 @@ class CarDetailsFragment : Fragment() {
                 R.drawable.ic_petrol
             )
             addFragment(
-                OdometerFragment.newInstance(car.id, car.unit),
-                getString(R.string.odometer),
-                R.drawable.ic_odometer
-            )
-            addFragment(
                 MaintenanceFragment.newInstance(car.id),
                 getString(R.string.maintenance),
                 R.drawable.ic_maintenance
+            )
+            addFragment(
+                OdometerFragment.newInstance(car.id, car.unit),
+                getString(R.string.odometer),
+                R.drawable.ic_odometer
             )
         }
     }
@@ -88,15 +88,15 @@ class CarDetailsFragment : Fragment() {
                 extendAddFab(false)
             }
 
-            fabAddOdometer.setOnClickListener {
+            fabAddMaintenance.setOnClickListener {
                 viewPager.setCurrentItem(1, true)
-                OdometerDialog.show(childFragmentManager, car.id)
+                MaintenanceDialog.show(childFragmentManager, car.id)
                 extendAddFab(false)
             }
 
-            fabAddMaintenance.setOnClickListener {
+            fabAddOdometer.setOnClickListener {
                 viewPager.setCurrentItem(2, true)
-                MaintenanceDialog.show(childFragmentManager, car.id)
+                OdometerDialog.show(childFragmentManager, car.id)
                 extendAddFab(false)
             }
         }
@@ -106,11 +106,11 @@ class CarDetailsFragment : Fragment() {
                 tabLayout.getTabAt(0)!!.orCreateBadge.number = it.size
             }
 
-            odometerCount.observe(viewLifecycleOwner) {
+            maintenanceCount.observe(viewLifecycleOwner) {
                 tabLayout.getTabAt(1)!!.orCreateBadge.number = it.size
             }
 
-            maintenanceCount.observe(viewLifecycleOwner) {
+            odometerCount.observe(viewLifecycleOwner) {
                 tabLayout.getTabAt(2)!!.orCreateBadge.number = it.size
             }
         }

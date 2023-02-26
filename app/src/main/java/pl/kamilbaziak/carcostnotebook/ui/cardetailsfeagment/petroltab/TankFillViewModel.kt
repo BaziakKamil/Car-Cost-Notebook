@@ -30,7 +30,7 @@ class TankFillViewModel(
     private val deleteTankFill = MutableLiveData<TankFill>()
 
     fun onEditTankFill(tankFill: TankFill) = viewModelScope.launch {
-        //todo
+        tankFillChannel.send(TankFillEvent.ShowTankFillEditDialogScreen(tankFill))
     }
 
     fun deleteTankFill() = viewModelScope.launch {

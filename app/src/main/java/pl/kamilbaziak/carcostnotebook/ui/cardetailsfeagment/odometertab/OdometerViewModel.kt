@@ -24,7 +24,7 @@ class OdometerViewModel(
     private val deleteOdometer = MutableLiveData<Odometer>()
 
     fun onEditOdometer(odometer: Odometer) = viewModelScope.launch {
-        //todo
+        odometerChannel.send(OdometerEvent.ShowOdometerEditDialogScreen(odometer))
     }
 
     fun deleteOdometer() = viewModelScope.launch {

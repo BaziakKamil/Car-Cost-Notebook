@@ -25,23 +25,33 @@ class MaintenanceDialogViewModel(
     private val _pickedDueDate = MutableLiveData<Long>()
     val pickedDueDate: LiveData<Long> = _pickedDueDate
 
+    private val _odometerForMaintenance = MutableLiveData<Odometer>()
+    val odometerForMaintenance: LiveData<Odometer> = _odometerForMaintenance
+
     fun changePickedDate(long: Long) {
         _pickedDate.value = long
     }
 
-    fun changePickedDueDate(long: Long) {
-        _pickedDueDate.value = long
+    fun getOdometerForMaintenance(odometerId: Long) = viewModelScope.launch {
+        odometerDao.getOdometerById(odometerId)?.let {
+            _odometerForMaintenance.value = it
+        }
     }
+
+    fun changePickedDueDate(long: Long?) = long?.let { _pickedDueDate.value }
 
     fun addMaintenance(
         carId: Long,
         name: String,
         price: Double?,
         odometer: Double?,
-        description: String?
+        description: String?,
+        maintenance: Maintenance?
     ) =
         viewModelScope.launch {
-            maintenanceDao.addMaintenance(
+            maintenance?.let {
+                editMaintenance(name, price, odometer, description, it)
+            } ?: maintenanceDao.addMaintenance(
                 Maintenance(
                     0,
                     carId,
@@ -63,6 +73,45 @@ class MaintenanceDialogViewModel(
                     pickedDueDate.value,
                     false,
                     description
+                )
+            )
+        }
+
+    private fun editMaintenance(
+        name: String,
+        price: Double?,
+        odometer: Double?,
+        description: String?,
+        maintenance: Maintenance
+    ) =
+        viewModelScope.launch {
+            var addedOdometerId: Long? = null
+
+            maintenance.odometerId?.let {
+                odometerDao.deleteOdometerById(it)
+            }
+
+            odometer?.let {
+                addedOdometerId = odometerDao.addOdometer(
+                    Odometer(
+                        0,
+                        maintenance.carId,
+                        it,
+                        carDao.getCarById(maintenance.carId)?.unit ?: UnitEnum.Kilometers,
+                        pickedDate.value ?: Date().time,
+                        canBeDeleted = false
+                    )
+                )
+            }
+
+            maintenanceDao.updateMaintenance(
+                maintenance.copy(
+                    name = name,
+                    price = price,
+                    odometerId = addedOdometerId,
+                    description = description,
+                    created = pickedDate.value ?: Date().time,
+                    dueDate = pickedDueDate.value,
                 )
             )
         }

@@ -12,7 +12,7 @@ import pl.kamilbaziak.carcostnotebook.databinding.ViewMainViewItemBinding
 import pl.kamilbaziak.carcostnotebook.model.Car
 
 class CarAdapter(
-    private val adapterClick: (Car) -> Unit,
+    private val openCarDetails: (Car) -> Unit,
     private val editCar: (Car) -> Unit,
     private val deleteCar: (Car) -> Unit
 ) : ListAdapter<Car, CarAdapter.CarViewHolder>(DiffCallback()) {
@@ -55,7 +55,7 @@ class CarAdapter(
                 root.apply {
                     setOnClickListener {
                         if (adapterPosition != RecyclerView.NO_POSITION) {
-                            adapterClick(getItem(adapterPosition))
+                            openCarDetails(getItem(adapterPosition))
                         }
                     }
                     setOnLongClickListener {

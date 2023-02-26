@@ -27,7 +27,7 @@ class MaintenanceViewModel(
     private val deleteMaintenance = MutableLiveData<Maintenance>()
 
     fun onEditMaintenance(maintenance: Maintenance) = viewModelScope.launch {
-        //todo
+        maintenanceChannel.send(MaintenanceEvent.ShowCarEditDialogScreen(maintenance))
     }
 
     fun deleteMaintenance() = viewModelScope.launch {
