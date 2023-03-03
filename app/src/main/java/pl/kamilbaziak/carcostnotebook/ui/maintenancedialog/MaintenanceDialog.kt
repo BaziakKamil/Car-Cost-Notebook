@@ -112,8 +112,8 @@ class MaintenanceDialog : BottomSheetDialogFragment() {
         viewModel.addMaintenance(
             carId!!,
             name,
-            price?.toDouble(),
-            odometer?.toDouble(),
+            price?.takeIf { it.isNotEmpty() }?.toDouble(),
+            odometer?.takeIf { it.isNotEmpty() }?.toDouble(),
             description,
             maintenance
         )

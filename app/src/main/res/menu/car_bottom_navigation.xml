@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_petrol"
+        android:enabled="true"
+        android:icon="@drawable/ic_petrol"
+        android:title="@string/petrol" />
+    <item
+        android:id="@+id/menu_maintenance"
+        android:enabled="true"
+        android:icon="@drawable/ic_maintenance"
+        android:title="@string/maintenance" />
+    <item
+        android:id="@+id/menu_odometer"
+        android:enabled="true"
+        android:icon="@drawable/ic_odometer"
+        android:title="@string/odometer" />
+</menu>
