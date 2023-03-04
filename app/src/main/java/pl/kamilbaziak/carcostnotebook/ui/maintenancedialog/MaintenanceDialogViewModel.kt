@@ -63,7 +63,7 @@ class MaintenanceDialogViewModel(
                                 0,
                                 carId,
                                 odometer,
-                                carDao.getCarById(carId)?.unit ?: UnitEnum.Kilometers,
+                                carDao.getCarById(carId).value?.unit ?: UnitEnum.Kilometers,
                                 pickedDate.value ?: Date().time,
                                 canBeDeleted = false
                             )
@@ -97,7 +97,7 @@ class MaintenanceDialogViewModel(
                         0,
                         maintenance.carId,
                         it,
-                        carDao.getCarById(maintenance.carId)?.unit ?: UnitEnum.Kilometers,
+                        carDao.getCarById(maintenance.carId).value?.unit ?: UnitEnum.Kilometers,
                         pickedDate.value ?: Date().time,
                         canBeDeleted = false
                     )

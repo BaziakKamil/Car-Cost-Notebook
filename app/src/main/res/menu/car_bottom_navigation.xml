@@ -15,4 +15,9 @@
         android:enabled="true"
         android:icon="@drawable/ic_odometer"
         android:title="@string/odometer" />
+    <item
+        android:id="@+id/menu_car_details"
+        android:enabled="true"
+        android:icon="@drawable/ic_car_background"
+        android:title="@string/details" />
 </menu>

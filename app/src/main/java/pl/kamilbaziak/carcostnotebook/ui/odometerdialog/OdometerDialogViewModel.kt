@@ -42,7 +42,7 @@ class OdometerDialogViewModel(
                 0,
                 carId,
                 odometer,
-                carDao.getCarById(carId)?.unit ?: UnitEnum.Kilometers,
+                carDao.getCarById(carId).value?.unit ?: UnitEnum.Kilometers,
                 _pickedDate.value ?: Date().time,
                 canBeDeleted = true
             )

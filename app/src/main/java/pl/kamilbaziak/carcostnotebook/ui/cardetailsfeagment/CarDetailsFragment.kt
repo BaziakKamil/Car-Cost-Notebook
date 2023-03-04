@@ -13,6 +13,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentCarDetailsBinding
+import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.details.DetailsFragment
 import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.maintenancetab.MaintenanceFragment
 import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.odometertab.OdometerFragment
 import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.petroltab.TankFillFragment
@@ -40,6 +41,7 @@ class CarDetailsFragment : Fragment() {
             addFragment(TankFillFragment.newInstance(car.id, car.petrolUnit))
             addFragment(MaintenanceFragment.newInstance(car.id))
             addFragment(OdometerFragment.newInstance(car.id, car.unit))
+            addFragment(DetailsFragment.newInstance(car.id))
         }
     }
 
@@ -63,6 +65,7 @@ class CarDetailsFragment : Fragment() {
                     bottomNavigation.selectedItemId = when (position) {
                         1 -> R.id.menu_maintenance
                         2 -> R.id.menu_odometer
+                        3 -> R.id.menu_car_details
                         else -> R.id.menu_petrol
                     }
                 }
@@ -74,6 +77,7 @@ class CarDetailsFragment : Fragment() {
                 R.id.menu_petrol -> viewPager.currentItem = 0
                 R.id.menu_maintenance -> viewPager.currentItem = 1
                 R.id.menu_odometer -> viewPager.currentItem = 2
+                R.id.menu_car_details -> viewPager.currentItem = 3
             }
             true
         }

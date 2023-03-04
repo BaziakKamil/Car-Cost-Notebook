@@ -15,7 +15,7 @@ import pl.kamilbaziak.carcostnotebook.model.TankFill
 class TankFillViewModel(
     private val tankFillDao: TankFillDao,
     private val odometerDao: OdometerDao,
-    private val carId: Long
+    carId: Long
 ) : ViewModel() {
 
     private val tankFillChannel = Channel<TankFillEvent>()
