@@ -38,10 +38,10 @@ class CarDetailsFragment : Fragment() {
 
     private val viewPagerAdapter by lazy {
         ViewPagerAdapter(childFragmentManager, lifecycle).apply {
+            addFragment(DetailsFragment.newInstance(car.id))
             addFragment(TankFillFragment.newInstance(car.id, car.petrolUnit))
             addFragment(MaintenanceFragment.newInstance(car.id))
             addFragment(OdometerFragment.newInstance(car.id, car.unit))
-            addFragment(DetailsFragment.newInstance(car.id))
         }
     }
 
@@ -62,11 +62,12 @@ class CarDetailsFragment : Fragment() {
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
+                    extendAddFab(false)
                     bottomNavigation.selectedItemId = when (position) {
-                        1 -> R.id.menu_maintenance
-                        2 -> R.id.menu_odometer
-                        3 -> R.id.menu_car_details
-                        else -> R.id.menu_petrol
+                        1 -> R.id.menu_petrol
+                        2 -> R.id.menu_maintenance
+                        3 -> R.id.menu_odometer
+                        else -> R.id.menu_car_details
                     }
                 }
             })
@@ -74,10 +75,11 @@ class CarDetailsFragment : Fragment() {
 
         bottomNavigation.setOnItemSelectedListener {
             when (it.itemId) {
-                R.id.menu_petrol -> viewPager.currentItem = 0
-                R.id.menu_maintenance -> viewPager.currentItem = 1
-                R.id.menu_odometer -> viewPager.currentItem = 2
-                R.id.menu_car_details -> viewPager.currentItem = 3
+                R.id.menu_car_details -> viewPager.currentItem = 0
+                R.id.menu_petrol -> viewPager.currentItem = 1
+                R.id.menu_maintenance -> viewPager.currentItem = 2
+                R.id.menu_odometer -> viewPager.currentItem = 3
+                R.id.menu_add -> extendAddFab(!fabAddContainer.fabAddPetrol.isVisible)
             }
             true
         }
@@ -153,7 +155,7 @@ class CarDetailsFragment : Fragment() {
                     textMaintenance.startAnimation(animFadeIn)
                     textAddOdometer.startAnimation(animFadeIn)
                     textPetrol.startAnimation(animFadeIn)
-                    fabAdd.extend()
+//                    fabAdd.extend()
                     fabAddMaintenance.show()
                     fabAddOdometer.show()
                     fabAddPetrol.show()
@@ -162,7 +164,7 @@ class CarDetailsFragment : Fragment() {
                     textMaintenance.startAnimation(animFadeOut)
                     textAddOdometer.startAnimation(animFadeOut)
                     textPetrol.startAnimation(animFadeOut)
-                    fabAdd.shrink()
+//                    fabAdd.shrink()
                     fabAddMaintenance.hide()
                     fabAddOdometer.hide()
                     fabAddPetrol.hide()

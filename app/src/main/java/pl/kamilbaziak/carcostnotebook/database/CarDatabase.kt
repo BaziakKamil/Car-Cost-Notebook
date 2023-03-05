@@ -17,7 +17,6 @@ import pl.kamilbaziak.carcostnotebook.model.TankFill
     version = 2,
     exportSchema = false
 )
-
 abstract class CarDatabase : RoomDatabase() {
     abstract val carDao: CarDao
     abstract val maintenanceDao: MaintenanceDao
