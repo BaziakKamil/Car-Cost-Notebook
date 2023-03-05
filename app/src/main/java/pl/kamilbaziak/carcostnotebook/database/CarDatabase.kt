@@ -14,7 +14,7 @@ import pl.kamilbaziak.carcostnotebook.model.TankFill
         Odometer::class,
         TankFill::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 

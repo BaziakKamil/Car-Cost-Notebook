@@ -16,5 +16,6 @@ data class Odometer(
     val input: Double,
     val unit: UnitEnum,
     val created: Long,
-    val canBeDeleted: Boolean
+    val canBeDeleted: Boolean,
+    val description: String? = null
 ) : Parcelable

@@ -4,6 +4,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -78,6 +79,14 @@ class OdometerAdapter(
                     unit.shortcut()
                 )
                 textDate.text = odometer.created.toDate()
+                textDescription.apply {
+                    if (!odometer.description.isNullOrEmpty()) {
+                        isVisible = true
+                        text = odometer.description
+                    } else {
+                        isVisible = false
+                    }
+                }
                 imageMore.setOnClickListener {
                     popMenu.show()
                 }
