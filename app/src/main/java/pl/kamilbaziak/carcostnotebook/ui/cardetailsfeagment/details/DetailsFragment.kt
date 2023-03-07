@@ -12,6 +12,8 @@ import org.koin.core.parameter.parametersOf
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentDetailsBinding
 import pl.kamilbaziak.carcostnotebook.model.name
+import pl.kamilbaziak.carcostnotebook.toDate
+import pl.kamilbaziak.carcostnotebook.toTwoDigits
 
 class DetailsFragment : Fragment() {
 
@@ -33,13 +35,21 @@ class DetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.apply {
-            currentCarData.observe(viewLifecycleOwner) {
-                it?.let { car ->
-
-                    //set text here
+            currentCarData.observe(viewLifecycleOwner) {c ->
+                c?.let { car ->
+                    textInputCarBrand.editText?.setText(car.brand)
+                    textInputCarModel.editText?.setText(car.model)
+                    textInputCarYear.editText?.setText(car.year.toString())
+                    textInputCarLicencePlate.editText?.setText(car.licensePlate)
+                    textInputDescription.editText?.setText(car.description.ifEmpty { getString(R.string.not_added) })
+                    textInputCarDateWhenBought.editText?.setText(
+                        car.dateWhenBought?.toDate() ?: getString(R.string.not_added)
+                    )
+                    textInputCarPriceWhenBought.editText?.setText(
+                        car.priceWhenBought?.toTwoDigits() ?: getString(R.string.not_added)
+                    )
                 } ?: run{
-                    noCarViewGroup.isVisible = true
-                    textCarName.text = getString(R.string.error_getting_car_data)
+                    //todo add error
                 }
             }
         }

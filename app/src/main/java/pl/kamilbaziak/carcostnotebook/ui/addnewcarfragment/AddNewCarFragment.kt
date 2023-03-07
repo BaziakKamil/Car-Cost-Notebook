@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
 import org.koin.android.ext.android.inject
@@ -23,6 +23,7 @@ import pl.kamilbaziak.carcostnotebook.enums.EngineEnum
 import pl.kamilbaziak.carcostnotebook.enums.PetrolUnitEnum
 import pl.kamilbaziak.carcostnotebook.enums.UnitEnum
 import pl.kamilbaziak.carcostnotebook.model.Car
+import pl.kamilbaziak.carcostnotebook.toDate
 import pl.kamilbaziak.carcostnotebook.toTwoDigits
 
 class AddNewCarFragment : Fragment() {
@@ -32,6 +33,9 @@ class AddNewCarFragment : Fragment() {
     }
     private val viewModel: AddNewCarViewModel by inject()
     private val args: AddNewCarFragmentArgs by navArgs()
+    private val dateDialog = MaterialDatePicker.Builder.datePicker()
+        .setTitleText(R.string.choose_date_when_bought)
+        .build()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,15 +74,11 @@ class AddNewCarFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         args.car?.let { car ->
-            viewModel.getAllOdometer(car)
-            viewModel.getLastOdometer(car)
-            viewModel.odometerAll.observe(viewLifecycleOwner) {
-                textInputCarOdometer.isEnabled = it != null && it.size > 1
-            }
-            viewModel.odometer.observe(viewLifecycleOwner) {
-                if (it != null) {
-                    textInputCarOdometer.editText?.setText(it.input.toTwoDigits())
-                    textInputUnit.editText?.setText(it.unit.name)
+            viewModel.apply {
+                getAllOdometer(car)
+                getLastOdometer(car)
+                car.dateWhenBought?.let {
+                    changePickedDate(it)
                 }
             }
 
@@ -89,7 +89,30 @@ class AddNewCarFragment : Fragment() {
             }
         }
 
+        dateDialog.addOnPositiveButtonClickListener {
+            viewModel.changePickedDate(it)
+        }
+
+        textInputCalendarWhenBought.editText?.setOnClickListener {
+            dateDialog.show(childFragmentManager, DATE_PICKER_TAG)
+        }
+
         activity?.actionBar?.title = args.title
+
+        viewModel.apply {
+            pickedDate.observe(viewLifecycleOwner) {
+                textInputCalendarWhenBought.editText?.setText(it.toDate())
+            }
+            odometerAll.observe(viewLifecycleOwner) {
+                textInputCarOdometer.isEnabled = it != null && it.size > 1
+            }
+            lastOdometer.observe(viewLifecycleOwner) {
+                if (it != null) {
+                    textInputCarOdometer.editText?.setText(it.input.toTwoDigits())
+                    textInputUnit.editText?.setText(it.unit.name)
+                }
+            }
+        }
 
         setEnumValuesToMaterialSpinner(
             textInputEngineType.editText as MaterialAutoCompleteTextView,
@@ -142,6 +165,12 @@ class AddNewCarFragment : Fragment() {
         textInputEngineType.editText?.setText(car.engineEnum.name)
         textInputPetrolUnit.editText?.setText(car.petrolUnit.name)
         textInputDescription.editText?.setText(car.description)
+        car.priceWhenBought?.let {
+            textInputCarPriceWhenBought.editText?.setText(it.toTwoDigits())
+        }
+        car.dateWhenBought?.let {
+            textInputCarPriceWhenBought.editText?.setText(it.toDate())
+        }
     }
 
     private fun saveCar() {
@@ -159,9 +188,11 @@ class AddNewCarFragment : Fragment() {
                         getEngineTypeFromName(textInputEngineType.editText?.text.toString()),
                         getPetrolUnitFromName(textInputPetrolUnit.editText?.text.toString()),
                         getUnitTypeFromName(textInputUnit.editText?.text.toString()),
-                        textInputDescription.editText?.text.toString()
+                        textInputDescription.editText?.text.toString(),
+                        textInputCarPriceWhenBought.editText?.text.toString().toDoubleOrNull(),
+                        viewModel.pickedDate.value
                     ),
-                    viewModel.odometer.value,
+                    viewModel.lastOdometer.value,
                     textInputCarOdometer.editText?.text.toString().toDouble()
                 )
             } else {
@@ -175,7 +206,9 @@ class AddNewCarFragment : Fragment() {
                         getEngineTypeFromName(textInputEngineType.editText?.text.toString()),
                         getPetrolUnitFromName(textInputPetrolUnit.editText?.text.toString()),
                         getUnitTypeFromName(textInputUnit.editText?.text.toString()),
-                        textInputDescription.editText?.text.toString()
+                        textInputDescription.editText?.text.toString(),
+                        textInputCarPriceWhenBought.editText?.text.toString().toDoubleOrNull(),
+                        viewModel.pickedDate.value
                     ),
                     textInputCarOdometer.editText?.text.toString().toDouble()
                 )
@@ -214,7 +247,8 @@ class AddNewCarFragment : Fragment() {
         textInputUnit.error = null
     }
 
-    private fun showSnackbar(message: String) =
-        Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG)
-            .show()
+    companion object Contract {
+
+        const val DATE_PICKER_TAG = "AddNewCarFragment.DATE_PICKER_TAG"
+    }
 }

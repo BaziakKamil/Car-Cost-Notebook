@@ -13,7 +13,7 @@ val carDatabase = module {
         CarDatabase::class.java,
         "car_database"
     )
-        .addMigrations(Migrations.MIGRATION_1_2)
+        .addMigrations(Migrations.MIGRATION_2_3)
         .fallbackToDestructiveMigration()
         .build()
 

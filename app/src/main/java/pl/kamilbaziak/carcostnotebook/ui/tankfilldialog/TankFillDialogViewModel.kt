@@ -73,7 +73,8 @@ class TankFillDialogViewModel(
                         odometer,
                         carDao.getCarById(carId).value?.unit ?: UnitEnum.Kilometers,
                         pickedDate.value ?: Date().time,
-                        canBeDeleted = false
+                        canBeDeleted = false,
+                        description = "Tank fill: $petrolStation"
                     )
                 ),
                 computerReading,
@@ -107,7 +108,8 @@ class TankFillDialogViewModel(
                         odometer,
                         carDao.getCarById(tankFill.carId).value?.unit ?: UnitEnum.Kilometers,
                         pickedDate.value ?: Date().time,
-                        canBeDeleted = false
+                        canBeDeleted = false,
+                        description = "Tank fill: $petrolStation"
                     )
                 ),
                 computerReading = computerReading,

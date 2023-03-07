@@ -74,6 +74,7 @@ class CarDetailsFragment : Fragment() {
         }
 
         bottomNavigation.setOnItemSelectedListener {
+            extendAddFab(false)
             when (it.itemId) {
                 R.id.menu_car_details -> viewPager.currentItem = 0
                 R.id.menu_petrol -> viewPager.currentItem = 1
