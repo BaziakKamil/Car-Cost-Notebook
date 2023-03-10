@@ -94,7 +94,7 @@ class TankFillAdapter(
                         tankFill.first.quantity.toTwoDigits(),
                         unit.shortcut(),
                         tankFill.first.petrolPrice!!.toTwoDigits(),
-                        "zł/" + unit.shortcut()
+                        "${ctx.getString(R.string.pln_currency)} / ${unit.shortcut()}"
                     )
                 } ?: ctx.getString(
                     R.string.petrol_amount,
@@ -116,7 +116,7 @@ class TankFillAdapter(
                         tankFill.first.quantity,
                         tankFill.first.petrolPrice
                     ).toTwoDigits(),
-                    "zł"
+                    ctx.getString(R.string.pln_currency)
                 )
 
                 textFromLastTankFill.text = ctx.getString(

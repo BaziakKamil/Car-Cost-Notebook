@@ -76,4 +76,7 @@
     <string name="error_getting_car_data">Error getting car data</string>
     <string name="do_you_want_to_add_fist_recorder_odometer_and_bought_cost">Do you want to add fist recorder odometer and bought cost?</string>
     <string name="not_added">Not added</string>
+    <string name="car_data">Car data</string>
+    <string name="car_data_when_bought">Data when car was bought</string>
+    <string name="pln_currency">zł</string>
 </resources>

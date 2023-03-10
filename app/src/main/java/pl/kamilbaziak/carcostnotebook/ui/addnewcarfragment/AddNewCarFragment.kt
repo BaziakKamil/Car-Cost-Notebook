@@ -64,8 +64,8 @@ class AddNewCarFragment : Fragment() {
     ) = binding.run {
         super.onViewCreated(view, savedInstanceState)
 
-        sectionCarData.textDivider.text = "Car data"
-        sectionCarWhenBought.textDivider.text = "Data when car was bought"
+        sectionCarData.textDivider.text = getString(R.string.car_data)
+        sectionCarWhenBought.textDivider.text = getString(R.string.car_data_when_bought)
 
         args.car?.let { car ->
             viewModel.apply {
@@ -181,7 +181,7 @@ class AddNewCarFragment : Fragment() {
                         textInputDescription.editText?.text.toString(),
                         textInputCarPriceWhenBought.editText?.text.toString().toDoubleOrNull(),
                         viewModel.pickedDate.value,
-                        "zł"
+                        getString(R.string.pln_currency)
                     ),
                     viewModel.lastOdometer.value,
                     textInputCarOdometer.editText?.text.toString().toDouble()
@@ -200,7 +200,7 @@ class AddNewCarFragment : Fragment() {
                         textInputDescription.editText?.text.toString(),
                         textInputCarPriceWhenBought.editText?.text.toString().toDoubleOrNull(),
                         viewModel.pickedDate.value,
-                        "zł"
+                        getString(R.string.pln_currency)
                     ),
                     textInputCarOdometer.editText?.text.toString().toDouble()
                 )
