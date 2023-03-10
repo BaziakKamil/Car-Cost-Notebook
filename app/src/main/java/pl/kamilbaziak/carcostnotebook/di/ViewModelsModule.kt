@@ -4,6 +4,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import pl.kamilbaziak.carcostnotebook.ui.addnewcarfragment.AddNewCarViewModel
 import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.CarDetailsViewModel
+import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.details.DetailsViewModel
 import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.maintenancetab.MaintenanceViewModel
 import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.odometertab.OdometerViewModel
 import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.petroltab.TankFillViewModel
@@ -23,4 +24,5 @@ val viewModelsModule = module {
     viewModel { TankFillDialogViewModel(get(), get(), get()) }
     viewModel { parameters -> OdometerDialogViewModel(get(), get(), parameters[0]) }
     viewModel { MaintenanceDialogViewModel(get(), get(), get()) }
+    viewModel { parameters -> DetailsViewModel(get(), get(), get(), get(), parameters[0]) }
 }

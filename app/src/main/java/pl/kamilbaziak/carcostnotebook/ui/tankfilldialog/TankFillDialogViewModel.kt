@@ -23,8 +23,17 @@ class TankFillDialogViewModel(
     private val _pickedDate = MutableLiveData(Date().time)
     val pickedDate: LiveData<Long> = _pickedDate
 
+    private val _odometerForTankFill = MutableLiveData<Odometer>()
+    val odometerForTankFill: LiveData<Odometer> = _odometerForTankFill
+
     fun changePickedDate(long: Long) {
         _pickedDate.value = long
+    }
+
+    fun getOdometerForTankFill(odometerId: Long) = viewModelScope.launch {
+        odometerDao.getOdometerById(odometerId)?.let {
+            _odometerForTankFill.value = it
+        }
     }
 
     fun addTankFill(
@@ -35,9 +44,21 @@ class TankFillDialogViewModel(
         distanceFromLastFill: Double?,
         odometer: Double,
         computerReading: Double?,
-        petrolStation: String
+        petrolStation: String,
+        tankFill: TankFill?
     ) = viewModelScope.launch {
-        tankFillDao.addTankFill(
+        tankFill?.let {
+            editTankFill(
+                petrolEnum,
+                quantity,
+                petrolPrice,
+                distanceFromLastFill,
+                odometer,
+                computerReading,
+                petrolStation,
+                it
+            )
+        } ?: tankFillDao.addTankFill(
             TankFill(
                 0,
                 carId,
@@ -50,14 +71,50 @@ class TankFillDialogViewModel(
                         0,
                         carId,
                         odometer,
-                        carDao.getCarById(carId)?.unit ?: UnitEnum.Kilometers,
+                        carDao.getCarById(carId).value?.unit ?: UnitEnum.Kilometers,
                         pickedDate.value ?: Date().time,
-                        canBeDeleted = false
+                        canBeDeleted = false,
+                        description = "Tank fill: $petrolStation"
                     )
                 ),
                 computerReading,
                 petrolStation,
-                pickedDate.value!!
+                pickedDate.value ?: Date().time
+            )
+        )
+    }
+
+    private fun editTankFill(
+        petrolEnum: PetrolEnum,
+        quantity: Double,
+        petrolPrice: Double?,
+        distanceFromLastFill: Double?,
+        odometer: Double,
+        computerReading: Double?,
+        petrolStation: String,
+        tankFill: TankFill
+    ) = viewModelScope.launch {
+        odometerDao.deleteOdometerById(tankFill.odometerId)
+        tankFillDao.updateTankFill(
+            tankFill.copy(
+                petrolEnum = petrolEnum,
+                quantity = quantity,
+                petrolPrice = petrolPrice,
+                distanceFromLastTankFill = distanceFromLastFill,
+                odometerId = odometerDao.addOdometer(
+                    Odometer(
+                        0,
+                        tankFill.carId,
+                        odometer,
+                        carDao.getCarById(tankFill.carId).value?.unit ?: UnitEnum.Kilometers,
+                        pickedDate.value ?: Date().time,
+                        canBeDeleted = false,
+                        description = "Tank fill: $petrolStation"
+                    )
+                ),
+                computerReading = computerReading,
+                petrolStation = petrolStation,
+                created = pickedDate.value ?: Date().time
             )
         )
     }

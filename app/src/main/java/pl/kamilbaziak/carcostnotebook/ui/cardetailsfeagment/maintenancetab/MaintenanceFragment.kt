@@ -14,6 +14,7 @@ import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.TextUtils
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentMaintenanceBinding
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialog
+import pl.kamilbaziak.carcostnotebook.ui.maintenancedialog.MaintenanceDialog
 
 class MaintenanceFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActions {
 
@@ -55,7 +56,12 @@ class MaintenanceFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogA
                             getString(R.string.maintenance_added_correctly)
                         )
 
-                    is MaintenanceViewModel.MaintenanceEvent.ShowCarEditDialogScreen -> TODO()
+                    is MaintenanceViewModel.MaintenanceEvent.ShowCarEditDialogScreen ->
+                        MaintenanceDialog.show(
+                            childFragmentManager,
+                            carId,
+                            event.maintenance
+                        )
                     is MaintenanceViewModel.MaintenanceEvent.ShowMaintenanceDeleteDialogMessage ->
                         MaterialAlertDialog.show(
                             childFragmentManager,

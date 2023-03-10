@@ -21,7 +21,10 @@ data class Car(
     val engineEnum: EngineEnum,
     val petrolUnit: PetrolUnitEnum,
     val unit: UnitEnum,
-    val description: String
+    val description: String,
+    val priceWhenBought: Double? = null,
+    val dateWhenBought: Long? = null,
+    val currency: String
 ) : Parcelable
 
 fun Car.name() = "${this.brand} ${this.model}"

@@ -8,11 +8,12 @@ import android.view.animation.AlphaAnimation
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.tabs.TabLayoutMediator
+import androidx.viewpager2.widget.ViewPager2
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentCarDetailsBinding
+import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.details.DetailsFragment
 import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.maintenancetab.MaintenanceFragment
 import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.odometertab.OdometerFragment
 import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.petroltab.TankFillFragment
@@ -37,21 +38,10 @@ class CarDetailsFragment : Fragment() {
 
     private val viewPagerAdapter by lazy {
         ViewPagerAdapter(childFragmentManager, lifecycle).apply {
-            addFragment(
-                TankFillFragment.newInstance(car.id, car.petrolUnit),
-                getString(R.string.petrol),
-                R.drawable.ic_petrol
-            )
-            addFragment(
-                OdometerFragment.newInstance(car.id, car.unit),
-                getString(R.string.odometer),
-                R.drawable.ic_odometer
-            )
-            addFragment(
-                MaintenanceFragment.newInstance(car.id),
-                getString(R.string.maintenance),
-                R.drawable.ic_maintenance
-            )
+            addFragment(DetailsFragment.newInstance(car.id))
+            addFragment(TankFillFragment.newInstance(car.id, car.petrolUnit))
+            addFragment(MaintenanceFragment.newInstance(car.id))
+            addFragment(OdometerFragment.newInstance(car.id, car.unit))
         }
     }
 
@@ -67,13 +57,33 @@ class CarDetailsFragment : Fragment() {
     ) = binding.run {
         super.onViewCreated(view, savedInstanceState)
 
-        viewPager.adapter = viewPagerAdapter
+        viewPager.apply {
+            adapter = viewPagerAdapter
+            registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    extendAddFab(false)
+                    bottomNavigation.selectedItemId = when (position) {
+                        1 -> R.id.menu_petrol
+                        2 -> R.id.menu_maintenance
+                        3 -> R.id.menu_odometer
+                        else -> R.id.menu_car_details
+                    }
+                }
+            })
+        }
 
-        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = viewPagerAdapter.getPageTitle(position)
-            tab.setIcon(viewPagerAdapter.getTabDrawable(position))
-            viewPager.setCurrentItem(tab.position, true)
-        }.attach()
+        bottomNavigation.setOnItemSelectedListener {
+            extendAddFab(false)
+            when (it.itemId) {
+                R.id.menu_car_details -> viewPager.currentItem = 0
+                R.id.menu_petrol -> viewPager.currentItem = 1
+                R.id.menu_maintenance -> viewPager.currentItem = 2
+                R.id.menu_odometer -> viewPager.currentItem = 3
+                R.id.menu_add -> extendAddFab(!fabAddContainer.fabAddPetrol.isVisible)
+            }
+            true
+        }
 
         extendAddFab(false)
 
@@ -84,34 +94,52 @@ class CarDetailsFragment : Fragment() {
         fabAddContainer.apply {
             fabAddPetrol.setOnClickListener {
                 viewPager.setCurrentItem(0, true)
+                bottomNavigation.selectedItemId = R.id.menu_petrol
                 TankFillDialog.show(childFragmentManager, car.id)
                 extendAddFab(false)
             }
 
-            fabAddOdometer.setOnClickListener {
+            fabAddMaintenance.setOnClickListener {
                 viewPager.setCurrentItem(1, true)
-                OdometerDialog.show(childFragmentManager, car.id)
+                bottomNavigation.selectedItemId = R.id.menu_maintenance
+                MaintenanceDialog.show(childFragmentManager, car.id)
                 extendAddFab(false)
             }
 
-            fabAddMaintenance.setOnClickListener {
+            fabAddOdometer.setOnClickListener {
                 viewPager.setCurrentItem(2, true)
-                MaintenanceDialog.show(childFragmentManager, car.id)
+                bottomNavigation.selectedItemId = R.id.menu_odometer
+                OdometerDialog.show(childFragmentManager, car.id)
                 extendAddFab(false)
             }
         }
 
         viewModel.apply {
             tankFillCount.observe(viewLifecycleOwner) {
-                tabLayout.getTabAt(0)!!.orCreateBadge.number = it.size
-            }
-
-            odometerCount.observe(viewLifecycleOwner) {
-                tabLayout.getTabAt(1)!!.orCreateBadge.number = it.size
+                if (it.isNotEmpty()) {
+                    bottomNavigation.getOrCreateBadge(R.id.menu_petrol).apply {
+                        isVisible = true
+                        number = it.size
+                    }
+                }
             }
 
             maintenanceCount.observe(viewLifecycleOwner) {
-                tabLayout.getTabAt(2)!!.orCreateBadge.number = it.size
+                if (it.isNotEmpty()) {
+                    bottomNavigation.getOrCreateBadge(R.id.menu_maintenance).apply {
+                        isVisible = true
+                        number = it.size
+                    }
+                }
+            }
+
+            odometerCount.observe(viewLifecycleOwner) {
+                if (it.isNotEmpty()) {
+                    bottomNavigation.getOrCreateBadge(R.id.menu_odometer).apply {
+                        isVisible = true
+                        number = it.size
+                    }
+                }
             }
         }
 
@@ -128,7 +156,7 @@ class CarDetailsFragment : Fragment() {
                     textMaintenance.startAnimation(animFadeIn)
                     textAddOdometer.startAnimation(animFadeIn)
                     textPetrol.startAnimation(animFadeIn)
-                    fabAdd.extend()
+//                    fabAdd.extend()
                     fabAddMaintenance.show()
                     fabAddOdometer.show()
                     fabAddPetrol.show()
@@ -137,7 +165,7 @@ class CarDetailsFragment : Fragment() {
                     textMaintenance.startAnimation(animFadeOut)
                     textAddOdometer.startAnimation(animFadeOut)
                     textPetrol.startAnimation(animFadeOut)
-                    fabAdd.shrink()
+//                    fabAdd.shrink()
                     fabAddMaintenance.hide()
                     fabAddOdometer.hide()
                     fabAddPetrol.hide()

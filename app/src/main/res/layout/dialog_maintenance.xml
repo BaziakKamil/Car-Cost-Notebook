@@ -12,7 +12,7 @@
         style="@style/MaterialAlertDialog.Material3.Title.Text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/add_tank_fill_details"
+        android:text="@string/add_maintenance_details"
         app:layout_constraintEnd_toStartOf="@+id/image_close"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -33,10 +33,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:hint="@string/name"
         android:textColorHint="@color/text_caption_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:hint="@string/name"
         app:layout_constraintTop_toBottomOf="@+id/image_close">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -103,16 +103,18 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:hint="@string/description"
         android:textColorHint="@color/text_caption_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:hint="@string/description"
         app:layout_constraintTop_toBottomOf="@+id/container_odometer_and_computer_reading">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:inputType="textCapSentences"
+            android:inputType="textMultiLine|textCapSentences"
+            android:maxLines="5"
+            android:minLines="1"
             android:singleLine="true" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -145,8 +147,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:textColorHint="@color/text_caption_color"
         android:hint="@string/due_date"
+        android:textColorHint="@color/text_caption_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_input_calendar"

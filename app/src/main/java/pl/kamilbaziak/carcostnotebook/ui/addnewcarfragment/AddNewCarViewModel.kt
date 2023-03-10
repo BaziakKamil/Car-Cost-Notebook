@@ -11,6 +11,7 @@ import pl.kamilbaziak.carcostnotebook.database.CarDao
 import pl.kamilbaziak.carcostnotebook.database.OdometerDao
 import pl.kamilbaziak.carcostnotebook.model.Car
 import pl.kamilbaziak.carcostnotebook.model.Odometer
+import java.util.*
 
 class AddNewCarViewModel(
     private val carDao: CarDao,
@@ -20,11 +21,14 @@ class AddNewCarViewModel(
     private val _addNewCarChannel = Channel<AddNewCarEvent>()
     val addNewCarEvent = _addNewCarChannel.receiveAsFlow()
 
-    private val _odometer = MutableLiveData<Odometer?>()
-    val odometer: LiveData<Odometer?> = _odometer
+    private val _lastOdometer = MutableLiveData<Odometer?>()
+    val lastOdometer: LiveData<Odometer?> = _lastOdometer
 
     private val _odometerAll = MutableLiveData<List<Odometer>>()
     val odometerAll: LiveData<List<Odometer>> = _odometerAll
+
+    private val _pickedDate = MutableLiveData(Date().time)
+    val pickedDate: LiveData<Long> = _pickedDate
 
     fun addCar(car: Car, odometer: Double) = viewModelScope.launch {
         odometerDao.addOdometer(
@@ -64,7 +68,11 @@ class AddNewCarViewModel(
     }
 
     fun getLastOdometer(car: Car) = viewModelScope.launch {
-        _odometer.value = odometerDao.getLastCarOdometer(car.id)
+        _lastOdometer.value = odometerDao.getLastCarOdometer(car.id)
+    }
+
+    fun changePickedDate(long: Long) {
+        _pickedDate.value = long
     }
 
     sealed class AddNewCarEvent {

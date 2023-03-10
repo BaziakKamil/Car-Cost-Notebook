@@ -15,7 +15,7 @@ import pl.kamilbaziak.carcostnotebook.model.TankFill
 class TankFillViewModel(
     private val tankFillDao: TankFillDao,
     private val odometerDao: OdometerDao,
-    private val carId: Long
+    carId: Long
 ) : ViewModel() {
 
     private val tankFillChannel = Channel<TankFillEvent>()
@@ -30,7 +30,7 @@ class TankFillViewModel(
     private val deleteTankFill = MutableLiveData<TankFill>()
 
     fun onEditTankFill(tankFill: TankFill) = viewModelScope.launch {
-        //todo
+        tankFillChannel.send(TankFillEvent.ShowTankFillEditDialogScreen(tankFill))
     }
 
     fun deleteTankFill() = viewModelScope.launch {

@@ -18,6 +18,7 @@ import pl.kamilbaziak.carcostnotebook.databinding.FragmentTankFillBinding
 import pl.kamilbaziak.carcostnotebook.enums.PetrolUnitEnum
 import pl.kamilbaziak.carcostnotebook.model.TankFill
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialog
+import pl.kamilbaziak.carcostnotebook.ui.tankfilldialog.TankFillDialog
 
 class TankFillFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActions {
 
@@ -83,7 +84,12 @@ class TankFillFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActi
                             getString(R.string.delete_dialog_message),
                             getString(R.string.delete)
                         )
-                    is TankFillViewModel.TankFillEvent.ShowTankFillEditDialogScreen -> TODO()
+                    is TankFillViewModel.TankFillEvent.ShowTankFillEditDialogScreen ->
+                        TankFillDialog.show(
+                            childFragmentManager,
+                            carId,
+                            event.tankFill
+                        )
                 }
             }
         }
@@ -99,23 +105,22 @@ class TankFillFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActi
         }
     }
 
-    private fun adapterClick(tankFill: TankFill) {
-        Toast.makeText(requireContext(), "${tankFill.quantity}", Toast.LENGTH_LONG).show()
+    override fun onConfirm() {
+        viewModel.deleteTankFill()
     }
 
     companion object {
         const val CAR_ID_EXTRA = "TankFillFragment.CAR_ID_EXTRA"
         const val PETROL_UNIT_EXTRA = "TankFillFragment.PETROL_UNIT_EXTRA"
 
-        fun newInstance(carId: Long, petrolUnit: PetrolUnitEnum) = TankFillFragment().apply {
+        fun newInstance(
+            carId: Long,
+            petrolUnit: PetrolUnitEnum
+        ) = TankFillFragment().apply {
             arguments = bundleOf(
                 CAR_ID_EXTRA to carId,
                 PETROL_UNIT_EXTRA to petrolUnit.name
             )
         }
-    }
-
-    override fun onConfirm() {
-        viewModel.deleteTankFill()
     }
 }

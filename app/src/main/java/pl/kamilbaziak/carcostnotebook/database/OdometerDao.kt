@@ -11,6 +11,9 @@ interface OdometerDao {
     @Query("SELECT * FROM ${Constants.ODOMETER_TABLE} WHERE carId = :carId ORDER BY created DESC")
     fun getAllOdometerForCar(carId: Long): LiveData<List<Odometer>>
 
+    @Query("SELECT * FROM ${Constants.ODOMETER_TABLE} WHERE carId = :carId ORDER BY created ASC LIMIT 1")
+    suspend fun getFirstCarOdometer(carId: Long): Odometer?
+
     @Query("SELECT * FROM ${Constants.ODOMETER_TABLE} WHERE carId = :carId ORDER BY created DESC LIMIT 1")
     suspend fun getLastCarOdometer(carId: Long): Odometer?
 
@@ -25,6 +28,9 @@ interface OdometerDao {
 
     @Delete
     suspend fun deleteOdometer(odometer: Odometer)
+
+    @Query("DELETE FROM ${Constants.ODOMETER_TABLE} WHERE id = :odometerId")
+    suspend fun deleteOdometerById(odometerId: Long)
 
     @Query("DELETE FROM ${Constants.ODOMETER_TABLE} WHERE carId = :carId")
     suspend fun deleteOdometer(carId: Long)

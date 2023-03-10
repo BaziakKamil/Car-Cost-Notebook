@@ -10,21 +10,13 @@ class ViewPagerAdapter(
     lifecycle: Lifecycle
 ) : FragmentStateAdapter(fragmentManager, lifecycle) {
 
-    private val list = mutableListOf<Triple<Fragment, String, Int>>()
+    private val list = mutableListOf<Fragment>()
 
     override fun getItemCount() = list.size
 
-    override fun createFragment(position: Int): Fragment = list[position].first
+    override fun createFragment(position: Int): Fragment = list[position]
 
-    fun addFragment(fragment: Fragment, title: String, drawableResId: Int) {
-        list.add(Triple(fragment, title, drawableResId))
-    }
-
-    fun getPageTitle(position: Int): CharSequence {
-        return list[position].second
-    }
-
-    fun getTabDrawable(position: Int): Int {
-        return list[position].third
+    fun addFragment(fragment: Fragment) {
+        list.add(fragment)
     }
 }
