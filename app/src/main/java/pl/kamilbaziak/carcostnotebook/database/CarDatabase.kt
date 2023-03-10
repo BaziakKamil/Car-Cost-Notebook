@@ -14,7 +14,7 @@ import pl.kamilbaziak.carcostnotebook.model.TankFill
         Odometer::class,
         TankFill::class
     ],
-    version = 3,
+    version = 5,
     exportSchema = false
 )
 abstract class CarDatabase : RoomDatabase() {

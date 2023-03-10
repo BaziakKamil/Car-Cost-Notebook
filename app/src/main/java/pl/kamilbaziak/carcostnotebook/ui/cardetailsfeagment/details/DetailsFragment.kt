@@ -10,7 +10,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentDetailsBinding
-import pl.kamilbaziak.carcostnotebook.model.Car
 import pl.kamilbaziak.carcostnotebook.shortcut
 import pl.kamilbaziak.carcostnotebook.toDate
 import pl.kamilbaziak.carcostnotebook.toTwoDigits
@@ -46,7 +45,9 @@ class DetailsFragment : Fragment() {
                         car.dateWhenBought?.toDate() ?: getString(R.string.not_added)
                     )
                     textInputCarPriceWhenBought.editText?.setText(
-                        "${car.priceWhenBought?.toTwoDigits()} zł" ?: getString(R.string.not_added)
+                        car.priceWhenBought?.let {
+                           "${car.priceWhenBought?.toTwoDigits()} ${car.currency}"
+                        } ?: getString(R.string.not_added)
                     )
                     allOdometerData.observe(viewLifecycleOwner) { list ->
                         textInputTotalDistanceMade.editText?.setText(
@@ -59,14 +60,13 @@ class DetailsFragment : Fragment() {
                         val totalFuelCost = list.sumOf { it.petrolPrice?.times(it.quantity) ?: 0.0 }.toTwoDigits()
 
                         textInputTotalFuelConsuption.editText?.setText("$totalFuelConsumption ${car.petrolUnit.shortcut()}")
-                        textInputTotalFuelPaid.editText?.setText("$totalFuelCost zł")
+                        textInputTotalFuelPaid.editText?.setText("$totalFuelCost ${car.currency}")
                         //todo extract concurency to database and make it global through data store
                     }
 
                     allMaintenance.observe(viewLifecycleOwner) { list ->
                         val totalMaintenanceCost =  list.sumOf { it.price ?: 0.0 }.toTwoDigits()
-
-                        textInputTotalMaintenancePaid.editText?.setText("$totalMaintenanceCost zł")
+                        textInputTotalMaintenancePaid.editText?.setText("$totalMaintenanceCost ${car.currency}")
                     }
                 } ?: run{
                     //todo add error

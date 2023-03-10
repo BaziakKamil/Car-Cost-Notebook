@@ -190,7 +190,8 @@ class AddNewCarFragment : Fragment() {
                         getUnitTypeFromName(textInputUnit.editText?.text.toString()),
                         textInputDescription.editText?.text.toString(),
                         textInputCarPriceWhenBought.editText?.text.toString().toDoubleOrNull(),
-                        viewModel.pickedDate.value
+                        viewModel.pickedDate.value,
+                        "zł"
                     ),
                     viewModel.lastOdometer.value,
                     textInputCarOdometer.editText?.text.toString().toDouble()
@@ -208,7 +209,8 @@ class AddNewCarFragment : Fragment() {
                         getUnitTypeFromName(textInputUnit.editText?.text.toString()),
                         textInputDescription.editText?.text.toString(),
                         textInputCarPriceWhenBought.editText?.text.toString().toDoubleOrNull(),
-                        viewModel.pickedDate.value
+                        viewModel.pickedDate.value,
+                        "zł"
                     ),
                     textInputCarOdometer.editText?.text.toString().toDouble()
                 )
