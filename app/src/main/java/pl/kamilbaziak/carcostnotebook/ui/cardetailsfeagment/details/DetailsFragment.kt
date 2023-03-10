@@ -5,13 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentDetailsBinding
-import pl.kamilbaziak.carcostnotebook.model.name
+import pl.kamilbaziak.carcostnotebook.model.Car
+import pl.kamilbaziak.carcostnotebook.shortcut
 import pl.kamilbaziak.carcostnotebook.toDate
 import pl.kamilbaziak.carcostnotebook.toTwoDigits
 
@@ -46,8 +46,28 @@ class DetailsFragment : Fragment() {
                         car.dateWhenBought?.toDate() ?: getString(R.string.not_added)
                     )
                     textInputCarPriceWhenBought.editText?.setText(
-                        car.priceWhenBought?.toTwoDigits() ?: getString(R.string.not_added)
+                        "${car.priceWhenBought?.toTwoDigits()} zł" ?: getString(R.string.not_added)
                     )
+                    allOdometerData.observe(viewLifecycleOwner) { list ->
+                        textInputTotalDistanceMade.editText?.setText(
+                            "${(list.maxOf { it.input } - list.minOf { it.input }).toTwoDigits()} ${car.unit.shortcut()}"
+                        )
+                    }
+
+                    allTankFillData.observe(viewLifecycleOwner) { list ->
+                        val totalFuelConsumption =  list.sumOf { it.quantity }.toTwoDigits()
+                        val totalFuelCost = list.sumOf { it.petrolPrice?.times(it.quantity) ?: 0.0 }.toTwoDigits()
+
+                        textInputTotalFuelConsuption.editText?.setText("$totalFuelConsumption ${car.petrolUnit.shortcut()}")
+                        textInputTotalFuelPaid.editText?.setText("$totalFuelCost zł")
+                        //todo extract concurency to database and make it global through data store
+                    }
+
+                    allMaintenance.observe(viewLifecycleOwner) { list ->
+                        val totalMaintenanceCost =  list.sumOf { it.price ?: 0.0 }.toTwoDigits()
+
+                        textInputTotalMaintenancePaid.editText?.setText("$totalMaintenanceCost zł")
+                    }
                 } ?: run{
                     //todo add error
                 }
