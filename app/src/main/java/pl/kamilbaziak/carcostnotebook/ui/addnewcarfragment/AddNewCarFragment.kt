@@ -1,10 +1,7 @@
 package pl.kamilbaziak.carcostnotebook.ui.addnewcarfragment
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.core.view.isVisible
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -46,15 +43,9 @@ class AddNewCarFragment : Fragment() {
                 when (isKeyboardShown) {
                     true -> {
                         fabAddCar.hide()
-                        if (args.car != null) {
-                            fabCancel.hide()
-                        }
                     }
                     else -> {
                         fabAddCar.show()
-                        if (args.car != null) {
-                            fabCancel.show()
-                        }
                     }
                 }
             }
@@ -73,6 +64,9 @@ class AddNewCarFragment : Fragment() {
     ) = binding.run {
         super.onViewCreated(view, savedInstanceState)
 
+        sectionCarData.textDivider.text = "Car data"
+        sectionCarWhenBought.textDivider.text = "Data when car was bought"
+
         args.car?.let { car ->
             viewModel.apply {
                 getAllOdometer(car)
@@ -83,10 +77,6 @@ class AddNewCarFragment : Fragment() {
             }
 
             editMode(car)
-            fabCancel.apply {
-                isVisible = true
-                setOnClickListener { findNavController().popBackStack() }
-            }
         }
 
         dateDialog.addOnPositiveButtonClickListener {
@@ -169,7 +159,7 @@ class AddNewCarFragment : Fragment() {
             textInputCarPriceWhenBought.editText?.setText(it.toTwoDigits())
         }
         car.dateWhenBought?.let {
-            textInputCarPriceWhenBought.editText?.setText(it.toDate())
+            textInputCalendarWhenBought.editText?.setText(it.toDate())
         }
     }
 
