@@ -47,6 +47,7 @@ class OdometerDialog : BottomSheetDialogFragment() {
         odometer?.let {
             textTitle.text = getString(R.string.edit_odometer_reading)
             textInputOdometer.editText?.setText(it.input.toTwoDigits())
+            textInputDescription.editText?.setText(it.description)
             viewModel.changePickedDate(it.created)
         }
 
@@ -63,14 +64,20 @@ class OdometerDialog : BottomSheetDialogFragment() {
         }
 
         buttonDone.setOnClickListener {
-            validate(textInputOdometer.editText?.text.toString())
+            validate(
+                textInputOdometer.editText?.text.toString(),
+                textInputDescription.editText?.text.toString()
+            )
         }
         buttonCancel.setOnClickListener { dismiss() }
         imageClose.setOnClickListener { dismiss() }
     }
 
     //todo validation with snackbar messages
-    private fun validate(odometerTxt: String?) {
+    private fun validate(
+        odometerTxt: String?,
+        description: String?
+    ) {
         if (odometerTxt.isNullOrEmpty()) {
             return
         }
@@ -78,8 +85,15 @@ class OdometerDialog : BottomSheetDialogFragment() {
             return
         }
         odometer?.let {
-            viewModel.updateOdometer(odometerTxt.toDouble(), it)
-        } ?: viewModel.addOdometer(odometerTxt.toDouble())
+            viewModel.updateOdometer(
+                odometerTxt.toDouble(),
+                description,
+                it
+            )
+        } ?: viewModel.addOdometer(
+            odometerTxt.toDouble(),
+            description
+        )
         dismiss()
     }
 

@@ -105,23 +105,22 @@ class TankFillFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActi
         }
     }
 
-    private fun adapterClick(tankFill: TankFill) {
-        Toast.makeText(requireContext(), "${tankFill.quantity}", Toast.LENGTH_LONG).show()
+    override fun onConfirm() {
+        viewModel.deleteTankFill()
     }
 
     companion object {
         const val CAR_ID_EXTRA = "TankFillFragment.CAR_ID_EXTRA"
         const val PETROL_UNIT_EXTRA = "TankFillFragment.PETROL_UNIT_EXTRA"
 
-        fun newInstance(carId: Long, petrolUnit: PetrolUnitEnum) = TankFillFragment().apply {
+        fun newInstance(
+            carId: Long,
+            petrolUnit: PetrolUnitEnum
+        ) = TankFillFragment().apply {
             arguments = bundleOf(
                 CAR_ID_EXTRA to carId,
                 PETROL_UNIT_EXTRA to petrolUnit.name
             )
         }
-    }
-
-    override fun onConfirm() {
-        viewModel.deleteTankFill()
     }
 }

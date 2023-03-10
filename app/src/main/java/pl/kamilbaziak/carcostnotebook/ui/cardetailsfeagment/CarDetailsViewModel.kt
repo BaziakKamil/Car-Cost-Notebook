@@ -6,10 +6,10 @@ import pl.kamilbaziak.carcostnotebook.database.OdometerDao
 import pl.kamilbaziak.carcostnotebook.database.TankFillDao
 
 class CarDetailsViewModel(
-    private val tankFillDao: TankFillDao,
-    private val odometerDao: OdometerDao,
-    private val maintenanceDao: MaintenanceDao,
-    private val carId: Long
+    tankFillDao: TankFillDao,
+    odometerDao: OdometerDao,
+    maintenanceDao: MaintenanceDao,
+    carId: Long
 ) : ViewModel() {
 
     private val _tankFillCount = tankFillDao.getTankFillData(carId)

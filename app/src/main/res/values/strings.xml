@@ -3,11 +3,14 @@
 
     <string name="car_brand">Car brand</string>
     <string name="car_model">Car model</string>
+    <string name="car_price_when_bought">Car price when bought</string>
     <string name="petrol">Petrol</string>
     <string name="petrol_type">Petrol type</string>
     <string name="petrol_unit">Petrol unit</string>
     <string name="odometer">Odometer</string>
     <string name="unit">Odometer unit</string>
+    <string name="odometer_when_bought">Odometer when bought</string>
+    <string name="date_when_bought">Date when bought</string>
     <string name="insert_car_brand">Insert car brand</string>
     <string name="insert_car_model">Insert car model</string>
     <string name="insert_car_mileage">Insert car mileage</string>
@@ -31,9 +34,11 @@
     <string name="from_last_fill">From last fill: %1$s %2$s</string>
     <string name="distance_driven">Distance driven: %1$s %2$s</string>
     <string name="choose_date">Choose date</string>
+    <string name="choose_date_when_bought">Choose date when car was bought</string>
     <string name="done">Done</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
+    <string name="details">Details</string>
     <string name="add_tank_fill_details">Add tank fill details</string>
     <string name="edit_tank_fill_details">Edit tank fill details</string>
     <string name="add_maintenance_details">Add maintenance details</string>
@@ -68,4 +73,10 @@
     <string name="tank_fill_deleted">Tank fill deleted</string>
     <string name="distance_from_last_tank_fill">Distance from last tank fill</string>
     <string name="title_activity_compose">ComposeActivity</string>
+    <string name="error_getting_car_data">Error getting car data</string>
+    <string name="do_you_want_to_add_fist_recorder_odometer_and_bought_cost">Do you want to add fist recorder odometer and bought cost?</string>
+    <string name="not_added">Not added</string>
+    <string name="car_data">Car data</string>
+    <string name="car_data_when_bought">Data when car was bought</string>
+    <string name="pln_currency">zł</string>
 </resources>

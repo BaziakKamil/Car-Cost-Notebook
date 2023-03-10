@@ -32,13 +32,13 @@ class MaintenanceDialogViewModel(
         _pickedDate.value = long
     }
 
+    fun changePickedDueDate(long: Long?) = long?.let { _pickedDueDate.value = it }
+
     fun getOdometerForMaintenance(odometerId: Long) = viewModelScope.launch {
         odometerDao.getOdometerById(odometerId)?.let {
             _odometerForMaintenance.value = it
         }
     }
-
-    fun changePickedDueDate(long: Long?) = long?.let { _pickedDueDate.value }
 
     fun addMaintenance(
         carId: Long,
@@ -63,9 +63,10 @@ class MaintenanceDialogViewModel(
                                 0,
                                 carId,
                                 odometer,
-                                carDao.getCarById(carId)?.unit ?: UnitEnum.Kilometers,
+                                carDao.getCarById(carId).value?.unit ?: UnitEnum.Kilometers,
                                 pickedDate.value ?: Date().time,
-                                canBeDeleted = false
+                                canBeDeleted = false,
+                                description = name
                             )
                         )
                     },
@@ -97,9 +98,10 @@ class MaintenanceDialogViewModel(
                         0,
                         maintenance.carId,
                         it,
-                        carDao.getCarById(maintenance.carId)?.unit ?: UnitEnum.Kilometers,
+                        carDao.getCarById(maintenance.carId).value?.unit ?: UnitEnum.Kilometers,
                         pickedDate.value ?: Date().time,
-                        canBeDeleted = false
+                        canBeDeleted = false,
+                        description = name
                     )
                 )
             }

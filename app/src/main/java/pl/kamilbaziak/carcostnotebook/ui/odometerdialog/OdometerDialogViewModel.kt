@@ -26,25 +26,31 @@ class OdometerDialogViewModel(
 
     fun updateOdometer(
         newOdometerValue: Double,
+        description: String?,
         odometer: Odometer
     ) = viewModelScope.launch {
         odometerDao.updateOdometer(
             odometer.copy(
                 input = newOdometerValue,
-                created = _pickedDate.value ?: Date().time
+                created = _pickedDate.value ?: Date().time,
+                description = description
             )
         )
     }
 
-    fun addOdometer(odometer: Double) = viewModelScope.launch {
+    fun addOdometer(
+        odometer: Double,
+        description: String?
+    ) = viewModelScope.launch {
         odometerDao.addOdometer(
             Odometer(
                 0,
-                carId,
-                odometer,
-                carDao.getCarById(carId)?.unit ?: UnitEnum.Kilometers,
-                _pickedDate.value ?: Date().time,
-                canBeDeleted = true
+                carId = carId,
+                input = odometer,
+                unit = carDao.getCarById(carId).value?.unit ?: UnitEnum.Kilometers,
+                created = _pickedDate.value ?: Date().time,
+                canBeDeleted = true,
+                description = description
             )
         )
     }
