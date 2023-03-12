@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import pl.kamilbaziak.carcostnotebook.R
-import pl.kamilbaziak.carcostnotebook.databinding.ViewMainViewItemBinding
+import pl.kamilbaziak.carcostnotebook.databinding.ViewCarItemBinding
 import pl.kamilbaziak.carcostnotebook.model.Car
 
 class CarAdapter(
@@ -18,7 +18,7 @@ class CarAdapter(
 ) : ListAdapter<Car, CarAdapter.CarViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarViewHolder {
-        val binding = ViewMainViewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ViewCarItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CarViewHolder(binding)
     }
 
@@ -27,7 +27,7 @@ class CarAdapter(
         holder.bind(currentItem)
     }
 
-    inner class CarViewHolder(private val binding: ViewMainViewItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class CarViewHolder(private val binding: ViewCarItemBinding) : RecyclerView.ViewHolder(binding.root) {
         private val popMenu = PopupMenu(binding.root.context, binding.root).apply {
             setOnMenuItemClickListener { item ->
                 when (item.itemId) {
