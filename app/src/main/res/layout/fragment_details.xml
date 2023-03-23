@@ -164,7 +164,8 @@
                     android:layout_height="wrap_content"
                     android:clickable="false"
                     android:focusable="false"
-                    android:inputType="textMultiLine|text"/>
+                    android:inputType="textMultiLine|text"
+                    android:maxLines="5" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
