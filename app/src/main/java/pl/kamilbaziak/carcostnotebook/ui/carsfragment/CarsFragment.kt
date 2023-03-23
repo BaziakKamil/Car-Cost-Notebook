@@ -49,6 +49,12 @@ class CarsFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActions 
         }
 
         viewModel.cars.observe(viewLifecycleOwner) {
+            if (it.isNotEmpty()) {
+                viewModel.setupCarMappedData(it)
+            }
+        }
+
+        viewModel.carsMapped.observe(viewLifecycleOwner) {
             adapter.submitList(it)
             noCarView.root.isVisible = it.isEmpty()
         }

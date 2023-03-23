@@ -4,13 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="2dp"
+    android:layout_marginVertical="4dp"
+    android:layout_marginHorizontal="8dp"
     app:cardCornerRadius="18dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp">
+
+        <TextView
+            android:id="@+id/text_car_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            app:layout_constraintEnd_toStartOf="@+id/image_more"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_car_last_odometer"
+            tools:text="Description" />
+
+        <TextView
+            android:id="@+id/text_car_last_odometer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_car_brand"
+            tools:text="300900 km" />
 
         <TextView
             android:id="@+id/text_car_brand"
@@ -26,7 +48,7 @@
             android:id="@+id/text_car_model"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="8dp"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/text_car_brand"
@@ -37,19 +59,19 @@
             android:id="@+id/text_car_year"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginTop="4dp"
             app:layout_constraintEnd_toStartOf="@+id/image_more"
-            app:layout_constraintTop_toBottomOf="@+id/text_car_brand"
+            app:layout_constraintTop_toBottomOf="@+id/text_car_licence_plate"
             tools:text="2005" />
 
         <TextView
             android:id="@+id/text_car_licence_plate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_car_brand"
+            app:layout_constraintBottom_toBottomOf="@+id/text_car_brand"
+            app:layout_constraintEnd_toStartOf="@+id/image_more"
+            app:layout_constraintTop_toTopOf="@+id/text_car_brand"
+            app:layout_constraintVertical_bias="1.0"
             tools:text="KN 45673" />
 
         <ImageView
