@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginVertical="4dp"
     android:layout_marginHorizontal="8dp"
+    android:layout_marginVertical="4dp"
     app:cardCornerRadius="18dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,43 +14,46 @@
         android:layout_margin="16dp">
 
         <TextView
-            android:id="@+id/text_car_brand"
+            android:id="@+id/text_maintenance_price"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_maintenance_name"
+            tools:text="KN 45673" />
+
+        <TextView
+            android:id="@+id/text_maintenance_name"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/image_more"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Car brand" />
 
         <TextView
-            android:id="@+id/text_car_model"
+            android:id="@+id/text_maintenance_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/text_car_brand"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Car Model" />
-
-        <TextView
-            android:id="@+id/text_car_year"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginTop="4dp"
             app:layout_constraintEnd_toStartOf="@+id/image_more"
-            app:layout_constraintTop_toBottomOf="@+id/text_car_brand"
+            app:layout_constraintTop_toBottomOf="@+id/text_maintenance_name"
             tools:text="2005" />
 
         <TextView
-            android:id="@+id/text_car_licence_plate"
-            android:layout_width="wrap_content"
+            android:id="@+id/text_maintenance_description"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            app:layout_constraintEnd_toStartOf="@+id/image_more"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_car_brand"
+            app:layout_constraintTop_toBottomOf="@+id/text_maintenance_price"
             tools:text="KN 45673" />
 
         <ImageView

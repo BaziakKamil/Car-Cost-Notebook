@@ -4,13 +4,16 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import pl.kamilbaziak.carcostnotebook.R
+import pl.kamilbaziak.carcostnotebook.databinding.ViewMaintenanceItemBinding
 import pl.kamilbaziak.carcostnotebook.databinding.ViewOdometerItemBinding
 import pl.kamilbaziak.carcostnotebook.model.Maintenance
 import pl.kamilbaziak.carcostnotebook.toDate
+import pl.kamilbaziak.carcostnotebook.toTwoDigits
 
 class MaintenanceAdapter(
     private val editMaintenance: (Maintenance) -> Unit,
@@ -20,7 +23,7 @@ class MaintenanceAdapter(
         DiffCallback()
     ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MaintenanceViewHolder {
-        val binding = ViewOdometerItemBinding.inflate(
+        val binding = ViewMaintenanceItemBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
@@ -33,10 +36,10 @@ class MaintenanceAdapter(
         holder.bind(currentItem)
     }
 
-    inner class MaintenanceViewHolder(private val binding: ViewOdometerItemBinding) :
+    inner class MaintenanceViewHolder(private val binding: ViewMaintenanceItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         private val popMenu = PopupMenu(binding.root.context, binding.root).apply {
-            setOnMenuItemClickListener {  item ->
+            setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.delete -> {
                         if (adapterPosition != RecyclerView.NO_POSITION) {
@@ -60,16 +63,28 @@ class MaintenanceAdapter(
         init {
             binding.apply {
                 root.setOnLongClickListener {
-                   popMenu.show()
+                    popMenu.show()
                     true
                 }
             }
         }
 
         fun bind(maintenance: Maintenance) {
+            val ctx = binding.root.context
             binding.apply {
-                textOdometer.text = maintenance.name
-                textDate.text = maintenance.created.toDate()
+
+                textMaintenanceName.text = maintenance.name
+                textMaintenanceDate.text = maintenance.created.toDate()
+                maintenance.price?.let {
+                    textMaintenancePrice.text = ctx.getString(
+                        R.string.total,
+                        it.toTwoDigits(),
+                        ctx.getString(R.string.pln_currency)
+                    )
+                } ?: run { textMaintenanceName.isVisible = false }
+                maintenance.description?.let {
+                    textMaintenanceDescription.text = it
+                } ?: run { textMaintenanceDescription.isVisible = false }
                 imageMore.setOnClickListener {
                     popMenu.show()
                 }
