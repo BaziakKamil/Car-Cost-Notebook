@@ -13,6 +13,7 @@ import pl.kamilbaziak.carcostnotebook.database.OdometerDao
 import pl.kamilbaziak.carcostnotebook.database.TankFillDao
 import pl.kamilbaziak.carcostnotebook.model.Car
 import pl.kamilbaziak.carcostnotebook.model.Odometer
+import pl.kamilbaziak.carcostnotebook.model.TankFill
 
 class CarsViewModel(
     private val carDao: CarDao,
@@ -23,6 +24,9 @@ class CarsViewModel(
 
     private val _cars = carDao.getAllCars()
     val cars: LiveData<List<Car>> = _cars
+
+    private val _carsMapped = MutableLiveData<List<Pair<Car, Odometer?>>>()
+    val carsMapped: LiveData<List<Pair<Car, Odometer?>>> = _carsMapped
 
     private val deleteCar = MutableLiveData<Car>()
 
@@ -59,6 +63,12 @@ class CarsViewModel(
     fun onCarDelete(car: Car) = viewModelScope.launch {
         deleteCar.value = car
         mainViewChannel.send(MainViewEvent.ShowCarDeleteDialogMessage(car))
+    }
+
+    fun setupCarMappedData(list: List<Car>) = viewModelScope.launch {
+        _carsMapped.value = list.map { car ->
+            Pair(car, odometerDao.getLastCarOdometer(car.id))
+        }
     }
 
     sealed class MainViewEvent {

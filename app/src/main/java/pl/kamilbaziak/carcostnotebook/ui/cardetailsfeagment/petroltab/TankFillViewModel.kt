@@ -62,8 +62,7 @@ class TankFillViewModel(
 
     fun setupTankFillData(list: List<TankFill>) = viewModelScope.launch {
         _tankFillMapped.value = list.map { tankFill ->
-            val odometer = odometerDao.getOdometerById(tankFill.odometerId)
-            Pair(tankFill, odometer)
+            Pair(tankFill, odometerDao.getOdometerById(tankFill.odometerId))
         }
     }
 
