@@ -50,9 +50,11 @@ class DetailsFragment : Fragment() {
                         } ?: getString(R.string.not_added)
                     )
                     allOdometerData.observe(viewLifecycleOwner) { list ->
-                        textInputTotalDistanceMade.editText?.setText(
-                            "${(list.maxOf { it.input } - list.minOf { it.input }).toTwoDigits()} ${car.unit.shortcut()}"
-                        )
+                        if(list.isNotEmpty()) {
+                            textInputTotalDistanceMade.editText?.setText(
+                                "${(list.maxOf { it.input } - list.minOf { it.input }).toTwoDigits()} ${car.unit.shortcut()}"
+                            )
+                        }
                     }
 
                     allTankFillData.observe(viewLifecycleOwner) { list ->
