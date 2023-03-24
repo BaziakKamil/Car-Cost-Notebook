@@ -18,7 +18,7 @@ class OdometerViewModel(
     private val odometerChannel = Channel<OdometerEvent>()
     val odometerEvent = odometerChannel.receiveAsFlow()
 
-    private val _odometerAll = odometerDao.getAllOdometerForCar(carId)
+    private val _odometerAll = odometerDao.getOdometerLiveData(carId)
     val odometerAll: LiveData<List<Odometer>> = _odometerAll
 
     private val deleteOdometer = MutableLiveData<Odometer>()

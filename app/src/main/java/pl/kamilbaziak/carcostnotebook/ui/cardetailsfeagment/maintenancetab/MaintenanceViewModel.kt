@@ -21,7 +21,7 @@ class MaintenanceViewModel(
     private val maintenanceChannel = Channel<MaintenanceEvent>()
     val maintenanceEvent = maintenanceChannel.receiveAsFlow()
 
-    private val _maintenanceAll = maintenanceDao.getMaintenanceData(carId)
+    private val _maintenanceAll = maintenanceDao.getMaintenanceLiveData(carId)
     val maintenanceAll: LiveData<List<Maintenance>> = _maintenanceAll
 
     private val deleteMaintenance = MutableLiveData<Maintenance>()

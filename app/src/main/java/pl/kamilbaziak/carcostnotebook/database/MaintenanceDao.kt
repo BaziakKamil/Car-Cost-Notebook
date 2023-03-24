@@ -9,7 +9,10 @@ import pl.kamilbaziak.carcostnotebook.model.Maintenance
 interface MaintenanceDao {
 
     @Query("SELECT * FROM ${Constants.MAINTENANCE_TABLE} WHERE carId = :carId ORDER BY created DESC")
-    fun getMaintenanceData(carId: Long): LiveData<List<Maintenance>>
+    fun getMaintenanceLiveData(carId: Long): LiveData<List<Maintenance>>
+
+    @Query("SELECT * FROM ${Constants.MAINTENANCE_TABLE} WHERE carId = :carId ORDER BY created DESC")
+    suspend fun getMaintenanceDataForCar(carId: Long): List<Maintenance>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addMaintenance(maintenance: Maintenance)

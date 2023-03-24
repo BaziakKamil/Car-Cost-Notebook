@@ -12,6 +12,7 @@ import pl.kamilbaziak.carcostnotebook.database.MaintenanceDao
 import pl.kamilbaziak.carcostnotebook.database.OdometerDao
 import pl.kamilbaziak.carcostnotebook.database.TankFillDao
 import pl.kamilbaziak.carcostnotebook.model.Car
+import pl.kamilbaziak.carcostnotebook.model.Maintenance
 import pl.kamilbaziak.carcostnotebook.model.Odometer
 import pl.kamilbaziak.carcostnotebook.model.TankFill
 
@@ -33,14 +34,34 @@ class CarsViewModel(
     private val mainViewChannel = Channel<MainViewEvent>()
     val mainViewEvent = mainViewChannel.receiveAsFlow()
 
+    private var deletedTankFill = listOf<TankFill>()
+    private var deletedMaintenance = listOf<Maintenance>()
+    private var deletedOdometers = listOf<Odometer>()
+
     fun deleteCar() = viewModelScope.launch {
+        saveDeletedCarData()
         deleteCar.value?.let {
             carDao.deleteCar(it)
             odometerDao.deleteOdometer(it.id)
             maintenanceDao.deleteMaintenance(it.id)
             tankFillDao.deleteTankFill(it.id)
-            mainViewChannel.send(MainViewEvent.ShowSuccessDeleteCarMessage(it))
-        } ?: mainViewChannel.send(MainViewEvent.ShowDeleteErrorSnackbar)
+            mainViewChannel.send(MainViewEvent.ShowUndoDeleteCarMessage)
+        } ?: mainViewChannel.send(MainViewEvent.ShowDeleteErrorMessage)
+    }
+
+    private suspend fun saveDeletedCarData() {
+        deleteCar.value?.let {
+            deletedTankFill = tankFillDao.getTankFillDataForCar(it.id)
+            deletedMaintenance = maintenanceDao.getMaintenanceDataForCar(it.id)
+            deletedOdometers = odometerDao.getAllOdometerDataForCar(it.id)
+        }
+    }
+
+    fun onUndoDeleteCar() = viewModelScope.launch {
+        deleteCar.value?.let { carDao.addCar(it) }
+        deletedTankFill.onEach { tankFillDao.addTankFill(it) }
+        deletedMaintenance.onEach { maintenanceDao.addMaintenance(it) }
+        deletedOdometers.onEach { odometerDao.addOdometer(it) }
     }
 
     fun onAddNewCarClick() = viewModelScope.launch {
@@ -81,7 +102,7 @@ class CarsViewModel(
         object AddNewCar : MainViewEvent()
         data class ShowCarEditDialogScreen(val car: Car) : MainViewEvent()
         data class ShowCarDeleteDialogMessage(val car: Car) : MainViewEvent()
-        data class ShowSuccessDeleteCarMessage(val car: Car?) : MainViewEvent()
-        object ShowDeleteErrorSnackbar : MainViewEvent()
+        object ShowUndoDeleteCarMessage : MainViewEvent()
+        object ShowDeleteErrorMessage : MainViewEvent()
     }
 }
