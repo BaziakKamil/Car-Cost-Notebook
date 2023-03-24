@@ -23,5 +23,6 @@ class DetailsViewModel(
     val allMaintenance = _allMaintenanceData
 
     private val _allTankFillData = tankFillDao.getTankFillLiveData(carId)
+
     val allTankFillData = _allTankFillData
 }
