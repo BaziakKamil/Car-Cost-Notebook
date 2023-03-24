@@ -9,7 +9,10 @@ import pl.kamilbaziak.carcostnotebook.model.Odometer
 interface OdometerDao {
 
     @Query("SELECT * FROM ${Constants.ODOMETER_TABLE} WHERE carId = :carId ORDER BY created DESC")
-    fun getAllOdometerForCar(carId: Long): LiveData<List<Odometer>>
+    fun getOdometerLiveData(carId: Long): LiveData<List<Odometer>>
+
+    @Query("SELECT * FROM ${Constants.ODOMETER_TABLE} WHERE carId = :carId ORDER BY created DESC")
+    suspend fun getAllOdometerDataForCar(carId: Long): List<Odometer>
 
     @Query("SELECT * FROM ${Constants.ODOMETER_TABLE} WHERE carId = :carId ORDER BY created ASC LIMIT 1")
     suspend fun getFirstCarOdometer(carId: Long): Odometer?

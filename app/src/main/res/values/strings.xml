@@ -4,6 +4,7 @@
     <string name="car_brand">Car brand</string>
     <string name="car_model">Car model</string>
     <string name="car_price_when_bought">Car price when bought</string>
+    <string name="car_deleted">Car deleted</string>
     <string name="petrol">Petrol</string>
     <string name="petrol_type">Petrol type</string>
     <string name="petrol_unit">Petrol unit</string>

@@ -18,20 +18,20 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:maxLines="2"
             android:ellipsize="end"
+            android:maxLines="2"
             app:layout_constraintEnd_toStartOf="@+id/image_more"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_car_last_odometer"
+            app:layout_constraintTop_toBottomOf="@+id/text_car_licence_plate"
             tools:text="Description" />
 
         <TextView
             android:id="@+id/text_car_last_odometer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            app:layout_constraintBottom_toBottomOf="@+id/text_car_licence_plate"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_car_brand"
+            app:layout_constraintTop_toTopOf="@+id/text_car_licence_plate"
             tools:text="300900 km" />
 
         <TextView
@@ -59,19 +59,22 @@
             android:id="@+id/text_car_year"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            app:layout_constraintEnd_toStartOf="@+id/image_more"
-            app:layout_constraintTop_toBottomOf="@+id/text_car_licence_plate"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/text_car_licence_plate"
+            app:layout_constraintEnd_toStartOf="@+id/text_car_licence_plate"
+            app:layout_constraintTop_toTopOf="@+id/text_car_licence_plate"
             tools:text="2005" />
 
         <TextView
             android:id="@+id/text_car_licence_plate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/text_car_brand"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/car_plate"
+            android:padding="3dp"
+            android:textColor="@color/black"
             app:layout_constraintEnd_toStartOf="@+id/image_more"
-            app:layout_constraintTop_toTopOf="@+id/text_car_brand"
-            app:layout_constraintVertical_bias="1.0"
+            app:layout_constraintTop_toBottomOf="@+id/text_car_brand"
             tools:text="KN 45673" />
 
         <ImageView

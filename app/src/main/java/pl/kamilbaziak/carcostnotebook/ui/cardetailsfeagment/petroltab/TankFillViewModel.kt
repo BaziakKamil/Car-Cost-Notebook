@@ -21,7 +21,7 @@ class TankFillViewModel(
     private val tankFillChannel = Channel<TankFillEvent>()
     val tankFillEvent = tankFillChannel.receiveAsFlow()
 
-    private val _tankFillAll = tankFillDao.getTankFillData(carId)
+    private val _tankFillAll = tankFillDao.getTankFillLiveData(carId)
     val tankFillAll: LiveData<List<TankFill>> = _tankFillAll
 
     private val _tankFillMapped = MutableLiveData<List<Pair<TankFill, Odometer?>>>()

@@ -16,12 +16,12 @@ class DetailsViewModel(
 
     val currentCarData = carDao.getCarById(carId)
 
-    private val _allOdometerData = odometerDao.getAllOdometerForCar(carId)
+    private val _allOdometerData = odometerDao.getOdometerLiveData(carId)
     val allOdometerData = _allOdometerData
 
-    private val _allMaintenanceData = maintenanceDao.getMaintenanceData(carId)
+    private val _allMaintenanceData = maintenanceDao.getMaintenanceLiveData(carId)
     val allMaintenance = _allMaintenanceData
 
-    private val _allTankFillData = tankFillDao.getTankFillData(carId)
+    private val _allTankFillData = tankFillDao.getTankFillLiveData(carId)
     val allTankFillData = _allTankFillData
 }

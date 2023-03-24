@@ -12,12 +12,12 @@ class CarDetailsViewModel(
     carId: Long
 ) : ViewModel() {
 
-    private val _tankFillCount = tankFillDao.getTankFillData(carId)
+    private val _tankFillCount = tankFillDao.getTankFillLiveData(carId)
     val tankFillCount = _tankFillCount
 
-    private val _odometerCount = odometerDao.getAllOdometerForCar(carId)
+    private val _odometerCount = odometerDao.getOdometerLiveData(carId)
     val odometerCount = _odometerCount
 
-    private val _maintenanceCount = maintenanceDao.getMaintenanceData(carId)
+    private val _maintenanceCount = maintenanceDao.getMaintenanceLiveData(carId)
     val maintenanceCount = _maintenanceCount
 }
