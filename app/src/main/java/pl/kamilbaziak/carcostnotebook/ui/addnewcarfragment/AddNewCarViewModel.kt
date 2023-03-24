@@ -64,7 +64,7 @@ class AddNewCarViewModel(
     }
 
     fun getAllOdometer(car: Car) = viewModelScope.launch {
-        _odometerAll.value = odometerDao.getAllOdometerForCar(car.id).value
+        _odometerAll.value = odometerDao.getOdometerLiveData(car.id).value
     }
 
     fun getLastOdometer(car: Car) = viewModelScope.launch {

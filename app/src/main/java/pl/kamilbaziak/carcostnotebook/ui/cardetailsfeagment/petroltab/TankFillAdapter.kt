@@ -21,10 +21,8 @@ class TankFillAdapter(
     private val editTankFill: (TankFill) -> Unit,
     private val deleteTankFill: (TankFill) -> Unit,
     private val unit: PetrolUnitEnum,
-) :
-    ListAdapter<Pair<TankFill, Odometer?>, TankFillAdapter.TankFillViewHolder>(
-        DiffCallback()
-    ) {
+) : ListAdapter<Pair<TankFill, Odometer?>, TankFillAdapter.TankFillViewHolder>(DiffCallback()) {
+    
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TankFillViewHolder {
         val binding = ViewTankFillItemBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -42,7 +40,7 @@ class TankFillAdapter(
     inner class TankFillViewHolder(private val binding: ViewTankFillItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         private val popMenu = PopupMenu(binding.root.context, binding.root).apply {
-            setOnMenuItemClickListener {  item ->
+            setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.delete -> {
                         if (adapterPosition != RecyclerView.NO_POSITION) {

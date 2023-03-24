@@ -9,7 +9,10 @@ import pl.kamilbaziak.carcostnotebook.model.TankFill
 interface TankFillDao {
 
     @Query("SELECT * FROM ${Constants.TANK_FILL_TABLE} WHERE carId = :carId ORDER BY created DESC")
-    fun getTankFillData(carId: Long): LiveData<List<TankFill>>
+    fun getTankFillLiveData(carId: Long): LiveData<List<TankFill>>
+
+    @Query("SELECT * FROM ${Constants.TANK_FILL_TABLE} WHERE carId = :carId ORDER BY created DESC")
+    suspend fun getTankFillDataForCar(carId: Long): List<TankFill>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addTankFill(tankFill: TankFill)

@@ -48,9 +48,17 @@ class CarsFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActions 
             setHasFixedSize(true)
         }
 
-        viewModel.cars.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
-            noCarView.root.isVisible = it.isEmpty()
+        viewModel.apply {
+            cars.observe(viewLifecycleOwner) {
+                if (it.isNotEmpty()) {
+                    viewModel.setupCarMappedData(it)
+                }
+            }
+
+            carsMapped.observe(viewLifecycleOwner) {
+                adapter.submitList(it)
+                noCarView.root.isVisible = it.isEmpty()
+            }
         }
 
         fabAddCar.setOnClickListener {
@@ -87,18 +95,18 @@ class CarsFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActions 
                             getString(R.string.cannot_be_undone),
                             getString(R.string.delete)
                         )
-                    is CarsViewModel.MainViewEvent.ShowDeleteErrorSnackbar ->
+                    is CarsViewModel.MainViewEvent.ShowUndoDeleteCarMessage ->
+                        TextUtils.showSnackbarWithAction(
+                            requireView(),
+                            getString(R.string.car_deleted),
+                            getString(R.string.undo)
+                        ) {
+                            viewModel.onUndoDeleteCar()
+                        }
+                    is CarsViewModel.MainViewEvent.ShowDeleteErrorMessage ->
                         TextUtils.showSnackbar(
                             requireView(),
                             getString(R.string.error_during_delete_process)
-                        )
-                    is CarsViewModel.MainViewEvent.ShowSuccessDeleteCarMessage ->
-                        TextUtils.showSnackbar(
-                            requireView(),
-                            getString(
-                                R.string.delete_car_success,
-                                event.car?.name() ?: "no name"
-                            )
                         )
                 }
             }
