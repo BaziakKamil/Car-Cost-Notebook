@@ -9,6 +9,7 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="dialog_background">#CBD2DD</color>
+    <color name="fab_text_background">#80CBD2DD</color>
     <color name="fab_icon_color">#FFFFFFFF</color>
     <color name="tab_background_color">#BFBFBF</color>
     <color name="icons_background_color">#BFBFBF</color>

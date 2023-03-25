@@ -91,12 +91,13 @@
         android:id="@+id/text_petrol"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:background="@drawable/grey_rounded_rectangle_6dp"
+        android:padding="5dp"
         android:text="@string/petrol_fill"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/fab_add_petrol"
-        app:layout_constraintEnd_toStartOf="@+id/fab_add_petrol"
         app:layout_constraintTop_toTopOf="@+id/fab_add_petrol"
+        tools:layout_editor_absoluteX="48dp"
         tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

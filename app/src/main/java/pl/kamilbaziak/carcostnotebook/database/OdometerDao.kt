@@ -17,9 +17,6 @@ interface OdometerDao {
     @Query("SELECT * FROM ${Constants.ODOMETER_TABLE} WHERE carId = :carId ORDER BY created ASC LIMIT 1")
     suspend fun getFirstCarOdometer(carId: Long): Odometer?
 
-    @Query("SELECT * FROM ${Constants.ODOMETER_TABLE} WHERE carId = :carId ORDER BY created ASC LIMIT 1")
-    suspend fun getFirstCarOdometer(carId: Long): Odometer?
-
     @Query("SELECT * FROM ${Constants.ODOMETER_TABLE} WHERE carId = :carId ORDER BY created DESC LIMIT 1")
     suspend fun getLastCarOdometer(carId: Long): Odometer?
 
