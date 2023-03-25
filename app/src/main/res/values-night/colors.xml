@@ -2,7 +2,6 @@
 <resources>
 
     <color name="dialog_background">#212223</color>
-    <color name="fab_text_background">#80212223</color>
     <color name="fab_icon_color">#000000</color>
     <color name="tab_background_color">#222222</color>
     <color name="icons_background_color">#B5B5B5</color>
