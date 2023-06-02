@@ -18,6 +18,7 @@ android {
         targetSdk 33
         versionCode 1
         versionName "1.0"
+        manifestPlaceholders = [hostName:"www.kamilbaziak.pl"]
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -27,8 +28,18 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            debuggable false
+        }
+
+        debug {
+            debuggable true
+        }
+
+        staging {
+            initWith debug
+            manifestPlaceholders = [hostName:"www.kamilbaziak.pl"]
         }
     }
 
@@ -59,12 +70,13 @@ android {
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.core:core-ktx:1.10.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.core:core-splashscreen:1.0.0'
 
     //Material
-    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'com.google.android.material:material:1.9.0'
 
     // Architectural Components
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1"
