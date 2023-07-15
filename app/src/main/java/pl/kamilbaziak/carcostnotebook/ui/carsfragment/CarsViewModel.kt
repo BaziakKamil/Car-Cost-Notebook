@@ -1,5 +1,7 @@
 package pl.kamilbaziak.carcostnotebook.ui.carsfragment
 
+import android.os.Environment
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,6 +17,7 @@ import pl.kamilbaziak.carcostnotebook.model.Car
 import pl.kamilbaziak.carcostnotebook.model.Maintenance
 import pl.kamilbaziak.carcostnotebook.model.Odometer
 import pl.kamilbaziak.carcostnotebook.model.TankFill
+import java.io.File
 
 class CarsViewModel(
     private val carDao: CarDao,
@@ -90,6 +93,13 @@ class CarsViewModel(
         _carsMapped.value = list.map { car ->
             Pair(car, odometerDao.getLastCarOdometer(car.id))
         }
+    }
+
+    fun exportDatabaseToCSV() = viewModelScope.launch{
+        carDao.getAllCars().value?.forEach {
+
+        }
+        tankFillDao.
     }
 
     sealed class MainViewEvent {

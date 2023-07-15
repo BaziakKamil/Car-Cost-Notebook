@@ -78,4 +78,5 @@
     <string name="car_data">Car data</string>
     <string name="car_data_when_bought">Data when car was bought</string>
     <string name="pln_currency">zł</string>
+    <string name="more">More</string>
 </resources>

@@ -2,13 +2,23 @@ package pl.kamilbaziak.carcostnotebook.ui.carsfragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.TextUtils
@@ -42,6 +52,8 @@ class CarsFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActions 
     ) = binding.run {
         super.onViewCreated(view, savedInstanceState)
 
+        setOptionsMenu()
+
         recycler.apply {
             adapter = this@CarsFragment.adapter
             layoutManager = LinearLayoutManager(requireContext())
@@ -74,6 +86,7 @@ class CarsFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActions 
                                 getString(R.string.add_new_car)
                             )
                         )
+
                     is CarsViewModel.MainViewEvent.NavigateToCarDetails -> findNavController().navigate(
                         CarsFragmentDirections.actionMainViewFragmentToCarDetailsFragment(
                             event.car,
@@ -81,6 +94,7 @@ class CarsFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActions 
                             "${event.car.brand} ${event.car.model} ${event.car.year}"
                         )
                     )
+
                     is CarsViewModel.MainViewEvent.ShowCarEditDialogScreen ->
                         findNavController().navigate(
                             CarsFragmentDirections.actionMainViewFragmentToAddNewCarFragment(
@@ -88,6 +102,7 @@ class CarsFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActions 
                                 event.car
                             )
                         )
+
                     is CarsViewModel.MainViewEvent.ShowCarDeleteDialogMessage ->
                         MaterialAlertDialog.show(
                             childFragmentManager,
@@ -95,6 +110,7 @@ class CarsFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActions 
                             getString(R.string.cannot_be_undone),
                             getString(R.string.delete)
                         )
+
                     is CarsViewModel.MainViewEvent.ShowUndoDeleteCarMessage ->
                         TextUtils.showSnackbarWithAction(
                             requireView(),
@@ -103,6 +119,7 @@ class CarsFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActions 
                         ) {
                             viewModel.onUndoDeleteCar()
                         }
+
                     is CarsViewModel.MainViewEvent.ShowDeleteErrorMessage ->
                         TextUtils.showSnackbar(
                             requireView(),
@@ -113,6 +130,29 @@ class CarsFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActions 
         }
 
         return@run
+    }
+
+    private fun setOptionsMenu() {
+        requireActivity().addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.main_menu_toolbar, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when(menuItem.itemId) {
+                    R.id.menu_export_database -> {
+                        viewModel.exportDatabaseToCSV()
+                        TextUtils.showSnackbar(binding.root, "Export database")
+                        return true
+                    }
+                    R.id.menu_import_from_csv -> {
+                        TextUtils.showSnackbar(binding.root, "Import from csv to database")
+                        return true
+                    }
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     override fun onConfirm() {
