@@ -99,7 +99,7 @@ class CarsViewModel(
         carDao.getAllCars().value?.forEach {
 
         }
-        tankFillDao.
+        tankFillDao.getAllTankFill()
     }
 
     sealed class MainViewEvent {
