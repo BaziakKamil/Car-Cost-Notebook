@@ -79,4 +79,6 @@
     <string name="car_data_when_bought">Data when car was bought</string>
     <string name="pln_currency">zł</string>
     <string name="more">More</string>
+    <string name="export_database">Export Database</string>
+    <string name="import_to_database">Import to Database</string>
 </resources>

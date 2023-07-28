@@ -7,21 +7,18 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.view.MenuHost
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.TextUtils
+import pl.kamilbaziak.carcostnotebook.databinding.DialogProgressBinding
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentCarBinding
 import pl.kamilbaziak.carcostnotebook.model.name
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialog
@@ -38,6 +35,16 @@ class CarsFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActions 
             { viewModel.onCarEdit(it) },
             { viewModel.onCarDelete(it) }
         )
+    }
+    private val progressDialog by lazy {
+        AlertDialog.Builder(requireActivity()).apply {
+            setView(
+                DialogProgressBinding.inflate(layoutInflater).apply {
+                    textProgressDialog.text = "test if setting text is working aas intended"
+                }.root
+            )
+                .setCancelable(false)
+        }.create()
     }
 
     override fun onCreateView(
@@ -139,16 +146,18 @@ class CarsFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActions 
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return when(menuItem.itemId) {
+                return when (menuItem.itemId) {
                     R.id.menu_export_database -> {
-                        viewModel.exportDatabaseToCSV()
+                        viewModel.exportDatabase()
                         TextUtils.showSnackbar(binding.root, "Export database")
                         return true
                     }
+
                     R.id.menu_import_from_csv -> {
-                        TextUtils.showSnackbar(binding.root, "Import from csv to database")
+                        TextUtils.showSnackbar(binding.root, "Import to database")
                         return true
                     }
+
                     else -> false
                 }
             }

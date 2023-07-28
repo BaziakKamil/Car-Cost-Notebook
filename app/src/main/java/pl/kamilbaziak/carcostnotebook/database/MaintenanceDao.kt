@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import pl.kamilbaziak.carcostnotebook.Constants
 import pl.kamilbaziak.carcostnotebook.model.Maintenance
+import pl.kamilbaziak.carcostnotebook.model.TankFill
 
 @Dao
 interface MaintenanceDao {
@@ -25,4 +26,7 @@ interface MaintenanceDao {
 
     @Query("DELETE FROM ${Constants.MAINTENANCE_TABLE} WHERE carId = :carId")
     suspend fun deleteMaintenance(carId: Long)
+
+    @Query("SELECT * FROM ${Constants.MAINTENANCE_TABLE} ORDER BY created DESC")
+    suspend fun getAllMaintenance(): List<Maintenance>
 }

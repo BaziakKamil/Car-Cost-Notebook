@@ -1,5 +1,6 @@
 package pl.kamilbaziak.carcostnotebook.ui.carsfragment
 
+import android.content.Context
 import android.os.Environment
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -9,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import org.json.JSONArray
 import pl.kamilbaziak.carcostnotebook.database.CarDao
 import pl.kamilbaziak.carcostnotebook.database.MaintenanceDao
 import pl.kamilbaziak.carcostnotebook.database.OdometerDao
@@ -18,6 +20,9 @@ import pl.kamilbaziak.carcostnotebook.model.Maintenance
 import pl.kamilbaziak.carcostnotebook.model.Odometer
 import pl.kamilbaziak.carcostnotebook.model.TankFill
 import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.util.Date
 
 class CarsViewModel(
     private val carDao: CarDao,
@@ -25,6 +30,8 @@ class CarsViewModel(
     private val maintenanceDao: MaintenanceDao,
     private val tankFillDao: TankFillDao
 ) : ViewModel() {
+
+    private val TAG = "CarsViewModel"
 
     private val _cars = carDao.getAllCars()
     val cars: LiveData<List<Car>> = _cars
@@ -95,11 +102,39 @@ class CarsViewModel(
         }
     }
 
-    fun exportDatabaseToCSV() = viewModelScope.launch{
-        carDao.getAllCars().value?.forEach {
+    fun exportDatabase() = viewModelScope.launch {
+        val carList = carDao.getAllCarlist()
+        val tankFillList = tankFillDao.getAllTankFill()
+        val maintenanceList = maintenanceDao.getAllMaintenance()
+        val odometerList = odometerDao.getAllOdometer()
 
+        val carJSON = JSONArray(carList)
+        val tankJSON = JSONArray(tankFillList)
+        val maintenanceJSON = JSONArray(maintenanceList)
+        val odometerJSON = JSONArray(odometerList)
+
+
+    }
+
+    private fun exportDatabase(context: Context, fileName: String): Boolean {
+        try {
+            val currentDB = File(context.getDatabasePath(localDbName).path)
+            Log.e(TAG, currentDB.toString())
+            val backupDB = File(Environment.getExternalStorageDirectory().path, backupDBName)
+            Log.e(TAG, backupDB.toString())
+            if (currentDB.exists()) {
+                val src = FileInputStream(currentDB).channel
+                val dst = FileOutputStream(backupDB).channel
+                dst.transferFrom(src, 0, src.size())
+                src.close()
+                dst.close()
+            } else {
+                Log.e(TAG, "SD can't write data!")
+                return false
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
-        tankFillDao.getAllTankFill()
     }
 
     sealed class MainViewEvent {

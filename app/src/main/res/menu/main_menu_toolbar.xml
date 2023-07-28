@@ -11,12 +11,12 @@
         <menu>
             <item
                 android:id="@+id/menu_export_database"
-                android:title="Export Database to CSV"
+                android:title="@string/export_database"
                 app:showAsAction="always"/>
 
             <item
                 android:id="@+id/menu_import_from_csv"
-                android:title="Import to Database from CSV"
+                android:title="@string/import_to_database"
                 app:showAsAction="always"/>
         </menu>
 
