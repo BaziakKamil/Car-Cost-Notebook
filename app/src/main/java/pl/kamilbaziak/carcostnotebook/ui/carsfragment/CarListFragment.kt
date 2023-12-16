@@ -19,18 +19,18 @@ import org.koin.android.ext.android.inject
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.TextUtils
 import pl.kamilbaziak.carcostnotebook.databinding.DialogProgressBinding
-import pl.kamilbaziak.carcostnotebook.databinding.FragmentCarBinding
+import pl.kamilbaziak.carcostnotebook.databinding.FragmentCarListBinding
 import pl.kamilbaziak.carcostnotebook.model.name
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialog
 
-class CarsFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActions {
+class CarListFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActions {
 
-    private val viewModel: CarsViewModel by inject()
-    private val binding: FragmentCarBinding by lazy {
-        FragmentCarBinding.inflate(layoutInflater)
+    private val viewModel: CarsListViewModel by inject()
+    private val binding: FragmentCarListBinding by lazy {
+        FragmentCarListBinding.inflate(layoutInflater)
     }
-    private val adapter: CarAdapter by lazy {
-        CarAdapter(
+    private val adapter: CarListAdapter by lazy {
+        CarListAdapter(
             { viewModel.onCarClick(it) },
             { viewModel.onCarEdit(it) },
             { viewModel.onCarDelete(it) }
@@ -62,7 +62,7 @@ class CarsFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActions 
         setOptionsMenu()
 
         recycler.apply {
-            adapter = this@CarsFragment.adapter
+            adapter = this@CarListFragment.adapter
             layoutManager = LinearLayoutManager(requireContext())
             setHasFixedSize(true)
         }
@@ -87,30 +87,30 @@ class CarsFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActions 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.mainViewEvent.collect { event ->
                 when (event) {
-                    CarsViewModel.MainViewEvent.AddNewCar ->
+                    CarsListViewModel.MainViewEvent.AddNewCar ->
                         findNavController().navigate(
-                            CarsFragmentDirections.actionMainViewFragmentToAddNewCarFragment(
+                            CarListFragmentDirections.actionMainViewFragmentToAddNewCarFragment(
                                 getString(R.string.add_new_car)
                             )
                         )
 
-                    is CarsViewModel.MainViewEvent.NavigateToCarDetails -> findNavController().navigate(
-                        CarsFragmentDirections.actionMainViewFragmentToCarDetailsFragment(
+                    is CarsListViewModel.MainViewEvent.NavigateToCarDetails -> findNavController().navigate(
+                        CarListFragmentDirections.actionMainViewFragmentToCarDetailsFragment(
                             event.car,
                             event.odometer,
                             "${event.car.brand} ${event.car.model} ${event.car.year}"
                         )
                     )
 
-                    is CarsViewModel.MainViewEvent.ShowCarEditDialogScreen ->
+                    is CarsListViewModel.MainViewEvent.ShowCarEditDialogScreen ->
                         findNavController().navigate(
-                            CarsFragmentDirections.actionMainViewFragmentToAddNewCarFragment(
+                            CarListFragmentDirections.actionMainViewFragmentToAddNewCarFragment(
                                 event.car.name(),
                                 event.car
                             )
                         )
 
-                    is CarsViewModel.MainViewEvent.ShowCarDeleteDialogMessage ->
+                    is CarsListViewModel.MainViewEvent.ShowCarDeleteDialogMessage ->
                         MaterialAlertDialog.show(
                             childFragmentManager,
                             getString(R.string.delete_dialog_title, event.car.name()),
@@ -118,7 +118,7 @@ class CarsFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActions 
                             getString(R.string.delete)
                         )
 
-                    is CarsViewModel.MainViewEvent.ShowUndoDeleteCarMessage ->
+                    is CarsListViewModel.MainViewEvent.ShowUndoDeleteCarMessage ->
                         TextUtils.showSnackbarWithAction(
                             requireView(),
                             getString(R.string.car_deleted),
@@ -127,7 +127,7 @@ class CarsFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActions 
                             viewModel.onUndoDeleteCar()
                         }
 
-                    is CarsViewModel.MainViewEvent.ShowDeleteErrorMessage ->
+                    is CarsListViewModel.MainViewEvent.ShowDeleteErrorMessage ->
                         TextUtils.showSnackbar(
                             requireView(),
                             getString(R.string.error_during_delete_process)

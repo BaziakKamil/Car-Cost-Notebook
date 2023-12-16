@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/carsFragment"
-        android:name="pl.kamilbaziak.carcostnotebook.ui.carsfragment.CarsFragment"
+        android:name="pl.kamilbaziak.carcostnotebook.ui.carsfragment.CarListFragment"
         android:label="@string/app_name"
-        tools:layout="@layout/fragment_car">
+        tools:layout="@layout/fragment_car_list">
         <action
             android:id="@+id/action_mainViewFragment_to_carDetailsFragment"
             app:destination="@id/carDetailsFragment" />
