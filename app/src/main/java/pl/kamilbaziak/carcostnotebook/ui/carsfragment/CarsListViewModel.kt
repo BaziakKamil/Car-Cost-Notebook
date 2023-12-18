@@ -1,16 +1,13 @@
 package pl.kamilbaziak.carcostnotebook.ui.carsfragment
 
-import android.content.Context
-import android.os.Environment
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import org.json.JSONArray
 import pl.kamilbaziak.carcostnotebook.database.CarDao
 import pl.kamilbaziak.carcostnotebook.database.MaintenanceDao
 import pl.kamilbaziak.carcostnotebook.database.OdometerDao
@@ -19,12 +16,8 @@ import pl.kamilbaziak.carcostnotebook.model.Car
 import pl.kamilbaziak.carcostnotebook.model.Maintenance
 import pl.kamilbaziak.carcostnotebook.model.Odometer
 import pl.kamilbaziak.carcostnotebook.model.TankFill
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.util.Date
 
-class CarsViewModel(
+class CarsListViewModel(
     private val carDao: CarDao,
     private val odometerDao: OdometerDao,
     private val maintenanceDao: MaintenanceDao,
@@ -32,6 +25,7 @@ class CarsViewModel(
 ) : ViewModel() {
 
     private val TAG = "CarsViewModel"
+    private val gson = Gson()
 
     private val _cars = carDao.getAllCars()
     val cars: LiveData<List<Car>> = _cars
@@ -103,18 +97,22 @@ class CarsViewModel(
     }
 
     fun exportDatabase() = viewModelScope.launch {
-        val carList = carDao.getAllCarlist()
+        val carList = carDao.getAllCarList()
         val tankFillList = tankFillDao.getAllTankFill()
         val maintenanceList = maintenanceDao.getAllMaintenance()
         val odometerList = odometerDao.getAllOdometer()
 
-        val carJSON = JSONArray(carList)
-        val tankJSON = JSONArray(tankFillList)
-        val maintenanceJSON = JSONArray(maintenanceList)
-        val odometerJSON = JSONArray(odometerList)
+        val carJSON = gson.toJson(carList)
+        val tankJSON = gson.toJson(tankFillList)
+        val maintenanceJSON = gson.toJson(maintenanceList)
+        val odometerJSON = gson.toJson(odometerList)
 
+        val finalJSON = gson.toJson(listOf(carJSON, tankJSON, maintenanceJSON, odometerJSON))
 
+        saveToStorage(finalJSON)
     }
+
+    private fun saveToStorage(json: String) = json
 
 //    private fun exportDatabase(context: Context, fileName: String): Boolean {
 //        try {
