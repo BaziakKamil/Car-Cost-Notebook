@@ -116,26 +116,24 @@ class CarsViewModel(
 
     }
 
-    private fun exportDatabase(context: Context, fileName: String): Boolean {
-        try {
-            val currentDB = File(context.getDatabasePath(localDbName).path)
-            Log.e(TAG, currentDB.toString())
-            val backupDB = File(Environment.getExternalStorageDirectory().path, backupDBName)
-            Log.e(TAG, backupDB.toString())
-            if (currentDB.exists()) {
-                val src = FileInputStream(currentDB).channel
-                val dst = FileOutputStream(backupDB).channel
-                dst.transferFrom(src, 0, src.size())
-                src.close()
-                dst.close()
-            } else {
-                Log.e(TAG, "SD can't write data!")
-                return false
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
+//    private fun exportDatabase(context: Context, fileName: String): Boolean {
+//        try {
+//            val currentDB = File(context.getDatabasePath(localDbName).path)
+//            val backupDB = File(Environment.getExternalStorageDirectory().path, backupDBName)
+//            if (currentDB.exists()) {
+//                val src = FileInputStream(currentDB).channel
+//                val dst = FileOutputStream(backupDB).channel
+//                dst.transferFrom(src, 0, src.size())
+//                src.close()
+//                dst.close()
+//            } else {
+//                Log.e(TAG, "SD can't write data!")
+//                return false
+//            }
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//        }
+//    }
 
     sealed class MainViewEvent {
 
