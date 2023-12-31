@@ -154,6 +154,7 @@ class CarListFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActio
                     }
 
                     R.id.menu_import_from_csv -> {
+                        viewModel.importDatabase()
                         TextUtils.showSnackbar(binding.root, "Import to database")
                         return true
                     }

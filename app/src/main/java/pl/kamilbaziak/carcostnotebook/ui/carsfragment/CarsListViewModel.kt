@@ -1,5 +1,8 @@
 package pl.kamilbaziak.carcostnotebook.ui.carsfragment
 
+import android.app.Application
+import android.content.Context
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +11,8 @@ import com.google.gson.Gson
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import pl.kamilbaziak.carcostnotebook.Constants.BACKUP_NAME
+import pl.kamilbaziak.carcostnotebook.DateUtils
 import pl.kamilbaziak.carcostnotebook.database.CarDao
 import pl.kamilbaziak.carcostnotebook.database.MaintenanceDao
 import pl.kamilbaziak.carcostnotebook.database.OdometerDao
@@ -16,13 +21,19 @@ import pl.kamilbaziak.carcostnotebook.model.Car
 import pl.kamilbaziak.carcostnotebook.model.Maintenance
 import pl.kamilbaziak.carcostnotebook.model.Odometer
 import pl.kamilbaziak.carcostnotebook.model.TankFill
+import java.io.File
+import java.io.FileOutputStream
+import java.util.Calendar
 
 class CarsListViewModel(
+    private val application: Application,
     private val carDao: CarDao,
     private val odometerDao: OdometerDao,
     private val maintenanceDao: MaintenanceDao,
     private val tankFillDao: TankFillDao
-) : ViewModel() {
+) : AndroidViewModel(application) {
+
+    private val context = application.applicationContext
 
     private val TAG = "CarsViewModel"
     private val gson = Gson()
@@ -112,7 +123,42 @@ class CarsListViewModel(
         saveToStorage(finalJSON)
     }
 
-    private fun saveToStorage(json: String) = json
+    fun importDatabase() = viewModelScope.launch {
+        getBackupFilesDialog()
+    }
+
+    private fun saveToStorage(json: String) {
+//        val path = context.filesDir.path
+//        val directory = File(path, "LET")
+//        directory.mkdirs()
+//        val file = File(directory, "carNotebookBackup_${DateUtils.formatDateFromLong(Calendar.getInstance().timeInMillis)}.ccn")
+//        FileOutputStream(file).use {
+//            it.write(json.toByteArray())
+//            it.close()
+//        }
+        val fileName = "$BACKUP_NAME${DateUtils.formatBackupDateFromLong(Calendar.getInstance().timeInMillis)}.ccn"
+        context.openFileOutput(fileName, Context.MODE_PRIVATE).use {
+            it.write(json.toByteArray())
+            it.close()
+        }
+    }
+
+    private fun getBackupFilesDialog() {
+        val files = context.filesDir.listFiles()
+        val backupFiles = files?.filter {
+            it.name.contains(BACKUP_NAME)
+        }
+        if (backupFiles.isNullOrEmpty()) {
+            //todo return information that there is no backup files
+            return
+        }
+
+        //todo show dialog with files listed
+    }
+
+    private fun readFromStorage() {
+
+    }
 
 //    private fun exportDatabase(context: Context, fileName: String): Boolean {
 //        try {
