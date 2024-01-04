@@ -15,11 +15,11 @@ import pl.kamilbaziak.carcostnotebook.model.Odometer
 import pl.kamilbaziak.carcostnotebook.shortcut
 import pl.kamilbaziak.carcostnotebook.toTwoDigits
 
-class CarListAdapter(
+class CarAdapter(
     private val openCarDetails: (Car) -> Unit,
     private val editCar: (Car) -> Unit,
     private val deleteCar: (Car) -> Unit
-) : ListAdapter<Pair<Car, Odometer?>, CarListAdapter.CarViewHolder>(DiffCallback()) {
+) : ListAdapter<Pair<Car, Odometer?>, CarAdapter.CarViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarViewHolder {
         val binding = ViewCarItemBinding.inflate(

@@ -14,10 +14,9 @@ import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.TextUtils
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentMaintenanceBinding
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialog
-import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialogActions
 import pl.kamilbaziak.carcostnotebook.ui.maintenancedialog.MaintenanceDialog
 
-class MaintenanceFragment : Fragment(), MaterialAlertDialogActions {
+class MaintenanceFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActions {
 
     private val binding by lazy {
         FragmentMaintenanceBinding.inflate(layoutInflater)
@@ -96,13 +95,9 @@ class MaintenanceFragment : Fragment(), MaterialAlertDialogActions {
         }
     }
 
-    override fun onPositiveButtonClicked() {
+    override fun onConfirm() {
         viewModel.deleteMaintenance()
     }
-
-    override fun onNegativeButtonClicked() {}
-
-    override fun getItemListItemTitle(title: String) {}
 
     companion object {
         const val CAR_ID_EXTRA = "MaintenanceFragment.CAR_ID_EXTRA"
