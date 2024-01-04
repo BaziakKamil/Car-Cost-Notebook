@@ -25,4 +25,7 @@ interface TankFillDao {
 
     @Query("DELETE FROM ${Constants.TANK_FILL_TABLE} WHERE carId = :carId")
     suspend fun deleteTankFill(carId: Long)
+
+    @Query("SELECT * FROM ${Constants.TANK_FILL_TABLE} ORDER BY created DESC")
+    suspend fun getAllTankFill(): List<TankFill>
 }

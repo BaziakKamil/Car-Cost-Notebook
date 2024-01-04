@@ -1,6 +1,7 @@
 package pl.kamilbaziak.carcostnotebook
 
 import android.annotation.SuppressLint
+import pl.kamilbaziak.carcostnotebook.Constants.BACKUP_DATE_FORMAT
 import pl.kamilbaziak.carcostnotebook.Constants.DATE_FORMAT
 import pl.kamilbaziak.carcostnotebook.Constants.TIME_FORMAT
 import java.text.SimpleDateFormat
@@ -15,4 +16,8 @@ object DateUtils {
     @SuppressLint("SimpleDateFormat")
     fun formatTimeFromLong(long: Long): String =
         SimpleDateFormat(TIME_FORMAT).format(Date(long))
+
+    @SuppressLint("SimpleDateFormat")
+    fun formatBackupDateFromLong(long: Long): String =
+        SimpleDateFormat(BACKUP_DATE_FORMAT).format(Date(long))
 }

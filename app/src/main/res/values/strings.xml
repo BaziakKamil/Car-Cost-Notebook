@@ -78,4 +78,12 @@
     <string name="car_data">Car data</string>
     <string name="car_data_when_bought">Data when car was bought</string>
     <string name="pln_currency">zł</string>
+    <string name="more">More</string>
+    <string name="export_data">Export Data</string>
+    <string name="import_data">Import Data</string>
+    <string name="error_occurred_during_import_process">Error occurred during import process</string>
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="error_occurred_during_saving_backup">Error occurred during saving backup</string>
+    <string name="app_directory_not_found_check_documents_folder_on_device">App directory not found, check Documents folder on device</string>
+    <string name="car_database_exported_successfully">Car database exported successfully</string>
 </resources>
