@@ -12,4 +12,9 @@ object Constants {
     const val TIME_FORMAT = "hh:mm"
 
     const val BACKUP_NAME = "carNotebookBackup_"
+    const val BACKUP_DIRECTORY = "Car Cost Notebook Backup"
+    const val BACKUP_CAR = "car.json"
+    const val BACKUP_TANK_FILL = "tank_fill.json"
+    const val BACKUP_MAINTENANCE = "maintenance.json"
+    const val BACKUP_ODOMETER = "odometer.json"
 }

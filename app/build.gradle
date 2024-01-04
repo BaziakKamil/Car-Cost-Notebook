@@ -53,7 +53,12 @@ android {
     }
 
     buildFeatures {
+        compose true
         viewBinding true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.5.0'
     }
 
     namespace 'pl.kamilbaziak.carcostnotebook'
@@ -73,17 +78,18 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.10.1'
 
     //Material
-    implementation 'com.google.android.material:material:1.10.0'
+    implementation 'androidx.compose.material3:material3:1.1.2'
+    implementation 'com.google.android.material:material:1.11.0'
 
     // Architectural Components
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2"
 
     // Room
-    implementation "androidx.room:room-runtime:2.6.0"
-    kapt "androidx.room:room-compiler:2.6.0"
+    implementation "androidx.room:room-runtime:2.6.1"
+    kapt "androidx.room:room-compiler:2.6.1"
 
     // Kotlin Extensions and Coroutines support for Room
-    implementation "androidx.room:room-ktx:2.6.0"
+    implementation "androidx.room:room-ktx:2.6.1"
 
     // Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1'
@@ -94,8 +100,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.2"
 
     // Navigation Components
-    implementation "androidx.navigation:navigation-fragment-ktx:2.7.4"
-    implementation "androidx.navigation:navigation-ui-ktx:2.7.4"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.7.6"
+    implementation "androidx.navigation:navigation-ui-ktx:2.7.6"
 
     // Koin for Android
     implementation "io.insert-koin:koin-android:3.2.2"
@@ -108,6 +114,15 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
+    //compose
+    implementation 'androidx.compose.ui:ui'
+    implementation 'androidx.compose.material:material'
+    implementation 'androidx.compose.runtime:runtime'
+    implementation 'androidx.activity:activity-compose:1.8.2'
+    implementation platform('androidx.compose:compose-bom:2022.10.00')
+    implementation 'androidx.compose.ui:ui-graphics'
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+
     //tests
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
@@ -119,7 +134,7 @@ dependencies {
     testImplementation "androidx.test:core:1.5.0"
     testImplementation "androidx.test:rules:1.5.0"
     testImplementation "androidx.test:runner:1.5.2"
-    testImplementation "org.jetbrains.kotlin:kotlin-test:1.7.10"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4"
+    testImplementation "org.jetbrains.kotlin:kotlin-test:1.8.22"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1"
     testImplementation "androidx.arch.core:core-testing:2.2.0"
 }

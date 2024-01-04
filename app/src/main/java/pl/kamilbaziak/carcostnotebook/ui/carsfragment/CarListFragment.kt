@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -22,8 +23,9 @@ import pl.kamilbaziak.carcostnotebook.databinding.DialogProgressBinding
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentCarListBinding
 import pl.kamilbaziak.carcostnotebook.model.name
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialog
+import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialogActions
 
-class CarListFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActions {
+class CarListFragment : Fragment(), MaterialAlertDialogActions {
 
     private val viewModel: CarsListViewModel by inject()
     private val binding: FragmentCarListBinding by lazy {
@@ -46,12 +48,31 @@ class CarListFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActio
                 .setCancelable(false)
         }.create()
     }
+    private var showAlertDialog = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = binding.root
+    ): View {
+        binding.composeView.apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+            )
+            setContent {
+//                if(showAlertDialog) {
+//                    MaterialDialog(
+//                        onDismissRequest = { showAlertDialog = false },
+//                        onConfirmation = { showAlertDialog = false },
+//                        dialogTitle = "Title",
+//                        dialogText = "Dialog text",
+//                        icon = Icons.Outlined.List
+//                    )
+//                }
+            }
+        }
+        return binding.root
+    }
 
     override fun onViewCreated(
         view: View,
@@ -132,6 +153,29 @@ class CarListFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActio
                             requireView(),
                             getString(R.string.error_during_delete_process)
                         )
+
+                    is CarsListViewModel.MainViewEvent.ShowBackupImportDialog ->
+                        MaterialAlertDialog.show(
+                            childFragmentManager,
+                            "Import car data backup files",
+                            "Choose which backup file to import",
+                            list = event.files
+                        )
+
+                    is CarsListViewModel.MainViewEvent.ShowErrorDialogMessage -> {
+                        MaterialAlertDialog.show(
+                            childFragmentManager,
+                            getString(R.string.something_went_wrong),
+                            event.message,
+                            getString(R.string.accept)
+                        )
+                    }
+
+                    is CarsListViewModel.MainViewEvent.ShowSnackbarMessage ->
+                        TextUtils.showSnackbar(
+                            requireView(),
+                            event.message
+                        )
                 }
             }
         }
@@ -149,13 +193,12 @@ class CarListFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActio
                 return when (menuItem.itemId) {
                     R.id.menu_export_database -> {
                         viewModel.exportDatabase()
-                        TextUtils.showSnackbar(binding.root, "Export database")
+                        showAlertDialog = true
                         return true
                     }
 
                     R.id.menu_import_from_csv -> {
                         viewModel.importDatabase()
-                        TextUtils.showSnackbar(binding.root, "Import to database")
                         return true
                     }
 
@@ -165,7 +208,13 @@ class CarListFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActio
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
-    override fun onConfirm() {
+    override fun onPositiveButtonClicked() {
         viewModel.deleteCar()
+    }
+
+    override fun onNegativeButtonClicked() {}
+
+    override fun getItemListItemTitle(title: String) {
+        viewModel.startImportFromJsonToDatabase(title)
     }
 }

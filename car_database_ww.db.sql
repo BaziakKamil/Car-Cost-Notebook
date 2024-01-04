@@ -2,6 +2,12 @@ INSERT INTO "car_table" VALUES
 (3,'Ford','Mondeo',2011,'KR531RY','Diesel','Liter','Kilometers','Auto zakupione w Krakowie od firmy, średnio 30 tys robione każdego roku. Auto zadbane wewnątrz, dołożony Akram, czujniki parkowania.
 
 Link projektu dom.
+https://www.archon.pl/projekty-domow/projekt-dom-pod-katalpa-2-me6026ca2180ce
+https://www.archon.pl/projekty-domow/projekt-dom-pod-katalpa-2-me6026ca2180ce
+https://www.archon.pl/projekty-domow/projekt-dom-pod-katalpa-2-me6026ca2180ce
+https://www.archon.pl/projekty-domow/projekt-dom-pod-katalpa-2-me6026ca2180ce
+https://www.archon.pl/projekty-domow/projekt-dom-pod-katalpa-2-me6026ca2180ce
+https://www.archon.pl/projekty-domow/projekt-dom-pod-katalpa-2-me6026ca2180ce
 https://www.archon.pl/projekty-domow/projekt-dom-pod-katalpa-2-me6026ca2180ce',15000.0,1668038400000,'zł'),
 (4,'Peugeot','308',2007,'KN6687G','Diesel','Liter','Kilometers','Auto kupione dla Anety na komisie, fajne autko',12500.0,1662768000000,'zł'),
 (5,'KIA','CEE''D',2012,'KN2077H','Diesel','Liter','Kilometers','Auto kupione dla Anetki, zeby jej sie dobrze nowym autkiem jezdzilo',20800.0,1686787200000,'zł');
@@ -56,7 +62,6 @@ INSERT INTO "odometer_table" VALUES
 (69,5,271589.0,'Kilometers',1686873600000,0,'Tank fill: Orlen Chelmiec'),
 (71,5,271988.0,'Kilometers',1688169600000,0,'Tank fill: Mol Nawojowska'),
 (72,5,271650.0,'Kilometers',1687046400000,0,'Tank fill: Mol Nawojowska');
-
 
 INSERT INTO "tank_fill_table" VALUES 
 (3,3,'Diesel',41.36,7.88,0.0,22,0.0,'Lotos Nawojowska',1668211200000),

@@ -4,9 +4,7 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -265,5 +263,4 @@
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
         </LinearLayout>
-    </ScrollView>
 </FrameLayout>
