@@ -18,9 +18,10 @@ import pl.kamilbaziak.carcostnotebook.databinding.FragmentTankFillBinding
 import pl.kamilbaziak.carcostnotebook.enums.PetrolUnitEnum
 import pl.kamilbaziak.carcostnotebook.model.TankFill
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialog
+import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialogActions
 import pl.kamilbaziak.carcostnotebook.ui.tankfilldialog.TankFillDialog
 
-class TankFillFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActions {
+class TankFillFragment : Fragment(), MaterialAlertDialogActions {
 
     private val binding by lazy {
         FragmentTankFillBinding.inflate(layoutInflater)
@@ -105,10 +106,6 @@ class TankFillFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActi
         }
     }
 
-    override fun onConfirm() {
-        viewModel.deleteTankFill()
-    }
-
     companion object {
         const val CAR_ID_EXTRA = "TankFillFragment.CAR_ID_EXTRA"
         const val PETROL_UNIT_EXTRA = "TankFillFragment.PETROL_UNIT_EXTRA"
@@ -123,4 +120,12 @@ class TankFillFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActi
             )
         }
     }
+
+    override fun onPositiveButtonClicked() {
+        viewModel.deleteTankFill()
+    }
+
+    override fun onNegativeButtonClicked() {}
+
+    override fun getItemListItemTitle(title: String) {}
 }

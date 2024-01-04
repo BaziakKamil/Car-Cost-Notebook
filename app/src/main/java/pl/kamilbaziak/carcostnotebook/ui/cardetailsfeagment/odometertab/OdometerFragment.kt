@@ -16,9 +16,10 @@ import pl.kamilbaziak.carcostnotebook.TextUtils
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentOdometerBinding
 import pl.kamilbaziak.carcostnotebook.enums.UnitEnum
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialog
+import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialogActions
 import pl.kamilbaziak.carcostnotebook.ui.odometerdialog.OdometerDialog
 
-class OdometerFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActions {
+class OdometerFragment : Fragment(), MaterialAlertDialogActions {
 
     private val binding by lazy {
         FragmentOdometerBinding.inflate(layoutInflater)
@@ -99,7 +100,11 @@ class OdometerFragment : Fragment(), MaterialAlertDialog.MaterialAlertDialogActi
         }
     }
 
-    override fun onConfirm() {
+    override fun onPositiveButtonClicked() {
         viewModel.deleteOdometer()
     }
+
+    override fun onNegativeButtonClicked() {}
+
+    override fun getItemListItemTitle(title: String) {}
 }

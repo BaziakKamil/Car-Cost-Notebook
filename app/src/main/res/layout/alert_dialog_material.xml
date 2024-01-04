@@ -36,6 +36,13 @@
             android:layout_margin="16dp"
             tools:text="You want to delete this?" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler"
+            android:layout_width="match_parent"
+            android:layout_marginHorizontal="16dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -47,7 +54,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/cancel"/>
+                android:text="@string/cancel" />
 
             <View
                 android:layout_width="8dp"
