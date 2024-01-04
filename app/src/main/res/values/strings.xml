@@ -79,8 +79,8 @@
     <string name="car_data_when_bought">Data when car was bought</string>
     <string name="pln_currency">zł</string>
     <string name="more">More</string>
-    <string name="export_database">Export Database</string>
-    <string name="import_to_database">Import to Database</string>
+    <string name="export_data">Export Data</string>
+    <string name="import_data">Import Data</string>
     <string name="error_occurred_during_import_process">Error occurred during import process</string>
     <string name="something_went_wrong">Something went wrong</string>
     <string name="error_occurred_during_saving_backup">Error occurred during saving backup</string>

@@ -224,7 +224,7 @@ class CarsListViewModel(
                 val mainteneanceData = gson.fromJson<List<Maintenance>>(maintenances, object : TypeToken<List<Maintenance>>() {}.type)
                 val odometerData = gson.fromJson<List<Odometer>>(odometers, object : TypeToken<List<Odometer>>() {}.type)
 
-                //todo add import to database and compare if same car exists, if so we need to add new
+                //todo will be improved in ticket #36
 
                 if(carsData.isNotEmpty()) {
                     carsData.forEach { carDao.addCar(it) }
