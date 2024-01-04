@@ -22,7 +22,4 @@ interface CarDao {
 
     @Delete
     suspend fun deleteCar(car: Car)
-
-    @Query("SELECT * FROM $CAR_TABLE")
-    suspend fun getAllCarList(): List<Car>
 }
