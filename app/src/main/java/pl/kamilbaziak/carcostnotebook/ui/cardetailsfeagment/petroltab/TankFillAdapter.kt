@@ -4,6 +4,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -22,7 +23,7 @@ class TankFillAdapter(
     private val deleteTankFill: (TankFill) -> Unit,
     private val unit: PetrolUnitEnum,
 ) : ListAdapter<Pair<TankFill, Odometer?>, TankFillAdapter.TankFillViewHolder>(DiffCallback()) {
-    
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TankFillViewHolder {
         val binding = ViewTankFillItemBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -48,12 +49,14 @@ class TankFillAdapter(
                         }
                         true
                     }
+
                     R.id.edit -> {
                         if (adapterPosition != RecyclerView.NO_POSITION) {
                             editTankFill(getItem(adapterPosition).first)
                         }
                         true
                     }
+
                     else -> false
                 }
             }
@@ -72,14 +75,14 @@ class TankFillAdapter(
 
         fun bind(tankFill: Pair<TankFill, Odometer?>) {
             binding.apply {
-                val ctx = root.context
+                val context = root.context
                 val mileageUnit =
                     tankFill.second?.unit?.shortcut() ?: UnitEnum.Kilometers.shortcut()
                 textPetrolStation.text = tankFill.first.petrolStation
                 textDate.text = tankFill.first.created.toDate()
 
                 textOdometer.text = tankFill.second?.let {
-                    ctx.getString(
+                    context.getString(
                         R.string.odometer_item_value,
                         it.input.toTwoDigits(),
                         it.unit.shortcut()
@@ -87,37 +90,37 @@ class TankFillAdapter(
                 } ?: "-"
 
                 textAmountAndPrice.text = tankFill.first.petrolPrice?.let {
-                    ctx.getString(
+                    context.getString(
                         R.string.petrol_amount_and_price_value,
                         tankFill.first.quantity.toTwoDigits(),
                         unit.shortcut(),
                         tankFill.first.petrolPrice!!.toTwoDigits(),
-                        "${ctx.getString(R.string.pln_currency)} / ${unit.shortcut()}"
+                        context.getString(R.string.pln_currency)
                     )
-                } ?: ctx.getString(
+                } ?: context.getString(
                     R.string.petrol_amount,
                     tankFill.first.quantity.toTwoDigits(),
                     unit.shortcut()
                 )
 
                 textComputed.text = tankFill.first.computerReading?.let {
-                    ctx.getString(
+                    context.getString(
                         R.string.from_computed,
                         tankFill.first.computerReading!!.toTwoDigits(),
                         unit.shortcut() + "/100" + mileageUnit
                     )
                 } ?: "-"
 
-                textTotalPrice.text = ctx.getString(
+                textTotalPrice.text = context.getString(
                     R.string.total,
                     calculateTotalPrice(
                         tankFill.first.quantity,
                         tankFill.first.petrolPrice
                     ).toTwoDigits(),
-                    ctx.getString(R.string.pln_currency)
+                    context.getString(R.string.pln_currency)
                 )
 
-                textFromLastTankFill.text = ctx.getString(
+                textFromLastTankFill.text = context.getString(
                     R.string.from_last_fill,
                     calculatePetrolUsage(
                         tankFill.first.quantity,
@@ -127,7 +130,7 @@ class TankFillAdapter(
                 )
 
                 textDistanceOnFill.text = tankFill.first.distanceFromLastTankFill?.let {
-                    ctx.getString(
+                    context.getString(
                         R.string.distance_driven,
                         tankFill.first.distanceFromLastTankFill!!.toTwoDigits(),
                         mileageUnit
@@ -135,6 +138,12 @@ class TankFillAdapter(
                 } ?: "-"
                 imageMore.setOnClickListener {
                     popMenu.show()
+                }
+                root.setOnClickListener {
+                    containerTankFillDetails.apply {
+                        isVisible = !isVisible
+                        iconMore.setImageResource(if (isVisible) R.drawable.ic_arrow_up else R.drawable.ic_arrow_down)
+                    }
                 }
             }
         }

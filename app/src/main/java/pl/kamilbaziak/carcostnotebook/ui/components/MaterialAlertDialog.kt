@@ -7,10 +7,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import pl.kamilbaziak.carcostnotebook.databinding.AlertDialogMaterialBinding
+import pl.kamilbaziak.carcostnotebook.ui.SimpleSingleItemAdapter
 
 class MaterialAlertDialog: BottomSheetDialogFragment() {
 
@@ -18,6 +24,7 @@ class MaterialAlertDialog: BottomSheetDialogFragment() {
     private val title by lazy { arguments?.getString(EXTRA_TITLE) }
     private val description by lazy { arguments?.getString(EXTRA_DESCRIPTION) }
     private val confirmButtonText by lazy { arguments?.getString(EXTRA_CONFIRM_BUTTON_TEXT) }
+    private val list by lazy { arguments?.getStringArrayList(EXTRA_LIST) }
     private val materialAlertDialogActions: MaterialAlertDialogActions? by lazy {
         (context as? MaterialAlertDialogActions) ?: parentFragment as? MaterialAlertDialogActions
     }
@@ -41,20 +48,33 @@ class MaterialAlertDialog: BottomSheetDialogFragment() {
         }
         title.text = this@MaterialAlertDialog.title
         description.text = this@MaterialAlertDialog.description
-        confirmButton.text = this@MaterialAlertDialog.confirmButtonText
+        this@MaterialAlertDialog.confirmButtonText?.let {
+            confirmButton.apply {
+                isVisible = true
+                text = it
+            }
+        } ?: run { confirmButton.isVisible = false }
+        list?.let { backupList ->
+            recycler.apply {
+                isVisible = backupList.isNotEmpty()
+                adapter = SimpleSingleItemAdapter {
+                    materialAlertDialogActions?.getItemListItemTitle(it)
+                }.also { it.submitList(backupList) }
+                layoutManager = LinearLayoutManager(requireContext())
+                setHasFixedSize(false)
+
+            }
+        } ?: run { recycler.isVisible = false }
 
         closeButton.setOnClickListener {
+            materialAlertDialogActions?.onNegativeButtonClicked()
             dismiss()
         }
 
         confirmButton.setOnClickListener {
-            materialAlertDialogActions?.onConfirm()
+            materialAlertDialogActions?.onPositiveButtonClicked()
             dismiss()
         }
-    }
-
-    interface MaterialAlertDialogActions {
-        fun onConfirm()
     }
 
     companion object Contract {
@@ -63,17 +83,20 @@ class MaterialAlertDialog: BottomSheetDialogFragment() {
         const val EXTRA_TITLE = "EXTRA_TITLE"
         const val EXTRA_DESCRIPTION = "EXTRA_DESCRIPTION"
         const val EXTRA_CONFIRM_BUTTON_TEXT = "EXTRA_CONFIRM_BUTTON_TEXT"
+        const val EXTRA_LIST = "EXTRA_LIST"
 
         fun show(
             fragmentManager: FragmentManager,
             title: String,
             description: String,
-            confirmButtonText: String
+            confirmButtonText: String? = null,
+            list: ArrayList<String>? = null
         ) = MaterialAlertDialog().apply {
             arguments = bundleOf(
                 EXTRA_TITLE to title,
                 EXTRA_DESCRIPTION to description,
-                EXTRA_CONFIRM_BUTTON_TEXT to confirmButtonText
+                EXTRA_CONFIRM_BUTTON_TEXT to confirmButtonText,
+                EXTRA_LIST to list
             )
         }.show(fragmentManager, TAG)
     }

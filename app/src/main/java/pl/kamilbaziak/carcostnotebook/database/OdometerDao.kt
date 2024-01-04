@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import pl.kamilbaziak.carcostnotebook.Constants
 import pl.kamilbaziak.carcostnotebook.model.Odometer
+import pl.kamilbaziak.carcostnotebook.model.TankFill
 
 @Dao
 interface OdometerDao {
@@ -37,4 +38,7 @@ interface OdometerDao {
 
     @Query("DELETE FROM ${Constants.ODOMETER_TABLE} WHERE carId = :carId")
     suspend fun deleteOdometer(carId: Long)
+
+    @Query("SELECT * FROM ${Constants.ODOMETER_TABLE} ORDER BY created DESC")
+    suspend fun getAllOdometer(): List<Odometer>
 }
