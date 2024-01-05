@@ -162,7 +162,7 @@ class CarsListViewModel(
         }
     }
 
-    private fun getAppDirectoryInDocuments(): File? {
+    private fun getAppDirectoryInDocuments(): File {
         val downloadsDirectory =
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
         val appDirectory = File(downloadsDirectory, BACKUP_DIRECTORY)
@@ -221,7 +221,7 @@ class CarsListViewModel(
 
                 val carsData = gson.fromJson<List<Car>>(cars, object : TypeToken<List<Car>>() {}.type)
                 val tankFillData = gson.fromJson<List<TankFill>>(tankFills, object : TypeToken<List<TankFill>>() {}.type)
-                val mainteneanceData = gson.fromJson<List<Maintenance>>(maintenances, object : TypeToken<List<Maintenance>>() {}.type)
+                val maintenanceData = gson.fromJson<List<Maintenance>>(maintenances, object : TypeToken<List<Maintenance>>() {}.type)
                 val odometerData = gson.fromJson<List<Odometer>>(odometers, object : TypeToken<List<Odometer>>() {}.type)
 
                 //todo will be improved in ticket #36
@@ -232,8 +232,8 @@ class CarsListViewModel(
                 if(tankFillData.isNotEmpty()) {
                     tankFillData.forEach { tankFillDao.addTankFill(it) }
                 }
-                if(mainteneanceData.isNotEmpty()) {
-                    mainteneanceData.forEach { maintenanceDao.addMaintenance(it) }
+                if(maintenanceData.isNotEmpty()) {
+                    maintenanceData.forEach { maintenanceDao.addMaintenance(it) }
                 }
                 if(odometerData.isNotEmpty()) {
                     odometerData.forEach { odometerDao.addOdometer(it) }

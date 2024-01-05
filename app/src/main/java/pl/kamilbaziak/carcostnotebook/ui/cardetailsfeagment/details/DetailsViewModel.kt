@@ -1,10 +1,15 @@
 package pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.details
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 import pl.kamilbaziak.carcostnotebook.database.CarDao
 import pl.kamilbaziak.carcostnotebook.database.MaintenanceDao
 import pl.kamilbaziak.carcostnotebook.database.OdometerDao
 import pl.kamilbaziak.carcostnotebook.database.TankFillDao
+import pl.kamilbaziak.carcostnotebook.model.Car
 
 class DetailsViewModel(
     private val carDao: CarDao,
@@ -13,6 +18,9 @@ class DetailsViewModel(
     private val maintenanceDao: MaintenanceDao,
     carId: Long
 ): ViewModel() {
+
+    private val detailsViewChannel = Channel<DetailsViewEvent>()
+    val detailsViewEvent = detailsViewChannel.receiveAsFlow()
 
     val currentCarData = carDao.getCarById(carId)
 
@@ -25,4 +33,30 @@ class DetailsViewModel(
     private val _allTankFillData = tankFillDao.getTankFillLiveData(carId)
 
     val allTankFillData = _allTankFillData
+
+    fun onCarEdit() = viewModelScope.launch {
+        detailsViewChannel.send(DetailsViewEvent.EditCar(currentCarData.value))
+    }
+
+    fun onCarDelete() = viewModelScope.launch {
+        detailsViewChannel.send(DetailsViewEvent.ShowCarDeleteDialogMessage(currentCarData.value))
+    }
+
+    fun deleteCar() = viewModelScope.launch {
+        currentCarData.value?.let {
+            carDao.deleteCar(it)
+            odometerDao.deleteOdometer(it.id)
+            maintenanceDao.deleteMaintenance(it.id)
+            tankFillDao.deleteTankFill(it.id)
+            detailsViewChannel.send(DetailsViewEvent.CarDeleted)
+        } ?: run { detailsViewChannel.send(DetailsViewEvent.ErrorDuringDeleteProcedure) }
+    }
+
+    sealed class DetailsViewEvent {
+
+        object CarDeleted: DetailsViewEvent()
+        object ErrorDuringDeleteProcedure: DetailsViewEvent()
+        data class EditCar(val car: Car?) : DetailsViewEvent()
+        data class ShowCarDeleteDialogMessage(val car: Car?) : DetailsViewEvent()
+    }
 }

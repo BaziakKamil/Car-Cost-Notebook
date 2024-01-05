@@ -139,7 +139,7 @@ class AddNewCarFragment : Fragment() {
             viewModel.addNewCarEvent.collect { event ->
                 when (event) {
                     AddNewCarViewModel.AddNewCarEvent.NavigateBack ->
-                        findNavController().popBackStack()
+                        findNavController().navigateUp()
                 }
             }
         }

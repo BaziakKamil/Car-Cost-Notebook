@@ -59,6 +59,7 @@ class MaterialAlertDialog: BottomSheetDialogFragment() {
                 isVisible = backupList.isNotEmpty()
                 adapter = SimpleSingleItemAdapter {
                     materialAlertDialogActions?.getItemListItemTitle(it)
+                    this@MaterialAlertDialog.dismiss()
                 }.also { it.submitList(backupList) }
                 layoutManager = LinearLayoutManager(requireContext())
                 setHasFixedSize(false)
