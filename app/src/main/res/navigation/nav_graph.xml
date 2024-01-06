@@ -12,10 +12,10 @@
         tools:layout="@layout/fragment_car_list">
         <action
             android:id="@+id/action_mainViewFragment_to_carDetailsFragment"
-            app:destination="@id/carDetailsFragment" />
+            app:destination="@id/carDetailsFragment"/>
         <action
             android:id="@+id/action_mainViewFragment_to_addNewCarFragment"
-            app:destination="@id/addNewCarFragment" />
+            app:destination="@id/addNewCarFragment"/>
     </fragment>
     <fragment
         android:id="@+id/addNewCarFragment"
@@ -46,5 +46,10 @@
         <argument
             android:name="title"
             app:argType="string" />
+        <action
+            android:id="@+id/actionCarDetailsFragmentToAddNewCarFragment"
+            app:destination="@id/addNewCarFragment"
+            app:popUpToInclusive="true"
+            app:popUpTo="@+id/carDetailsFragment"/>
     </fragment>
 </navigation>

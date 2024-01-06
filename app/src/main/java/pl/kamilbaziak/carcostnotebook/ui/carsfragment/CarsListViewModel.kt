@@ -12,12 +12,10 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import pl.kamilbaziak.carcostnotebook.Constants.BACKUP_CAR
 import pl.kamilbaziak.carcostnotebook.Constants.BACKUP_DIRECTORY
-import pl.kamilbaziak.carcostnotebook.Constants.BACKUP_MAINTENANCE
+import pl.kamilbaziak.carcostnotebook.Constants.BACKUP_EXTENSION
 import pl.kamilbaziak.carcostnotebook.Constants.BACKUP_NAME
-import pl.kamilbaziak.carcostnotebook.Constants.BACKUP_ODOMETER
-import pl.kamilbaziak.carcostnotebook.Constants.BACKUP_TANK_FILL
+import pl.kamilbaziak.carcostnotebook.Constants.BACKUP_SEPARATOR
 import pl.kamilbaziak.carcostnotebook.DateUtils
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.database.CarDao
@@ -127,42 +125,28 @@ class CarsListViewModel(
         val maintenanceJSON = gson.toJson(maintenanceList)
         val odometerJSON = gson.toJson(odometerList)
 
-        saveToStorage(carJSON, tankJSON, maintenanceJSON, odometerJSON)
+        saveToStorage(arrayOf(carJSON, tankJSON, maintenanceJSON, odometerJSON))
     }
 
     fun importDatabase() = viewModelScope.launch {
-        showImportDialog(getBackupFilesTitles())
+        mainViewChannel.send(MainViewEvent.OpenFilePicker)
     }
 
-    private fun saveToStorage(
-        carJson: String,
-        tankJSON: String,
-        maintenanceJSON: String,
-        odometerJSON: String,
-    ) = viewModelScope.launch {
-        val backupFolderName =
-            "$BACKUP_NAME${DateUtils.formatBackupDateFromLong(Calendar.getInstance().timeInMillis)}"
-        val backupDirectory = getBackupDirectory(backupFolderName)
-        if (backupDirectory != null) {
-            var message = context.getString(R.string.car_database_exported_successfully)
-            try {
-                File(backupDirectory, BACKUP_CAR).writeBytes(carJson.toByteArray())
-                File(backupDirectory, BACKUP_TANK_FILL).writeBytes(tankJSON.toByteArray())
-                File(backupDirectory, BACKUP_MAINTENANCE).writeBytes(maintenanceJSON.toByteArray())
-                File(backupDirectory, BACKUP_ODOMETER).writeBytes(odometerJSON.toByteArray())
-            } catch (e: IOException) {
-                e.printStackTrace()
-                message = context.getString(R.string.error_occurred_during_saving_backup)
-            }
-            mainViewChannel.send(MainViewEvent.ShowSnackbarMessage(message))
-        } else {
-            mainViewChannel.send(
-                MainViewEvent.ShowErrorDialogMessage(context.getString(R.string.app_directory_not_found_check_documents_folder_on_device))
-            )
+    private fun saveToStorage(jsonArray: Array<String>) = viewModelScope.launch {
+        val backupDirectory = getAppDirectoryInDocuments()
+        var message = context.getString(R.string.car_database_exported_successfully)
+        try {
+            val fileName = "$BACKUP_NAME${DateUtils.formatBackupDateFromLong(Calendar.getInstance().timeInMillis)}$BACKUP_EXTENSION"
+            val backupFile = jsonArray.joinToString(BACKUP_SEPARATOR)
+            File(backupDirectory, fileName).writeBytes(backupFile.toByteArray())
+        } catch (e: IOException) {
+            e.printStackTrace()
+            message = context.getString(R.string.error_occurred_during_saving_backup)
         }
+        mainViewChannel.send(MainViewEvent.ShowSnackbarMessage(message))
     }
 
-    private fun getAppDirectoryInDocuments(): File? {
+    private fun getAppDirectoryInDocuments(): File {
         val downloadsDirectory =
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
         val appDirectory = File(downloadsDirectory, BACKUP_DIRECTORY)
@@ -174,83 +158,54 @@ class CarsListViewModel(
         return appDirectory
     }
 
-    private fun getBackupDirectory(backupName: String): File? {
-        val appDirectory = getAppDirectoryInDocuments()
-        val backupDirectory = File(appDirectory, backupName)
-
-        if (!backupDirectory.exists()) {
-            backupDirectory.mkdir()
+    fun prepareFileForImportToDatabase(file: String) = viewModelScope.launch {
+        val backupList = file.split(BACKUP_SEPARATOR)
+        if (backupList.isEmpty() || backupList.size < 4) {
+            mainViewChannel.send(MainViewEvent.ShowSnackbarMessage(context.getString(R.string.error_occurred_during_import_wrong_file)))
+            return@launch
         }
-
-        return backupDirectory
+        putToDatabaseFromJson(backupList)
     }
 
-    private fun getBackupFilesTitles(): ArrayList<String>? {
-        val list = getBackupFilesFromStorage().let { file ->
-            arrayListOf<String>().apply {
-                addAll(file.map { it.name })
-            }
-        }
-        return if (list.isEmpty()) null else list
-    }
-
-    private fun getBackupFilesFromStorage(): List<File> =
-        getAppDirectoryInDocuments()?.let { appDirectory ->
-            appDirectory.listFiles()?.filter { backupFile ->
-                backupFile.name.contains(BACKUP_NAME)
-            }
-        } ?: listOf()
-
-    fun startImportFromJsonToDatabase(title: String) = viewModelScope.launch {
-        getBackupFilesFromStorage().let { backupFiles ->
-            backupFiles.firstOrNull { it.name.contains(title) }?.let {
-                putToDatabaseFromJson(it)
-            } ?: run {
-                mainViewChannel.send(MainViewEvent.ShowSnackbarMessage("Backup file not found, try again"))
-            }
-        }
-    }
-
-    private fun putToDatabaseFromJson(file: File) = viewModelScope.launch {
+    private fun putToDatabaseFromJson(backupList: List<String>) = viewModelScope.launch {
         try {
-            file.listFiles()?.apply {
-                val cars = this.firstOrNull { it.name == BACKUP_CAR }?.readBytes()?.decodeToString()
-                val tankFills = this.firstOrNull { it.name == BACKUP_TANK_FILL }?.readBytes()?.decodeToString()
-                val maintenances = this.firstOrNull { it.name == BACKUP_MAINTENANCE }?.readBytes()?.decodeToString()
-                val odometers = this.firstOrNull { it.name == BACKUP_ODOMETER }?.readBytes()?.decodeToString()
+                val cars = backupList[0]
+                val tankFills = backupList[1]
+                val maintenances = backupList[2]
+                val odometers = backupList[3]
 
-                val carsData = gson.fromJson<List<Car>>(cars, object : TypeToken<List<Car>>() {}.type)
-                val tankFillData = gson.fromJson<List<TankFill>>(tankFills, object : TypeToken<List<TankFill>>() {}.type)
-                val mainteneanceData = gson.fromJson<List<Maintenance>>(maintenances, object : TypeToken<List<Maintenance>>() {}.type)
-                val odometerData = gson.fromJson<List<Odometer>>(odometers, object : TypeToken<List<Odometer>>() {}.type)
+                val carsData = gson.fromJson<List<Car>>(
+                    cars,
+                    object : TypeToken<List<Car>>() {}.type
+                )
+                val tankFillData = gson.fromJson<List<TankFill>>(
+                    tankFills,
+                    object : TypeToken<List<TankFill>>() {}.type
+                )
+                val maintenanceData = gson.fromJson<List<Maintenance>>(
+                    maintenances,
+                    object : TypeToken<List<Maintenance>>() {}.type
+                )
+                val odometerData = gson.fromJson<List<Odometer>>(
+                    odometers,
+                    object : TypeToken<List<Odometer>>() {}.type
+                )
 
-                //todo will be improved in ticket #36
-
-                if(carsData.isNotEmpty()) {
+                if (carsData.isNotEmpty()) {
                     carsData.forEach { carDao.addCar(it) }
                 }
-                if(tankFillData.isNotEmpty()) {
+                if (tankFillData.isNotEmpty()) {
                     tankFillData.forEach { tankFillDao.addTankFill(it) }
                 }
-                if(mainteneanceData.isNotEmpty()) {
-                    mainteneanceData.forEach { maintenanceDao.addMaintenance(it) }
+                if (maintenanceData.isNotEmpty()) {
+                    maintenanceData.forEach { maintenanceDao.addMaintenance(it) }
                 }
-                if(odometerData.isNotEmpty()) {
+                if (odometerData.isNotEmpty()) {
                     odometerData.forEach { odometerDao.addOdometer(it) }
                 }
-            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
-    }
-
-    private fun showImportDialog(files: ArrayList<String>?) = viewModelScope.launch {
-        mainViewChannel.send(
-            files?.let {
-                MainViewEvent.ShowBackupImportDialog(it)
-            }
-                ?: MainViewEvent.ShowErrorDialogMessage(context.getString(R.string.error_occurred_during_import_process))
-        )
     }
 
     sealed class MainViewEvent {
@@ -263,10 +218,10 @@ class CarsListViewModel(
         object AddNewCar : MainViewEvent()
         object ShowUndoDeleteCarMessage : MainViewEvent()
         object ShowDeleteErrorMessage : MainViewEvent()
+        object OpenFilePicker : MainViewEvent()
         data class ShowSnackbarMessage(val message: String) : MainViewEvent()
         data class ShowCarEditDialogScreen(val car: Car) : MainViewEvent()
         data class ShowCarDeleteDialogMessage(val car: Car) : MainViewEvent()
         data class ShowErrorDialogMessage(val message: String) : MainViewEvent()
-        data class ShowBackupImportDialog(val files: ArrayList<String>) : MainViewEvent()
     }
 }

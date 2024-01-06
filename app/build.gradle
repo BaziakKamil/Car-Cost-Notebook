@@ -14,10 +14,10 @@ android {
 
     defaultConfig {
         applicationId "pl.kamilbaziak.carcostnotebook"
-        minSdk 28
+        minSdk 33
         targetSdk 34
         versionCode 1
-        versionName "1.0"
+        versionName "0.1"
         manifestPlaceholders = [hostName:"www.kamilbaziak.pl"]
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

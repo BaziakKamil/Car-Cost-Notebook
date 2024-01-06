@@ -99,7 +99,6 @@ class MaintenanceDialog : BottomSheetDialogFragment() {
         imageClose.setOnClickListener { dismiss() }
     }
 
-    // todo validation with snackbar messages
     private fun validate(
         name: String?,
         price: String?,
