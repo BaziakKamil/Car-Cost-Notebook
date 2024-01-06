@@ -82,8 +82,12 @@
     <string name="export_data">Export Data</string>
     <string name="import_data">Import Data</string>
     <string name="error_occurred_during_import_process">Error occurred during import process</string>
+    <string name="error_occurred_during_import_wrong_file">Error occurred during import process, corrupted file or missing content. Please make sure it is correct backup file</string>
     <string name="something_went_wrong">Something went wrong</string>
     <string name="error_occurred_during_saving_backup">Error occurred during saving backup</string>
     <string name="app_directory_not_found_check_documents_folder_on_device">App directory not found, check Documents folder on device</string>
     <string name="car_database_exported_successfully">Car database exported successfully</string>
+    <string name="backup_file_should_end_with_ccn_extension_please_choose_correct_file">Backup file should end with \".ccn\" extension. Please choose correct file</string>
+    <string name="wrong_extension_of_file">Wrong extension of file</string>
+    <string name="choose_backup_file">Choose backup file</string>
 </resources>
