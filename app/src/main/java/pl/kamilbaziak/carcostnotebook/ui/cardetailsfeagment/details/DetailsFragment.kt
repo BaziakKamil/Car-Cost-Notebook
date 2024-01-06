@@ -78,7 +78,6 @@ class DetailsFragment : Fragment(), MaterialAlertDialogActions {
 
                         textInputTotalFuelConsuption.editText?.setText("$totalFuelConsumption ${car.petrolUnit.shortcut()}")
                         textInputTotalFuelPaid.editText?.setText("$totalFuelCost ${car.currency}")
-                        //todo extract concurency to database and make it global through data store
                     }
 
                     allMaintenance.observe(viewLifecycleOwner) { list ->
@@ -86,7 +85,7 @@ class DetailsFragment : Fragment(), MaterialAlertDialogActions {
                         textInputTotalMaintenancePaid.editText?.setText("$totalMaintenanceCost ${car.currency}")
                     }
                 } ?: run{
-                    //todo add error
+                    TextUtils.showSnackbar(requireView(), getString(R.string.something_went_wrong))
                 }
             }
         }

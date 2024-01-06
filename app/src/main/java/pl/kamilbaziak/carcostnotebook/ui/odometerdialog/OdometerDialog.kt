@@ -73,7 +73,6 @@ class OdometerDialog : BottomSheetDialogFragment() {
         imageClose.setOnClickListener { dismiss() }
     }
 
-    //todo validation with snackbar messages
     private fun validate(
         odometerTxt: String?,
         description: String?
