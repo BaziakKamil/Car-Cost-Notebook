@@ -76,4 +76,16 @@
     <string name="car_data">Dane samochodu</string>
     <string name="car_data_when_bought">Data kiedy kupione</string>
     <string name="pln_currency">zł</string>
+    <string name="more">Więcej</string>
+    <string name="export_data">Eksportuj dane</string>
+    <string name="import_data">Importuj dane</string>
+    <string name="error_occurred_during_import_process">Wystąpił bląd podczas importowania danych</string>
+    <string name="error_occurred_during_import_wrong_file">Wystąpił bląd podczas importowania danych, popsuty lub niekompletny plik zapasowy</string>
+    <string name="something_went_wrong">Coś poszło nie tak</string>
+    <string name="error_occurred_during_saving_backup">Wystąpił bląd podczas eksportowania danych</string>
+    <string name="app_directory_not_found_check_documents_folder_on_device">Folder aplikacji nie znaleziony, sprawdz folder Documenty</string>
+    <string name="car_database_exported_successfully">Baza samochodów wyeksportowana poprawnie</string>
+    <string name="backup_file_should_end_with_ccn_extension_please_choose_correct_file">Plik zapasowany powinien mieć rozszerzenie \".ccn\". Sprawdź poprawność nazwy pliku.</string>
+    <string name="wrong_extension_of_file">Złe rozszerzenie pliku</string>
+    <string name="choose_backup_file">Wybierz plik zapasowy</string>
 </resources>
