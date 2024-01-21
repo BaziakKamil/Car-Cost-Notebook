@@ -3,7 +3,6 @@ package pl.kamilbaziak.carcostnotebook
 import pl.kamilbaziak.carcostnotebook.enums.PetrolUnitEnum
 import pl.kamilbaziak.carcostnotebook.enums.UnitEnum
 import pl.kamilbaziak.carcostnotebook.model.Car
-import pl.kamilbaziak.carcostnotebook.model.name
 import java.text.DecimalFormat
 
 private const val EMPTY = ""
@@ -36,3 +35,5 @@ fun Long.toDate(): String = DateUtils.formatDateFromLong(this)
 fun Long.toTime(): String = DateUtils.formatTimeFromLong(this)
 
 fun Double.toTwoDigits(): String = DecimalFormat("#.##").format(this)
+
+fun Car.name() = "${this.brand} ${this.model}"

@@ -18,12 +18,11 @@ import org.koin.core.parameter.parametersOf
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.TextUtils
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentDetailsBinding
-import pl.kamilbaziak.carcostnotebook.model.name
+import pl.kamilbaziak.carcostnotebook.name
 import pl.kamilbaziak.carcostnotebook.shortcut
 import pl.kamilbaziak.carcostnotebook.toDate
 import pl.kamilbaziak.carcostnotebook.toTwoDigits
 import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.CarDetailsFragmentDirections
-import pl.kamilbaziak.carcostnotebook.ui.carsfragment.CarListFragmentDirections
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialog
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialogActions
 

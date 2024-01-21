@@ -26,5 +26,3 @@ data class Car(
     val dateWhenBought: Long? = null,
     val currency: String
 ) : Parcelable
-
-fun Car.name() = "${this.brand} ${this.model}"
