@@ -1,6 +1,5 @@
 package pl.kamilbaziak.carcostnotebook.ui.carsfragment
 
-import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -28,7 +27,7 @@ import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.TextUtils
 import pl.kamilbaziak.carcostnotebook.databinding.DialogProgressBinding
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentCarListBinding
-import pl.kamilbaziak.carcostnotebook.model.name
+import pl.kamilbaziak.carcostnotebook.name
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialog
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialogActions
 import java.io.File
