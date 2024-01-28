@@ -30,6 +30,7 @@ import pl.kamilbaziak.carcostnotebook.databinding.FragmentCarListBinding
 import pl.kamilbaziak.carcostnotebook.name
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialog
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialogActions
+import pl.kamilbaziak.carcostnotebook.ui.compose.activity.ComposeActivity
 import java.io.File
 
 class CarListFragment : Fragment(), MaterialAlertDialogActions {
@@ -63,13 +64,16 @@ class CarListFragment : Fragment(), MaterialAlertDialogActions {
                 var message = getString(R.string.error_occurred_during_import_process)
                 val data = result.data?.data
                 if (data != null && data.path != null) {
-                    val file = requireContext().contentResolver.openInputStream(data)?.readAllBytes()?.decodeToString()
+                    val file =
+                        requireContext().contentResolver.openInputStream(data)?.readAllBytes()
+                            ?.decodeToString()
                     if (file != null) {
                         viewModel.prepareFileForImportToDatabase(file)
                         return@registerForActivityResult
                     } else {
                         title = getString(R.string.wrong_extension_of_file)
-                        message = getString(R.string.backup_file_should_end_with_ccn_extension_please_choose_correct_file)
+                        message =
+                            getString(R.string.backup_file_should_end_with_ccn_extension_please_choose_correct_file)
                     }
                 }
 
@@ -134,6 +138,10 @@ class CarListFragment : Fragment(), MaterialAlertDialogActions {
 
         fabAddCar.setOnClickListener {
             viewModel.onAddNewCarClick()
+        }
+        fabAddCar.setOnLongClickListener {
+            startActivity(Intent(requireContext(), ComposeActivity::class.java))
+            false
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
