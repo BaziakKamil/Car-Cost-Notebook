@@ -78,7 +78,7 @@
             android:layout_marginTop="4dp"
             android:background="@drawable/car_plate"
             android:padding="3dp"
-            android:textColor="@color/black"
+            android:textColor="@color/md_theme_scrim"
             app:layout_constraintEnd_toStartOf="@+id/image_more"
             app:layout_constraintTop_toBottomOf="@+id/text_car_brand"
             tools:text="KN 45673" />

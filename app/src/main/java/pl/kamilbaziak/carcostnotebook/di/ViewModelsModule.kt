@@ -3,6 +3,7 @@ package pl.kamilbaziak.carcostnotebook.di
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
+import pl.kamilbaziak.carcostnotebook.ui.activity.MainViewModel
 import pl.kamilbaziak.carcostnotebook.ui.addnewcarfragment.AddNewCarViewModel
 import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.CarDetailsViewModel
 import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.details.DetailsViewModel
@@ -16,6 +17,7 @@ import pl.kamilbaziak.carcostnotebook.ui.tankfilldialog.TankFillDialogViewModel
 
 val viewModelsModule = module {
 
+    viewModel { MainViewModel() }
     viewModel { CarsListViewModel(androidApplication(), get(), get(), get(), get()) }
     viewModel { AddNewCarViewModel(get(), get()) }
     viewModel { parameters -> CarDetailsViewModel(get(), get(), get(), parameters[0]) }

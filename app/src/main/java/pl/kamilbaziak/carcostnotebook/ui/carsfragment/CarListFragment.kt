@@ -21,19 +21,23 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.transition.TransitionInflater
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.kamilbaziak.carcostnotebook.Constants.BACKUP_DIRECTORY
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.TextUtils
 import pl.kamilbaziak.carcostnotebook.databinding.DialogProgressBinding
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentCarListBinding
 import pl.kamilbaziak.carcostnotebook.name
+import pl.kamilbaziak.carcostnotebook.ui.activity.MainViewModel
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialog
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialogActions
 import java.io.File
 
 class CarListFragment : Fragment(), MaterialAlertDialogActions {
 
+    private val mainViewModel by sharedViewModel<MainViewModel>()
     private val viewModel: CarsListViewModel by inject()
     private val binding: FragmentCarListBinding by lazy {
         FragmentCarListBinding.inflate(layoutInflater)
@@ -81,29 +85,18 @@ class CarListFragment : Fragment(), MaterialAlertDialogActions {
             }
         }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val inflater = TransitionInflater.from(requireContext())
+        enterTransition = inflater.inflateTransition(R.transition.slide_right)
+        exitTransition = inflater.inflateTransition(R.transition.fade)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        binding.composeView.apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-//                if(showAlertDialog) {
-//                    MaterialDialog(
-//                        onDismissRequest = { showAlertDialog = false },
-//                        onConfirmation = { showAlertDialog = false },
-//                        dialogTitle = "Title",
-//                        dialogText = "Dialog text",
-//                        icon = Icons.Outlined.List
-//                    )
-//                }
-            }
-        }
-        return binding.root
-    }
+    ): View = binding.root
 
     override fun onViewCreated(
         view: View,
@@ -140,26 +133,19 @@ class CarListFragment : Fragment(), MaterialAlertDialogActions {
             viewModel.mainViewEvent.collect { event ->
                 when (event) {
                     CarsListViewModel.MainViewEvent.AddNewCar ->
-                        findNavController().navigate(
-                            CarListFragmentDirections.actionMainViewFragmentToAddNewCarFragment(
-                                getString(R.string.add_new_car)
-                            )
-                        )
+                        mainViewModel.openAddNewCar(getString(R.string.add_new_car))
 
-                    is CarsListViewModel.MainViewEvent.NavigateToCarDetails -> findNavController().navigate(
-                        CarListFragmentDirections.actionMainViewFragmentToCarDetailsFragment(
-                            event.car,
-                            event.odometer,
-                            "${event.car.brand} ${event.car.model} ${event.car.year}"
+                    is CarsListViewModel.MainViewEvent.NavigateToCarDetails ->
+                        mainViewModel.openCarDetails(
+                            car = event.car,
+                            odometer = event.odometer,
+                            title = "${event.car.brand} ${event.car.model} ${event.car.year}"
                         )
-                    )
 
                     is CarsListViewModel.MainViewEvent.ShowCarEditDialogScreen ->
-                        findNavController().navigate(
-                            CarListFragmentDirections.actionMainViewFragmentToAddNewCarFragment(
-                                event.car.name(),
-                                event.car
-                            )
+                        mainViewModel.openAddNewCar(
+                            title = event.car.name(),
+                            car = event.car
                         )
 
                     is CarsListViewModel.MainViewEvent.ShowCarDeleteDialogMessage ->

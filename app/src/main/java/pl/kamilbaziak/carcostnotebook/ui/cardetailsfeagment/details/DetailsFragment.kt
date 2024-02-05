@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import pl.kamilbaziak.carcostnotebook.R
@@ -22,7 +23,7 @@ import pl.kamilbaziak.carcostnotebook.name
 import pl.kamilbaziak.carcostnotebook.shortcut
 import pl.kamilbaziak.carcostnotebook.toDate
 import pl.kamilbaziak.carcostnotebook.toTwoDigits
-import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.CarDetailsFragmentDirections
+import pl.kamilbaziak.carcostnotebook.ui.activity.MainViewModel
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialog
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialogActions
 
@@ -35,6 +36,7 @@ class DetailsFragment : Fragment(), MaterialAlertDialogActions {
     private val viewModel: DetailsViewModel by viewModel {
         parametersOf(carId)
     }
+    private val mainViewModel by sharedViewModel<MainViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -107,11 +109,9 @@ class DetailsFragment : Fragment(), MaterialAlertDialogActions {
                             getString(R.string.delete)
                         )
                     is DetailsViewModel.DetailsViewEvent.EditCar ->
-                        findNavController().navigate(
-                            CarDetailsFragmentDirections.actionCarDetailsFragmentToAddNewCarFragment(
-                                event.car!!.name(),
-                                event.car
-                            )
+                        mainViewModel.openAddNewCar(
+                            title = event.car!!.name(),
+                            car = event.car
                         )
                 }
             }

@@ -1,11 +1,14 @@
 package pl.kamilbaziak.carcostnotebook.ui.addnewcarfragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.transition.TransitionInflater
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
@@ -19,23 +22,27 @@ import pl.kamilbaziak.carcostnotebook.databinding.FragmentAddNewCarBinding
 import pl.kamilbaziak.carcostnotebook.enums.EngineEnum
 import pl.kamilbaziak.carcostnotebook.enums.PetrolUnitEnum
 import pl.kamilbaziak.carcostnotebook.enums.UnitEnum
+import pl.kamilbaziak.carcostnotebook.extra
 import pl.kamilbaziak.carcostnotebook.model.Car
+import pl.kamilbaziak.carcostnotebook.name
 import pl.kamilbaziak.carcostnotebook.toDate
 import pl.kamilbaziak.carcostnotebook.toTwoDigits
 
-class AddNewCarFragment : Fragment() {
+class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car) {
 
     private val binding by lazy {
         FragmentAddNewCarBinding.inflate(layoutInflater)
     }
     private val viewModel: AddNewCarViewModel by inject()
-    private val args: AddNewCarFragmentArgs by navArgs()
+    private val car by extra<Car?>(EXTRA_CAR)
+    private val title by extra<String>(EXTRA_TITLE)
     private val dateDialog = MaterialDatePicker.Builder.datePicker()
         .setTitleText(R.string.choose_date_when_bought)
         .build()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("XXX", "addNewCarFragemnt onCreate car ${car?.name()}")
         KeyboardVisibilityEvent.setEventListener(
             requireActivity()
         ) { isKeyboardShown ->
@@ -50,6 +57,9 @@ class AddNewCarFragment : Fragment() {
                 }
             }
         }
+        val inflater = TransitionInflater.from(requireContext())
+        enterTransition = inflater.inflateTransition(R.transition.slide_right)
+        exitTransition = inflater.inflateTransition(R.transition.fade)
     }
 
     override fun onCreateView(
@@ -67,7 +77,14 @@ class AddNewCarFragment : Fragment() {
         sectionCarData.textDivider.text = getString(R.string.car_data)
         sectionCarWhenBought.textDivider.text = getString(R.string.car_data_when_bought)
 
-        args.car?.let { car ->
+        toolbar.apply {
+            title = car?.name() ?: getString(R.string.add_new_car)
+            setNavigationOnClickListener {
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+            }
+        }
+
+        car?.let { car ->
             viewModel.apply {
                 getAllOdometer(car)
                 getLastOdometer(car)
@@ -76,7 +93,7 @@ class AddNewCarFragment : Fragment() {
                 }
             }
 
-            editMode(car)
+            editMode(car)                    
         }
 
         dateDialog.addOnPositiveButtonClickListener {
@@ -87,7 +104,7 @@ class AddNewCarFragment : Fragment() {
             dateDialog.show(childFragmentManager, DATE_PICKER_TAG)
         }
 
-        activity?.actionBar?.title = args.title
+        activity?.actionBar?.title = title
 
         viewModel.apply {
             pickedDate.observe(viewLifecycleOwner) {
@@ -107,7 +124,7 @@ class AddNewCarFragment : Fragment() {
         setEnumValuesToMaterialSpinner(
             textInputEngineType.editText as MaterialAutoCompleteTextView,
             buildList {
-                EngineEnum.values().map {
+                EngineEnum.entries.map {
                     add(it.name)
                 }
             }
@@ -116,7 +133,7 @@ class AddNewCarFragment : Fragment() {
         setEnumValuesToMaterialSpinner(
             textInputPetrolUnit.editText as MaterialAutoCompleteTextView,
             buildList {
-                PetrolUnitEnum.values().map {
+                PetrolUnitEnum.entries.map {
                     add(it.name)
                 }
             }
@@ -125,7 +142,7 @@ class AddNewCarFragment : Fragment() {
         setEnumValuesToMaterialSpinner(
             textInputUnit.editText as MaterialAutoCompleteTextView,
             buildList {
-                UnitEnum.values().map {
+                UnitEnum.entries.map {
                     add(it.name)
                 }
             }
@@ -167,10 +184,10 @@ class AddNewCarFragment : Fragment() {
         if (!validateData()) return
 
         binding.apply {
-            if (args.car != null) {
+            if (car != null) {
                 viewModel.updateCar(
                     Car(
-                        args.car?.id ?: 0,
+                        car?.id ?: 0,
                         textInputCarBrand.editText?.text.toString(),
                         textInputCarModel.editText?.text.toString(),
                         textInputCarYear.editText?.text.toString().toInt(),
@@ -239,8 +256,20 @@ class AddNewCarFragment : Fragment() {
         textInputUnit.error = null
     }
 
-    companion object Contract {
+    companion object Factory {
 
         const val DATE_PICKER_TAG = "AddNewCarFragment.DATE_PICKER_TAG"
+        const val TAG = "AddNewCarFragment"
+        private const val EXTRA_CAR = "EXTRA_CAR"
+        private const val EXTRA_TITLE = "EXTRA_TITLE"
+
+        fun newInstance(car: Car?, title: String) = AddNewCarFragment().apply {
+            arguments = car?.let { Pair(EXTRA_CAR, it) }?.let {
+                bundleOf(
+                    EXTRA_TITLE to title,
+                    it
+                )
+            }
+        }
     }
 }

@@ -5,14 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.navArgs
+import androidx.transition.TransitionInflater
 import androidx.viewpager2.widget.ViewPager2
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentCarDetailsBinding
+import pl.kamilbaziak.carcostnotebook.extra
+import pl.kamilbaziak.carcostnotebook.model.Car
+import pl.kamilbaziak.carcostnotebook.model.Odometer
 import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.details.DetailsFragment
 import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.maintenancetab.MaintenanceFragment
 import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.odometertab.OdometerFragment
@@ -23,13 +27,12 @@ import pl.kamilbaziak.carcostnotebook.ui.tankfilldialog.TankFillDialog
 
 class CarDetailsFragment : Fragment() {
 
-    private val args: CarDetailsFragmentArgs by navArgs()
-    private val car by lazy {
-        args.car
-    }
     private val binding by lazy {
         FragmentCarDetailsBinding.inflate(layoutInflater)
     }
+    private val car by extra<Car>(EXTRA_CAR)
+    private val odometer by extra<Odometer>(EXTRA_ODOMETER)
+    private val carTitle by extra<String>(EXTRA_TITLE)
     private val viewModel: CarDetailsViewModel by viewModel {
         parametersOf(car.id)
     }
@@ -45,6 +48,13 @@ class CarDetailsFragment : Fragment() {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val inflater = TransitionInflater.from(requireContext())
+        enterTransition = inflater.inflateTransition(R.transition.slide_right)
+        exitTransition = inflater.inflateTransition(R.transition.fade)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -56,6 +66,13 @@ class CarDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ) = binding.run {
         super.onViewCreated(view, savedInstanceState)
+
+        toolbar.apply {
+            title = carTitle
+            setNavigationOnClickListener {
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+            }
+        }
 
         viewPager.apply {
             isSaveEnabled = false
@@ -162,6 +179,7 @@ class CarDetailsFragment : Fragment() {
                     fabAddOdometer.show()
                     fabAddPetrol.show()
                 }
+
                 else -> {
                     textMaintenance.startAnimation(animFadeOut)
                     textAddOdometer.startAnimation(animFadeOut)
@@ -171,6 +189,24 @@ class CarDetailsFragment : Fragment() {
                     fabAddOdometer.hide()
                     fabAddPetrol.hide()
                 }
+            }
+        }
+    }
+
+    companion object Factory {
+
+        const val TAG = "CarDetailsFragment"
+        private const val EXTRA_CAR = "EXTRA_CAR"
+        private const val EXTRA_ODOMETER = "EXTRA_ODOMETER"
+        private const val EXTRA_TITLE = "EXTRA_TITLE"
+
+        fun newInstance(car: Car, odometer: Odometer?, title: String) = CarDetailsFragment().apply {
+            arguments = odometer?.let { Pair(EXTRA_ODOMETER, it) }?.let {
+                bundleOf(
+                    EXTRA_TITLE to title,
+                    EXTRA_CAR to car,
+                    it
+                )
             }
         }
     }

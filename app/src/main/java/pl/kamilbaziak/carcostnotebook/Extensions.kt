@@ -1,5 +1,6 @@
 package pl.kamilbaziak.carcostnotebook
 
+import androidx.fragment.app.Fragment
 import pl.kamilbaziak.carcostnotebook.enums.PetrolUnitEnum
 import pl.kamilbaziak.carcostnotebook.enums.UnitEnum
 import pl.kamilbaziak.carcostnotebook.model.Car
@@ -18,6 +19,8 @@ fun String.hasLetters(): Boolean {
     }
     return false
 }
+
+fun <T> Fragment.extra(key: String) = lazy { arguments?.get(key) as T }
 
 fun UnitEnum.shortcut(): String = when (this) {
     UnitEnum.Kilometers -> "km"
