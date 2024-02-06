@@ -11,23 +11,42 @@ import pl.kamilbaziak.carcostnotebook.database.OdometerDao
 import pl.kamilbaziak.carcostnotebook.database.TankFillDao
 import pl.kamilbaziak.carcostnotebook.model.Odometer
 import pl.kamilbaziak.carcostnotebook.model.TankFill
+import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.DataState
 
 class TankFillViewModel(
     private val tankFillDao: TankFillDao,
     private val odometerDao: OdometerDao,
-    carId: Long
+    private val carId: Long
 ) : ViewModel() {
 
     private val tankFillChannel = Channel<TankFillEvent>()
     val tankFillEvent = tankFillChannel.receiveAsFlow()
 
-    private val _tankFillAll = tankFillDao.getTankFillLiveData(carId)
-    val tankFillAll: LiveData<List<TankFill>> = _tankFillAll
-
-    private val _tankFillMapped = MutableLiveData<List<Pair<TankFill, Odometer?>>>()
-    val tankFillMapped: LiveData<List<Pair<TankFill, Odometer?>>> = _tankFillMapped
+    private val _dataState = MutableLiveData<DataState>(DataState.Progress)
+    val dataState: LiveData<DataState> = _dataState
 
     private val deleteTankFill = MutableLiveData<TankFill>()
+
+    init {
+        prepareTankFillData()
+    }
+
+    private fun prepareTankFillData() {
+        _dataState.value = DataState.Progress
+        viewModelScope.launch {
+            tankFillDao.getTankFillData(carId).let { list ->
+                _dataState.value = if (list.isNotEmpty()) {
+                    DataState.Found(
+                        list.map { tankFill ->
+                            Pair(tankFill, odometerDao.getOdometerById(tankFill.odometerId))
+                        }
+                    )
+                } else {
+                    DataState.NotFound
+                }
+            }
+        }
+    }
 
     fun onEditTankFill(tankFill: TankFill) = viewModelScope.launch {
         tankFillChannel.send(TankFillEvent.ShowTankFillEditDialogScreen(tankFill))
@@ -60,12 +79,6 @@ class TankFillViewModel(
         pairedOdometer?.let { odometerDao.addOdometer(pairedOdometer) }
     }
 
-    fun setupTankFillData(list: List<TankFill>) = viewModelScope.launch {
-        _tankFillMapped.value = list.map { tankFill ->
-            Pair(tankFill, odometerDao.getOdometerById(tankFill.odometerId))
-        }
-    }
-
     sealed class TankFillEvent {
         data class ShowTankFillEditDialogScreen(val tankFill: TankFill) : TankFillEvent()
         object ShowTankFillDeleteDialogMessage : TankFillEvent()
@@ -74,6 +87,7 @@ class TankFillViewModel(
             val tankFill: TankFill,
             val pairedOdometer: Odometer?
         ) : TankFillEvent()
+
         object ShowTankFillSavedConfirmationMessage : TankFillEvent()
     }
 }

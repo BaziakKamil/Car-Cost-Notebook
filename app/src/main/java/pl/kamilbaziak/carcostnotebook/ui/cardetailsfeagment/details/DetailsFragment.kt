@@ -123,16 +123,16 @@ class DetailsFragment : Fragment(), MaterialAlertDialogActions {
     private fun setOptionsMenu() {
         requireActivity().addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.more_menu, menu)
+                menuInflater.inflate(R.menu.details_menu_toolbar, menu)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
-                    R.id.delete -> {
+                    R.id.menu_delete -> {
                         viewModel.onCarDelete()
                         true
                     }
-                    R.id.edit -> {
+                    R.id.menu_edit -> {
                         viewModel.onCarEdit()
                         true
                     }

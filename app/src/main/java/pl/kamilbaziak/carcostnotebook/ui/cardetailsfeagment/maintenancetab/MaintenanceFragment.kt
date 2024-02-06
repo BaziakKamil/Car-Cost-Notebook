@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,6 +14,8 @@ import org.koin.core.parameter.parametersOf
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.TextUtils
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentMaintenanceBinding
+import pl.kamilbaziak.carcostnotebook.model.Maintenance
+import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.DataState
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialog
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialogActions
 import pl.kamilbaziak.carcostnotebook.ui.maintenancedialog.MaintenanceDialog
@@ -91,8 +94,14 @@ class MaintenanceFragment : Fragment(), MaterialAlertDialogActions {
             }
         }
 
-        viewModel.maintenanceAll.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
+        viewModel.dataState.observe(viewLifecycleOwner) { state ->
+            progress.isVisible = state is DataState.Progress
+            layoutNotFound.isVisible = state is DataState.NotFound
+            recycler.isVisible = state is DataState.Found
+
+            if(state is DataState.Found) {
+                adapter.submitList(state.list as List<Maintenance>)
+            }
         }
     }
 

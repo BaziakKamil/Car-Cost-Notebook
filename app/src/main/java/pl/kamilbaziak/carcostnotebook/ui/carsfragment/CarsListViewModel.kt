@@ -74,7 +74,7 @@ class CarsListViewModel(
     private suspend fun saveDeletedCarData() {
         deleteCar.value?.let {
             deletedTankFill = tankFillDao.getTankFillDataForCar(it.id)
-            deletedMaintenance = maintenanceDao.getMaintenanceDataForCar(it.id)
+            deletedMaintenance = maintenanceDao.getMaintenanceData(it.id)
             deletedOdometers = odometerDao.getAllOdometerDataForCar(it.id)
         }
     }

@@ -215,8 +215,8 @@ class CarListFragment : Fragment(), MaterialAlertDialogActions {
         )
     }
 
-    private fun setOptionsMenu() {
-        requireActivity().addMenuProvider(object : MenuProvider {
+    private fun setOptionsMenu() = binding.run {
+        toolbar.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.main_menu_toolbar, menu)
             }

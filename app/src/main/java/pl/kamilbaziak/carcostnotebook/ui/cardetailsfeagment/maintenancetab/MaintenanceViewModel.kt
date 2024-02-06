@@ -11,6 +11,7 @@ import pl.kamilbaziak.carcostnotebook.database.MaintenanceDao
 import pl.kamilbaziak.carcostnotebook.database.OdometerDao
 import pl.kamilbaziak.carcostnotebook.model.Maintenance
 import pl.kamilbaziak.carcostnotebook.model.Odometer
+import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.DataState
 
 class MaintenanceViewModel(
     private val maintenanceDao: MaintenanceDao,
@@ -21,10 +22,25 @@ class MaintenanceViewModel(
     private val maintenanceChannel = Channel<MaintenanceEvent>()
     val maintenanceEvent = maintenanceChannel.receiveAsFlow()
 
-    private val _maintenanceAll = maintenanceDao.getMaintenanceLiveData(carId)
-    val maintenanceAll: LiveData<List<Maintenance>> = _maintenanceAll
-
     private val deleteMaintenance = MutableLiveData<Maintenance>()
+
+    private val _dataState = MutableLiveData<DataState>(DataState.Progress)
+    val dataState: LiveData<DataState> = _dataState
+
+    init { prepareMaintenanceData() }
+
+    private fun prepareMaintenanceData()  {
+        _dataState.value = DataState.Progress
+        viewModelScope.launch {
+            maintenanceDao.getMaintenanceData(carId).let { list ->
+                _dataState.value = if (list.isNotEmpty()) {
+                    DataState.Found(list.sortedByDescending { it.created })
+                } else {
+                    DataState.NotFound
+                }
+            }
+        }
+    }
 
     fun onEditMaintenance(maintenance: Maintenance) = viewModelScope.launch {
         maintenanceChannel.send(MaintenanceEvent.ShowCarEditDialogScreen(maintenance))

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +16,9 @@ import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.TextUtils
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentOdometerBinding
 import pl.kamilbaziak.carcostnotebook.enums.UnitEnum
+import pl.kamilbaziak.carcostnotebook.model.Odometer
+import pl.kamilbaziak.carcostnotebook.model.TankFill
+import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.DataState
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialog
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialogActions
 import pl.kamilbaziak.carcostnotebook.ui.odometerdialog.OdometerDialog
@@ -83,8 +87,14 @@ class OdometerFragment : Fragment(), MaterialAlertDialogActions {
             }
         }
 
-        viewModel.odometerAll.observe(viewLifecycleOwner) { list ->
-            adapter.submitList(list.sortedByDescending { it.created })
+        viewModel.dataState.observe(viewLifecycleOwner) { state ->
+            progress.isVisible = state is DataState.Progress
+            layoutNotFound.isVisible = state is DataState.NotFound
+            recycler.isVisible = state is DataState.Found
+
+            if(state is DataState.Found) {
+                adapter.submitList(state.list as List<Odometer>)
+            }
         }
     }
 

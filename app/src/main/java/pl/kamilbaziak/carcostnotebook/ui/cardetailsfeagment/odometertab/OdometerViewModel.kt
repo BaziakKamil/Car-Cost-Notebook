@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import pl.kamilbaziak.carcostnotebook.database.OdometerDao
 import pl.kamilbaziak.carcostnotebook.model.Odometer
+import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.DataState
 
 class OdometerViewModel(
     private val odometerDao: OdometerDao,
@@ -18,10 +19,25 @@ class OdometerViewModel(
     private val odometerChannel = Channel<OdometerEvent>()
     val odometerEvent = odometerChannel.receiveAsFlow()
 
-    private val _odometerAll = odometerDao.getOdometerLiveData(carId)
-    val odometerAll: LiveData<List<Odometer>> = _odometerAll
-
     private val deleteOdometer = MutableLiveData<Odometer>()
+
+    private val _dataState = MutableLiveData<DataState>(DataState.Progress)
+    val dataState: LiveData<DataState> = _dataState
+
+    init { prepareOdometerData() }
+
+    private fun prepareOdometerData()  {
+        _dataState.value = DataState.Progress
+        viewModelScope.launch {
+            odometerDao.getOdometerData(carId).let { list ->
+                _dataState.value = if (list.isNotEmpty()) {
+                    DataState.Found(list.sortedByDescending { it.created })
+                } else {
+                    DataState.NotFound
+                }
+            }
+        }
+    }
 
     fun onEditOdometer(odometer: Odometer) = viewModelScope.launch {
         odometerChannel.send(OdometerEvent.ShowOdometerEditDialogScreen(odometer))

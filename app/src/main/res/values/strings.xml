@@ -90,4 +90,7 @@
     <string name="backup_file_should_end_with_ccn_extension_please_choose_correct_file">Backup file should end with \".ccn\" extension. Please choose correct file</string>
     <string name="wrong_extension_of_file">Wrong extension of file</string>
     <string name="choose_backup_file">Choose backup file</string>
+    <string name="no_tank_fill_data_found">No tank fill data found</string>
+    <string name="no_maintenance_data_found">No maintenance data found</string>
+    <string name="no_odometer_data_found">No odometer data found</string>
 </resources>

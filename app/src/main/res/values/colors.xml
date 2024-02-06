@@ -149,4 +149,5 @@
     <color name="text_color">#0B0B0B</color>
     <color name="text_caption_color">#2C2C2C</color>
     <color name="car_background_color">#AEEDEDED</color>
+    <color name="transparent">#00000000</color>
 </resources>
