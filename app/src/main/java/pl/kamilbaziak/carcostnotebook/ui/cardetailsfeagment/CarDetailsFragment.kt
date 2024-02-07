@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import androidx.core.os.bundleOf
+import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.transition.TransitionInflater
@@ -162,6 +163,11 @@ class CarDetailsFragment : Fragment() {
         }
 
         return@run
+    }
+
+    fun setMenuProvider(menuProvider: MenuProvider) = binding.toolbar.addMenuProvider(menuProvider)
+    fun removeMenuProvider(menuProvider: MenuProvider) {
+        binding.toolbar.removeMenuProvider(menuProvider)
     }
 
     private fun extendAddFab(extend: Boolean) = binding.run {

@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -23,6 +22,7 @@ import pl.kamilbaziak.carcostnotebook.shortcut
 import pl.kamilbaziak.carcostnotebook.toDate
 import pl.kamilbaziak.carcostnotebook.toTwoDigits
 import pl.kamilbaziak.carcostnotebook.ui.activity.MainViewModel
+import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.CarDetailsFragment
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialog
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialogActions
 
@@ -36,6 +36,27 @@ class DetailsFragment : Fragment(), MaterialAlertDialogActions {
         parametersOf(carId)
     }
     private val mainViewModel by sharedViewModel<MainViewModel>()
+    private val menuProvider = object : MenuProvider {
+        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+            menuInflater.inflate(R.menu.details_menu_toolbar, menu)
+        }
+
+        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+            return when (menuItem.itemId) {
+                R.id.menu_delete -> {
+                    viewModel.onCarDelete()
+                    true
+                }
+
+                R.id.menu_edit -> {
+                    viewModel.onCarEdit()
+                    true
+                }
+
+                else -> false
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,10 +67,8 @@ class DetailsFragment : Fragment(), MaterialAlertDialogActions {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = binding.run {
         super.onViewCreated(view, savedInstanceState)
 
-        setOptionsMenu()
-
         viewModel.apply {
-            currentCarData.observe(viewLifecycleOwner) {c ->
+            currentCarData.observe(viewLifecycleOwner) { c ->
                 c?.let { car ->
                     textInputCarBrand.editText?.setText(car.brand)
                     textInputCarModel.editText?.setText(car.model)
@@ -61,11 +80,11 @@ class DetailsFragment : Fragment(), MaterialAlertDialogActions {
                     )
                     textInputCarPriceWhenBought.editText?.setText(
                         car.priceWhenBought?.let {
-                           "${car.priceWhenBought?.toTwoDigits()} ${car.currency}"
+                            "${car.priceWhenBought?.toTwoDigits()} ${car.currency}"
                         } ?: getString(R.string.not_added)
                     )
                     allOdometerData.observe(viewLifecycleOwner) { list ->
-                        if(list.isNotEmpty()) {
+                        if (list.isNotEmpty()) {
                             textInputTotalDistanceMade.editText?.setText(
                                 "${(list.maxOf { it.input } - list.minOf { it.input }).toTwoDigits()} ${car.unit.shortcut()}"
                             )
@@ -73,18 +92,19 @@ class DetailsFragment : Fragment(), MaterialAlertDialogActions {
                     }
 
                     allTankFillData.observe(viewLifecycleOwner) { list ->
-                        val totalFuelConsumption =  list.sumOf { it.quantity }.toTwoDigits()
-                        val totalFuelCost = list.sumOf { it.petrolPrice?.times(it.quantity) ?: 0.0 }.toTwoDigits()
+                        val totalFuelConsumption = list.sumOf { it.quantity }.toTwoDigits()
+                        val totalFuelCost =
+                            list.sumOf { it.petrolPrice?.times(it.quantity) ?: 0.0 }.toTwoDigits()
 
                         textInputTotalFuelConsuption.editText?.setText("$totalFuelConsumption ${car.petrolUnit.shortcut()}")
                         textInputTotalFuelPaid.editText?.setText("$totalFuelCost ${car.currency}")
                     }
 
                     allMaintenance.observe(viewLifecycleOwner) { list ->
-                        val totalMaintenanceCost =  list.sumOf { it.price ?: 0.0 }.toTwoDigits()
+                        val totalMaintenanceCost = list.sumOf { it.price ?: 0.0 }.toTwoDigits()
                         textInputTotalMaintenancePaid.editText?.setText("$totalMaintenanceCost ${car.currency}")
                     }
-                } ?: run{
+                } ?: run {
                     TextUtils.showSnackbar(requireView(), getString(R.string.something_went_wrong))
                 }
             }
@@ -95,8 +115,13 @@ class DetailsFragment : Fragment(), MaterialAlertDialogActions {
                 when (event) {
                     is DetailsViewModel.DetailsViewEvent.CarDeleted ->
                         requireActivity().onBackPressedDispatcher.onBackPressed()
+
                     is DetailsViewModel.DetailsViewEvent.ErrorDuringDeleteProcedure ->
-                        TextUtils.showSnackbar(requireView(), getString(R.string.error_during_delete_process))
+                        TextUtils.showSnackbar(
+                            requireView(),
+                            getString(R.string.error_during_delete_process)
+                        )
+
                     is DetailsViewModel.DetailsViewEvent.ShowCarDeleteDialogMessage ->
                         MaterialAlertDialog.show(
                             childFragmentManager,
@@ -107,6 +132,7 @@ class DetailsFragment : Fragment(), MaterialAlertDialogActions {
                             getString(R.string.cannot_be_undone),
                             getString(R.string.delete)
                         )
+
                     is DetailsViewModel.DetailsViewEvent.EditCar ->
                         mainViewModel.openAddNewCar(
                             title = event.car!!.name(),
@@ -119,28 +145,8 @@ class DetailsFragment : Fragment(), MaterialAlertDialogActions {
         return@run
     }
 
-    private fun setOptionsMenu() {
-        requireActivity().addMenuProvider(object : MenuProvider {
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.details_menu_toolbar, menu)
-            }
-
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return when (menuItem.itemId) {
-                    R.id.menu_delete -> {
-                        viewModel.onCarDelete()
-                        true
-                    }
-                    R.id.menu_edit -> {
-                        viewModel.onCarEdit()
-                        true
-                    }
-
-                    else -> false
-                }
-            }
-        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
-    }
+    private fun getCarDetailsFragment() =
+        (requireActivity().supportFragmentManager.findFragmentByTag(CarDetailsFragment.TAG) as? CarDetailsFragment)
 
     override fun onPositiveButtonClicked() {
         viewModel.deleteCar()
