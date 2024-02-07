@@ -6,8 +6,6 @@ import android.view.*
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -42,7 +40,7 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("XXX", "addNewCarFragemnt onCreate car ${car?.name()}")
+        Log.d("XXX", "addNewCarFragment onCreate car ${car?.name()}")
         KeyboardVisibilityEvent.setEventListener(
             requireActivity()
         ) { isKeyboardShown ->
@@ -51,6 +49,7 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car) {
                     true -> {
                         fabAddCar.hide()
                     }
+
                     else -> {
                         fabAddCar.show()
                     }
@@ -93,7 +92,7 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car) {
                 }
             }
 
-            editMode(car)                    
+            editMode(car)
         }
 
         dateDialog.addOnPositiveButtonClickListener {
@@ -123,29 +122,17 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car) {
 
         setEnumValuesToMaterialSpinner(
             textInputEngineType.editText as MaterialAutoCompleteTextView,
-            buildList {
-                EngineEnum.entries.map {
-                    add(it.name)
-                }
-            }
+            EngineEnum.entries.map { it.name }
         )
 
         setEnumValuesToMaterialSpinner(
             textInputPetrolUnit.editText as MaterialAutoCompleteTextView,
-            buildList {
-                PetrolUnitEnum.entries.map {
-                    add(it.name)
-                }
-            }
+            PetrolUnitEnum.entries.map { it.name }
         )
 
         setEnumValuesToMaterialSpinner(
             textInputUnit.editText as MaterialAutoCompleteTextView,
-            buildList {
-                UnitEnum.entries.map {
-                    add(it.name)
-                }
-            }
+            UnitEnum.entries.map { it.name }
         )
 
         fabAddCar.setOnClickListener {
@@ -156,7 +143,7 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car) {
             viewModel.addNewCarEvent.collect { event ->
                 when (event) {
                     AddNewCarViewModel.AddNewCarEvent.NavigateBack ->
-                        findNavController().navigateUp()
+                        requireActivity().onBackPressedDispatcher.onBackPressed()
                 }
             }
         }

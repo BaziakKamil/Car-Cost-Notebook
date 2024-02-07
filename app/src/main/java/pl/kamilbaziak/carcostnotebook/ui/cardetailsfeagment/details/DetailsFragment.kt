@@ -12,7 +12,6 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -95,7 +94,7 @@ class DetailsFragment : Fragment(), MaterialAlertDialogActions {
             viewModel.detailsViewEvent.collect { event ->
                 when (event) {
                     is DetailsViewModel.DetailsViewEvent.CarDeleted ->
-                        findNavController().navigateUp()
+                        requireActivity().onBackPressedDispatcher.onBackPressed()
                     is DetailsViewModel.DetailsViewEvent.ErrorDuringDeleteProcedure ->
                         TextUtils.showSnackbar(requireView(), getString(R.string.error_during_delete_process))
                     is DetailsViewModel.DetailsViewEvent.ShowCarDeleteDialogMessage ->
