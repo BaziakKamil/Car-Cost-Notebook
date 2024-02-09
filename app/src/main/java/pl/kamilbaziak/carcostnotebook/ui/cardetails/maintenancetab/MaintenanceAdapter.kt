@@ -1,4 +1,4 @@
-package pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.maintenancetab
+package pl.kamilbaziak.carcostnotebook.ui.cardetails.maintenancetab
 
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.databinding.ViewMaintenanceItemBinding
-import pl.kamilbaziak.carcostnotebook.databinding.ViewOdometerItemBinding
 import pl.kamilbaziak.carcostnotebook.model.Maintenance
 import pl.kamilbaziak.carcostnotebook.toDate
 import pl.kamilbaziak.carcostnotebook.toTwoDigits

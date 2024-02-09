@@ -1,4 +1,4 @@
-package pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.details
+package pl.kamilbaziak.carcostnotebook.ui.cardetails.details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -1,4 +1,4 @@
-package pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.petroltab
+package pl.kamilbaziak.carcostnotebook.ui.cardetails.petroltab
 
 import android.view.Gravity
 import android.view.LayoutInflater

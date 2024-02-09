@@ -2,8 +2,8 @@ package pl.kamilbaziak.carcostnotebook.ui.activity
 
 import pl.kamilbaziak.carcostnotebook.model.Car
 import pl.kamilbaziak.carcostnotebook.model.Odometer
-import pl.kamilbaziak.carcostnotebook.ui.addnewcarfragment.AddNewCarFragment
-import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.CarDetailsFragment
+import pl.kamilbaziak.carcostnotebook.ui.newcar.AddNewCarFragment
+import pl.kamilbaziak.carcostnotebook.ui.cardetails.CarDetailsFragment
 
 sealed class MainActivityEvent(val tag: String) {
 

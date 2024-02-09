@@ -1,4 +1,4 @@
-package pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.petroltab
+package pl.kamilbaziak.carcostnotebook.ui.cardetails.petroltab
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,7 +11,7 @@ import pl.kamilbaziak.carcostnotebook.database.OdometerDao
 import pl.kamilbaziak.carcostnotebook.database.TankFillDao
 import pl.kamilbaziak.carcostnotebook.model.Odometer
 import pl.kamilbaziak.carcostnotebook.model.TankFill
-import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.DataState
+import pl.kamilbaziak.carcostnotebook.ui.cardetails.DataState
 
 class TankFillViewModel(
     private val tankFillDao: TankFillDao,

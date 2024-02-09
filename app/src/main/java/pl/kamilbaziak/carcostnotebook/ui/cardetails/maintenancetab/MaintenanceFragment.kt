@@ -1,4 +1,4 @@
-package pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.maintenancetab
+package pl.kamilbaziak.carcostnotebook.ui.cardetails.maintenancetab
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,7 +15,7 @@ import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.TextUtils
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentMaintenanceBinding
 import pl.kamilbaziak.carcostnotebook.model.Maintenance
-import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.DataState
+import pl.kamilbaziak.carcostnotebook.ui.cardetails.DataState
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialog
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialogActions
 import pl.kamilbaziak.carcostnotebook.ui.maintenancedialog.MaintenanceDialog

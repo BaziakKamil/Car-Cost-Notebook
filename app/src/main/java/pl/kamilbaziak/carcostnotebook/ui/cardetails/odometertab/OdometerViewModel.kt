@@ -1,4 +1,4 @@
-package pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.odometertab
+package pl.kamilbaziak.carcostnotebook.ui.cardetails.odometertab
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import pl.kamilbaziak.carcostnotebook.database.OdometerDao
 import pl.kamilbaziak.carcostnotebook.model.Odometer
-import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.DataState
+import pl.kamilbaziak.carcostnotebook.ui.cardetails.DataState
 
 class OdometerViewModel(
     private val odometerDao: OdometerDao,

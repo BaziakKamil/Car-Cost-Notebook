@@ -1,4 +1,4 @@
-package pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment
+package pl.kamilbaziak.carcostnotebook.ui.cardetails
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,10 +18,10 @@ import pl.kamilbaziak.carcostnotebook.databinding.FragmentCarDetailsBinding
 import pl.kamilbaziak.carcostnotebook.extra
 import pl.kamilbaziak.carcostnotebook.model.Car
 import pl.kamilbaziak.carcostnotebook.model.Odometer
-import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.details.DetailsFragment
-import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.maintenancetab.MaintenanceFragment
-import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.odometertab.OdometerFragment
-import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.petroltab.TankFillFragment
+import pl.kamilbaziak.carcostnotebook.ui.cardetails.details.DetailsFragment
+import pl.kamilbaziak.carcostnotebook.ui.cardetails.maintenancetab.MaintenanceFragment
+import pl.kamilbaziak.carcostnotebook.ui.cardetails.odometertab.OdometerFragment
+import pl.kamilbaziak.carcostnotebook.ui.cardetails.petroltab.TankFillFragment
 import pl.kamilbaziak.carcostnotebook.ui.maintenancedialog.MaintenanceDialog
 import pl.kamilbaziak.carcostnotebook.ui.odometerdialog.OdometerDialog
 import pl.kamilbaziak.carcostnotebook.ui.tankfilldialog.TankFillDialog

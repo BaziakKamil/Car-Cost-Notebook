@@ -1,4 +1,4 @@
-package pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment
+package pl.kamilbaziak.carcostnotebook.ui.cardetails
 
 sealed interface DataState {
 

@@ -1,4 +1,4 @@
-package pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.maintenancetab
+package pl.kamilbaziak.carcostnotebook.ui.cardetails.maintenancetab
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,7 +11,7 @@ import pl.kamilbaziak.carcostnotebook.database.MaintenanceDao
 import pl.kamilbaziak.carcostnotebook.database.OdometerDao
 import pl.kamilbaziak.carcostnotebook.model.Maintenance
 import pl.kamilbaziak.carcostnotebook.model.Odometer
-import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.DataState
+import pl.kamilbaziak.carcostnotebook.ui.cardetails.DataState
 
 class MaintenanceViewModel(
     private val maintenanceDao: MaintenanceDao,

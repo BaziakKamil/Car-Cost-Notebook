@@ -8,8 +8,8 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.kamilbaziak.carcostnotebook.databinding.ActivityMainBinding
-import pl.kamilbaziak.carcostnotebook.ui.addnewcarfragment.AddNewCarFragment
-import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.CarDetailsFragment
+import pl.kamilbaziak.carcostnotebook.ui.newcar.AddNewCarFragment
+import pl.kamilbaziak.carcostnotebook.ui.cardetails.CarDetailsFragment
 
 class MainActivity : AppCompatActivity() {
 

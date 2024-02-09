@@ -1,4 +1,4 @@
-package pl.kamilbaziak.carcostnotebook.ui.addnewcarfragment
+package pl.kamilbaziak.carcostnotebook.ui.newcar
 
 import android.os.Bundle
 import android.util.Log
@@ -81,6 +81,14 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car) {
             setNavigationOnClickListener {
                 requireActivity().onBackPressedDispatcher.onBackPressed()
             }
+            menu
+                .add(R.string.save)
+                .setIcon(R.drawable.ic_done)
+                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
+                .setOnMenuItemClickListener {
+                    saveCar()
+                    true
+                }
         }
 
         car?.let { car ->
@@ -94,6 +102,8 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car) {
 
             editMode(car)
         }
+
+        disableViewsWhenEditMode()
 
         dateDialog.addOnPositiveButtonClickListener {
             viewModel.changePickedDate(it)
@@ -135,10 +145,6 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car) {
             UnitEnum.entries.map { it.name }
         )
 
-        fabAddCar.setOnClickListener {
-            saveCar()
-        }
-
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.addNewCarEvent.collect { event ->
                 when (event) {
@@ -149,6 +155,14 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car) {
         }
 
         return@run
+    }
+
+    private fun disableViewsWhenEditMode() = binding.run {
+        val editMode = car != null
+        textInputCarOdometer.isEnabled = !editMode
+        textInputPetrolUnit.isEnabled = !editMode
+        textInputEngineType.isEnabled = !editMode
+        textInputUnit.isEnabled = !editMode
     }
 
     private fun editMode(car: Car) = binding.apply {

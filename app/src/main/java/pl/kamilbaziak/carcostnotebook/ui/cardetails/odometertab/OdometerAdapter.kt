@@ -1,4 +1,4 @@
-package pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.odometertab
+package pl.kamilbaziak.carcostnotebook.ui.cardetails.odometertab
 
 import android.view.Gravity
 import android.view.LayoutInflater

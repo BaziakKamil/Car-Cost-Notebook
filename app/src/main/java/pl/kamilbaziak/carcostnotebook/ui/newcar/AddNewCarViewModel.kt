@@ -1,4 +1,4 @@
-package pl.kamilbaziak.carcostnotebook.ui.addnewcarfragment
+package pl.kamilbaziak.carcostnotebook.ui.newcar
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

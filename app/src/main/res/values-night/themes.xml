@@ -1,5 +1,6 @@
 <resources>
     <style name="AppTheme" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="android:windowSplashScreenBackground">@color/md_theme_surface</item>
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="colorPrimary">@color/md_theme_primary</item>

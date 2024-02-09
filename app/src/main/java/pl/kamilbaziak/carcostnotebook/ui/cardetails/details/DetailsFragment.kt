@@ -1,4 +1,4 @@
-package pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.details
+package pl.kamilbaziak.carcostnotebook.ui.cardetails.details
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,7 +22,7 @@ import pl.kamilbaziak.carcostnotebook.shortcut
 import pl.kamilbaziak.carcostnotebook.toDate
 import pl.kamilbaziak.carcostnotebook.toTwoDigits
 import pl.kamilbaziak.carcostnotebook.ui.activity.MainViewModel
-import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.CarDetailsFragment
+import pl.kamilbaziak.carcostnotebook.ui.cardetails.CarDetailsFragment
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialog
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialogActions
 

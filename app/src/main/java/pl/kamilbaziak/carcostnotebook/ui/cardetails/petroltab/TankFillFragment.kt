@@ -1,4 +1,4 @@
-package pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.petroltab
+package pl.kamilbaziak.carcostnotebook.ui.cardetails.petroltab
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,7 +18,7 @@ import pl.kamilbaziak.carcostnotebook.databinding.FragmentTankFillBinding
 import pl.kamilbaziak.carcostnotebook.enums.PetrolUnitEnum
 import pl.kamilbaziak.carcostnotebook.model.Odometer
 import pl.kamilbaziak.carcostnotebook.model.TankFill
-import pl.kamilbaziak.carcostnotebook.ui.cardetailsfeagment.DataState
+import pl.kamilbaziak.carcostnotebook.ui.cardetails.DataState
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialog
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialogActions
 import pl.kamilbaziak.carcostnotebook.ui.tankfilldialog.TankFillDialog
