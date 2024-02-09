@@ -12,6 +12,9 @@ interface TankFillDao {
     fun getTankFillLiveData(carId: Long): LiveData<List<TankFill>>
 
     @Query("SELECT * FROM ${Constants.TANK_FILL_TABLE} WHERE carId = :carId ORDER BY created DESC")
+    suspend fun getTankFillData(carId: Long): List<TankFill>
+
+    @Query("SELECT * FROM ${Constants.TANK_FILL_TABLE} WHERE carId = :carId ORDER BY created DESC")
     suspend fun getTankFillDataForCar(carId: Long): List<TankFill>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

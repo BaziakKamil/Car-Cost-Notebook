@@ -13,6 +13,9 @@ interface OdometerDao {
     fun getOdometerLiveData(carId: Long): LiveData<List<Odometer>>
 
     @Query("SELECT * FROM ${Constants.ODOMETER_TABLE} WHERE carId = :carId ORDER BY created DESC")
+    suspend fun getOdometerData(carId: Long): List<Odometer>
+
+    @Query("SELECT * FROM ${Constants.ODOMETER_TABLE} WHERE carId = :carId ORDER BY created DESC")
     suspend fun getAllOdometerDataForCar(carId: Long): List<Odometer>
 
     @Query("SELECT * FROM ${Constants.ODOMETER_TABLE} WHERE carId = :carId ORDER BY created ASC LIMIT 1")
