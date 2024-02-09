@@ -120,6 +120,11 @@ class CarsListViewModel(
         val maintenanceList = maintenanceDao.getAllMaintenance()
         val odometerList = odometerDao.getAllOdometer()
 
+        if (carList.isEmpty()) {
+            mainViewChannel.send(MainViewEvent.ShowSnackbarMessage(context.getString(R.string.nothing_to_export)))
+            return@launch
+        }
+
         val carJSON = gson.toJson(carList)
         val tankJSON = gson.toJson(tankFillList)
         val maintenanceJSON = gson.toJson(maintenanceList)

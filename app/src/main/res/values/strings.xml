@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Car Cost Notebook</string>
-
     <string name="car_brand">Car brand</string>
     <string name="car_model">Car model</string>
     <string name="car_price_when_bought">Car price when bought</string>
@@ -93,4 +92,5 @@
     <string name="no_tank_fill_data_found">No tank fill data found</string>
     <string name="no_maintenance_data_found">No maintenance data found</string>
     <string name="no_odometer_data_found">No odometer data found</string>
+    <string name="nothing_to_export">Nothing to export</string>
 </resources>

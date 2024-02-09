@@ -1,7 +1,6 @@
 package pl.kamilbaziak.carcostnotebook.ui.newcar
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -9,7 +8,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.transition.TransitionInflater
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
-import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
 import org.koin.android.ext.android.inject
 import pl.kamilbaziak.carcostnotebook.EnumUtils.getEngineTypeFromName
 import pl.kamilbaziak.carcostnotebook.EnumUtils.getPetrolUnitFromName
@@ -40,22 +38,6 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("XXX", "addNewCarFragment onCreate car ${car?.name()}")
-        KeyboardVisibilityEvent.setEventListener(
-            requireActivity()
-        ) { isKeyboardShown ->
-            binding.apply {
-                when (isKeyboardShown) {
-                    true -> {
-                        fabAddCar.hide()
-                    }
-
-                    else -> {
-                        fabAddCar.show()
-                    }
-                }
-            }
-        }
         val inflater = TransitionInflater.from(requireContext())
         enterTransition = inflater.inflateTransition(R.transition.slide_right)
         exitTransition = inflater.inflateTransition(R.transition.fade)

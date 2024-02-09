@@ -108,9 +108,6 @@ dependencies {
     // Koin for Android
     implementation "io.insert-koin:koin-android:3.2.2"
 
-    //Keyboard event
-    implementation "net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC3"
-
     //Crashlytics
     implementation platform('com.google.firebase:firebase-bom:31.2.3')
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
