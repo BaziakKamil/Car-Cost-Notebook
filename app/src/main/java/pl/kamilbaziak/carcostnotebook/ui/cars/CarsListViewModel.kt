@@ -108,8 +108,8 @@ class CarsListViewModel(
         mainViewChannel.send(MainViewEvent.ShowCarDeleteDialogMessage(car))
     }
 
-    fun setupCarMappedData(list: List<Car>) = viewModelScope.launch {
-        _carsMapped.value = list.map { car ->
+    fun setupCarMappedData(list: List<Car>?) = viewModelScope.launch {
+        _carsMapped.value = list?.map { car ->
             Pair(car, odometerDao.getLastCarOdometer(car.id))
         }
     }

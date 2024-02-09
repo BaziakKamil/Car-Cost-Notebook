@@ -112,9 +112,7 @@ class CarListFragment : Fragment(), MaterialAlertDialogActions {
 
         viewModel.apply {
             cars.observe(viewLifecycleOwner) {
-                if (it.isNotEmpty()) {
-                    viewModel.setupCarMappedData(it)
-                }
+                viewModel.setupCarMappedData(it)
             }
 
             carsMapped.observe(viewLifecycleOwner) {

@@ -9,7 +9,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_no_car"
+        android:src="@drawable/carcostnotebook_logo"
         app:tint="@color/icons_background_color" />
 
     <TextView

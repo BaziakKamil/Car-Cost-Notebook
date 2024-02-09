@@ -82,7 +82,10 @@ class CarListAdapter(
                 textCarBrand.text = car.brand
                 textCarModel.text = car.model
                 textCarYear.text = car.year.toString()
-                textCarLicencePlate.text = car.licensePlate
+                textCarLicencePlate.apply {
+                    isVisible = car.licensePlate.isNotBlank()
+                    text = car.licensePlate
+                }
                 item.second?.let {
                     textCarLastOdometer.apply {
                         isVisible = true
