@@ -12,6 +12,12 @@ Backup folder with backup files is created under Documents section in folder nam
 
 Only data that is collected are bugs. Firebase Crashlytics is implemented and if any bugs or crash appears it sends info back to developers console.
 But none of users private data is sent only bug trace.
+Data gathered by crashlytics:
+1. Phone manufacturer and model
+2. Android version
+3. RAM free amount - Disk free amount
+4. If phone rooted
+5. When crash happened and on which app version
 
 If you find any security vulnerability that has been inadvertently caused by me, or have any question regarding how the app protects your privacy, 
 please send me an email or post a discussion on GitHub, and I will surely try to fix it/help you.
@@ -19,4 +25,4 @@ please send me an email or post a discussion on GitHub, and I will surely try to
 Happy using the app.
 
 Kamil Baziak
-Last edited on 9th February 2024
+Last edited on 10th February 2024
