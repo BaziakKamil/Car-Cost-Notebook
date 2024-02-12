@@ -10,6 +10,7 @@ import pl.kamilbaziak.carcostnotebook.database.OdometerDao
 import pl.kamilbaziak.carcostnotebook.database.TankFillDao
 import pl.kamilbaziak.carcostnotebook.enums.PetrolEnum
 import pl.kamilbaziak.carcostnotebook.enums.UnitEnum
+import pl.kamilbaziak.carcostnotebook.model.Car
 import pl.kamilbaziak.carcostnotebook.model.Odometer
 import pl.kamilbaziak.carcostnotebook.model.TankFill
 import java.util.Date
@@ -17,7 +18,8 @@ import java.util.Date
 class TankFillDialogViewModel(
     private val carDao: CarDao,
     private val tankFillDao: TankFillDao,
-    private val odometerDao: OdometerDao
+    private val odometerDao: OdometerDao,
+    private val carId: Long
 ) : ViewModel() {
 
     private val _pickedDate = MutableLiveData(Date().time)
@@ -25,6 +27,8 @@ class TankFillDialogViewModel(
 
     private val _odometerForTankFill = MutableLiveData<Odometer>()
     val odometerForTankFill: LiveData<Odometer> = _odometerForTankFill
+
+    val currentCar: LiveData<Car?> = carDao.getCarById(carId)
 
     fun changePickedDate(long: Long) {
         _pickedDate.value = long

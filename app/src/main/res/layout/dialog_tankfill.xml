@@ -33,16 +33,17 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:hint="@string/petrol_station"
         android:textColorHint="@color/text_caption_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:hint="@string/petrol_station"
         app:layout_constraintTop_toBottomOf="@+id/image_close"
         app:startIconDrawable="@drawable/ic_petrol">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:imeOptions="actionNext"
             android:inputType="textCapSentences"
             android:singleLine="true" />
 
@@ -54,9 +55,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@+id/text_input_petrol_station"
         android:hint="@string/petrol_type"
-        app:errorEnabled="true">
+        app:errorEnabled="true"
+        app:layout_constraintTop_toBottomOf="@+id/text_input_petrol_station">
 
         <AutoCompleteTextView
             android:layout_width="match_parent"
@@ -87,6 +88,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:imeOptions="actionNext"
                 android:inputType="numberDecimal"
                 android:singleLine="true" />
 
@@ -107,6 +109,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:imeOptions="actionNext"
                 android:inputType="numberDecimal"
                 android:singleLine="true" />
 
@@ -137,6 +140,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:imeOptions="actionNext"
                 android:inputType="numberDecimal"
                 android:singleLine="true" />
 
@@ -157,6 +161,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:imeOptions="actionNext"
                 android:inputType="numberDecimal"
                 android:singleLine="true" />
 
@@ -170,15 +175,16 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:hint="@string/distance_from_last_tank_fill"
         android:textColorHint="@color/text_caption_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:hint="@string/distance_from_last_tank_fill"
         app:layout_constraintTop_toBottomOf="@+id/container_odometer_and_computer_reading">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:imeOptions="actionDone"
             android:inputType="numberDecimal"
             android:singleLine="true" />
 

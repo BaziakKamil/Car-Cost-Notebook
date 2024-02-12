@@ -42,6 +42,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:imeOptions="actionNext"
             android:inputType="textCapSentences"
             android:singleLine="true" />
 
@@ -70,6 +71,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:imeOptions="actionNext"
                 android:inputType="numberDecimal"
                 android:singleLine="true" />
 
@@ -90,6 +92,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:imeOptions="actionNext"
                 android:inputType="numberDecimal"
                 android:singleLine="true" />
 
@@ -112,6 +115,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:imeOptions="actionDone"
             android:inputType="textMultiLine|textCapSentences"
             android:maxLines="5"
             android:minLines="1"

@@ -1,6 +1,8 @@
 package pl.kamilbaziak.carcostnotebook
 
+import android.content.Context
 import androidx.fragment.app.Fragment
+import pl.kamilbaziak.carcostnotebook.enums.CurrencyEnum
 import pl.kamilbaziak.carcostnotebook.enums.PetrolUnitEnum
 import pl.kamilbaziak.carcostnotebook.enums.UnitEnum
 import pl.kamilbaziak.carcostnotebook.model.Car
@@ -32,6 +34,28 @@ fun PetrolUnitEnum.shortcut(): String = when (this) {
     PetrolUnitEnum.Galon -> "gal"
     PetrolUnitEnum.kWh -> "kWh"
     PetrolUnitEnum.kg -> "kg"
+}
+
+fun CurrencyEnum.shortcut(context: Context): String = context.getString(
+    when (this) {
+        CurrencyEnum.Zloty -> R.string.pln_currency
+        CurrencyEnum.Dolar -> R.string.dol_currency
+        CurrencyEnum.Euro -> R.string.eur_currency
+    }
+)
+
+fun CurrencyEnum.extendedName(context: Context): String = context.getString(
+    when (this) {
+        CurrencyEnum.Zloty -> R.string.pln_currency_extended
+        CurrencyEnum.Dolar -> R.string.dol_currency_extended
+        CurrencyEnum.Euro -> R.string.eur_currency_extended
+    }
+)
+
+fun CurrencyEnum.formatForText(context: Context, text: String) = when (this) {
+    CurrencyEnum.Dolar,
+    CurrencyEnum.Euro -> "${this.shortcut(context)} $text"
+    CurrencyEnum.Zloty -> "$text ${this.shortcut(context)}"
 }
 
 fun Long.toDate(): String = DateUtils.formatDateFromLong(this)

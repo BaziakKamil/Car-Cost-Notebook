@@ -75,8 +75,9 @@
     <string name="not_added">Nie dodano</string>
     <string name="car_data">Dane samochodu</string>
     <string name="car_data_when_bought">Data kiedy kupione</string>
-    <string name="pln_currency">zł</string>
+    <string name="non_editable_data">This data cannot be edited after added</string>
     <string name="more">Więcej</string>
+    <string name="currency">Waluta</string>
     <string name="export_data">Eksportuj dane</string>
     <string name="import_data">Importuj dane</string>
     <string name="error_occurred_during_import_process">Wystąpił bląd podczas importowania danych</string>

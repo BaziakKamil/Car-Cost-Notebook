@@ -76,7 +76,14 @@
     <string name="not_added">Not added</string>
     <string name="car_data">Car data</string>
     <string name="car_data_when_bought">Data when car was bought</string>
-    <string name="pln_currency">zł</string>
+    <string name="non_editable_data">This data cannot be edited after car is added</string>
+    <string name="currency">Currency</string>
+    <string name="pln_currency" translatable="false">zł</string>
+    <string name="dol_currency" translatable="false">$</string>
+    <string name="eur_currency" translatable="false">€</string>
+    <string name="pln_currency_extended" translatable="false">Złoty ( zł )</string>
+    <string name="dol_currency_extended" translatable="false">Dolar ( $ )</string>
+    <string name="eur_currency_extended" translatable="false">Euro ( € )</string>
     <string name="more">More</string>
     <string name="export_data">Export Data</string>
     <string name="import_data">Import Data</string>

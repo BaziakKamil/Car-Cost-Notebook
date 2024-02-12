@@ -10,10 +10,13 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import pl.kamilbaziak.carcostnotebook.EnumUtils
 import pl.kamilbaziak.carcostnotebook.EnumUtils.getPetrolEnumFromName
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.databinding.DialogTankfillBinding
+import pl.kamilbaziak.carcostnotebook.enums.EngineEnum
 import pl.kamilbaziak.carcostnotebook.enums.PetrolEnum
 import pl.kamilbaziak.carcostnotebook.model.TankFill
 import pl.kamilbaziak.carcostnotebook.toDate
@@ -26,7 +29,9 @@ class TankFillDialog : BottomSheetDialogFragment() {
     }
     private val carId by lazy { arguments?.getLong(EXTRA_CAR_ID) }
     private val tankFill by lazy { arguments?.get(EXTRA_TANK_FILL) as? TankFill }
-    private val viewModel: TankFillDialogViewModel by inject()
+    private val viewModel: TankFillDialogViewModel by viewModel {
+        parametersOf(carId)
+    }
     private val dateDialog = MaterialDatePicker.Builder.datePicker()
         .setTitleText(R.string.choose_date)
         .build()
@@ -51,15 +56,6 @@ class TankFillDialog : BottomSheetDialogFragment() {
             viewModel.changePickedDate(it.created)
         }
 
-        EnumUtils.setEnumValuesToMaterialSpinner(
-            textInputPetrolType.editText as MaterialAutoCompleteTextView,
-            buildList {
-                PetrolEnum.values().map {
-                    add(it.name)
-                }
-            }
-        )
-
         dateDialog.addOnPositiveButtonClickListener {
             viewModel.changePickedDate(it)
         }
@@ -75,6 +71,33 @@ class TankFillDialog : BottomSheetDialogFragment() {
             odometerForTankFill.observe(viewLifecycleOwner) {
                 if (it != null) {
                     textInputOdometer.editText?.setText(it.input.toTwoDigits())
+                }
+            }
+            viewModel.currentCar.observe(viewLifecycleOwner) { car ->
+                if (car != null) {
+                    val suitablePetrolForEngine = mutableListOf<PetrolEnum>()
+                    when (car.engineEnum) {
+                        EngineEnum.Petrol -> suitablePetrolForEngine.apply {
+                            add(PetrolEnum.Petrol)
+                            add(PetrolEnum.LPG)
+                            add(PetrolEnum.CNG)
+                        }
+
+                        EngineEnum.Diesel -> suitablePetrolForEngine.add(PetrolEnum.Diesel)
+                        EngineEnum.Electric -> suitablePetrolForEngine.add(PetrolEnum.Electric)
+                        EngineEnum.Hybrid -> suitablePetrolForEngine.apply {
+                            add(PetrolEnum.Petrol)
+                            add(PetrolEnum.Diesel)
+                            add(PetrolEnum.Electric)
+                        }
+                    }
+                    EnumUtils.setEnumValuesToMaterialSpinner(
+                        textInputPetrolType.editText as MaterialAutoCompleteTextView,
+                        suitablePetrolForEngine.map { it.name }
+                    )
+                    textInputPetrolType.editText?.setText(
+                        suitablePetrolForEngine[0].name
+                    )
                 }
             }
         }

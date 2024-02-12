@@ -1,23 +1,31 @@
 package pl.kamilbaziak.carcostnotebook.ui.newcar
 
+import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.view.*
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
+import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.transition.TransitionInflater
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import org.koin.android.ext.android.inject
+import pl.kamilbaziak.carcostnotebook.EnumUtils.getCurrencyTypeFromName
 import pl.kamilbaziak.carcostnotebook.EnumUtils.getEngineTypeFromName
 import pl.kamilbaziak.carcostnotebook.EnumUtils.getPetrolUnitFromName
 import pl.kamilbaziak.carcostnotebook.EnumUtils.getUnitTypeFromName
 import pl.kamilbaziak.carcostnotebook.EnumUtils.setEnumValuesToMaterialSpinner
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentAddNewCarBinding
+import pl.kamilbaziak.carcostnotebook.enums.CurrencyEnum
 import pl.kamilbaziak.carcostnotebook.enums.EngineEnum
 import pl.kamilbaziak.carcostnotebook.enums.PetrolUnitEnum
 import pl.kamilbaziak.carcostnotebook.enums.UnitEnum
+import pl.kamilbaziak.carcostnotebook.extendedName
 import pl.kamilbaziak.carcostnotebook.extra
 import pl.kamilbaziak.carcostnotebook.model.Car
 import pl.kamilbaziak.carcostnotebook.name
@@ -32,9 +40,9 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car) {
     private val viewModel: AddNewCarViewModel by inject()
     private val car by extra<Car?>(EXTRA_CAR)
     private val title by extra<String>(EXTRA_TITLE)
-    private val dateDialog = MaterialDatePicker.Builder.datePicker()
-        .setTitleText(R.string.choose_date_when_bought)
-        .build()
+    private val dateDialog =
+        MaterialDatePicker.Builder.datePicker().setTitleText(R.string.choose_date_when_bought)
+            .build()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,34 +52,31 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car) {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View = binding.root
 
     override fun onViewCreated(
-        view: View,
-        savedInstanceState: Bundle?
+        view: View, savedInstanceState: Bundle?
     ) = binding.run {
         super.onViewCreated(view, savedInstanceState)
 
         sectionCarData.textDivider.text = getString(R.string.car_data)
         sectionCarWhenBought.textDivider.text = getString(R.string.car_data_when_bought)
+        sectionNonEditableItems.textDivider.text = getString(R.string.non_editable_data)
 
         toolbar.apply {
             title = car?.name() ?: getString(R.string.add_new_car)
             setNavigationOnClickListener {
                 requireActivity().onBackPressedDispatcher.onBackPressed()
             }
-            menu
-                .add(R.string.save)
-                .setIcon(R.drawable.ic_done)
-                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
-                .setOnMenuItemClickListener {
+            menu.add(R.string.save).setIcon(R.drawable.ic_done)
+                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS).setOnMenuItemClickListener {
                     saveCar()
                     true
                 }
         }
+
+
 
         car?.let { car ->
             viewModel.apply {
@@ -112,26 +117,22 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car) {
             }
         }
 
-        setEnumValuesToMaterialSpinner(
-            textInputEngineType.editText as MaterialAutoCompleteTextView,
-            EngineEnum.entries.map { it.name }
-        )
+        setEnumValuesToMaterialSpinner(textInputEngineType.editText as MaterialAutoCompleteTextView,
+            EngineEnum.entries.map { it.name })
 
-        setEnumValuesToMaterialSpinner(
-            textInputPetrolUnit.editText as MaterialAutoCompleteTextView,
-            PetrolUnitEnum.entries.map { it.name }
-        )
+        setEnumValuesToMaterialSpinner(textInputPetrolUnit.editText as MaterialAutoCompleteTextView,
+            PetrolUnitEnum.entries.map { it.name })
 
-        setEnumValuesToMaterialSpinner(
-            textInputUnit.editText as MaterialAutoCompleteTextView,
-            UnitEnum.entries.map { it.name }
-        )
+        setEnumValuesToMaterialSpinner(textInputUnit.editText as MaterialAutoCompleteTextView,
+            UnitEnum.entries.map { it.name })
+
+        setEnumValuesToMaterialSpinner(textInputCurrency.editText as MaterialAutoCompleteTextView,
+            CurrencyEnum.entries.map { it.extendedName(requireContext()) })
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.addNewCarEvent.collect { event ->
                 when (event) {
-                    AddNewCarViewModel.AddNewCarEvent.NavigateBack ->
-                        requireActivity().onBackPressedDispatcher.onBackPressed()
+                    AddNewCarViewModel.AddNewCarEvent.NavigateBack -> requireActivity().onBackPressedDispatcher.onBackPressed()
                 }
             }
         }
@@ -145,15 +146,25 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car) {
         textInputPetrolUnit.isEnabled = !editMode
         textInputEngineType.isEnabled = !editMode
         textInputUnit.isEnabled = !editMode
+        textInputCurrency.isEnabled = !editMode
     }
 
+    @SuppressLint("ResourceAsColor")
     private fun editMode(car: Car) = binding.apply {
+        toolbar.navigationIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_close)
+        toolbar.setNavigationIconTint(R.color.md_theme_error)
+        layoutNonEditable.apply {
+            sectionNonEditableItems.root.isVisible = false
+            setPadding(0)
+            setBackgroundColor(Color.TRANSPARENT)
+        }
         textInputCarBrand.editText?.setText(car.brand)
         textInputCarModel.editText?.setText(car.model)
         textInputCarYear.editText?.setText(car.year.toString())
         textInputCarLicencePlate.editText?.setText(car.licensePlate)
         textInputEngineType.editText?.setText(car.engineEnum.name)
         textInputPetrolUnit.editText?.setText(car.petrolUnit.name)
+        textInputCurrency.editText?.setText(car.currency.extendedName(requireContext()))
         textInputDescription.editText?.setText(car.description)
         car.priceWhenBought?.let {
             textInputCarPriceWhenBought.editText?.setText(it.toTwoDigits())
@@ -169,19 +180,15 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car) {
         binding.apply {
             if (car != null) {
                 viewModel.updateCar(
-                    Car(
-                        car?.id ?: 0,
-                        textInputCarBrand.editText?.text.toString(),
-                        textInputCarModel.editText?.text.toString(),
-                        textInputCarYear.editText?.text.toString().toInt(),
-                        textInputCarLicencePlate.editText?.text.toString(),
-                        getEngineTypeFromName(textInputEngineType.editText?.text.toString()),
-                        getPetrolUnitFromName(textInputPetrolUnit.editText?.text.toString()),
-                        getUnitTypeFromName(textInputUnit.editText?.text.toString()),
-                        textInputDescription.editText?.text.toString(),
-                        textInputCarPriceWhenBought.editText?.text.toString().toDoubleOrNull(),
-                        viewModel.pickedDate.value,
-                        getString(R.string.pln_currency)
+                    car!!.copy(
+                        brand = textInputCarBrand.editText?.text.toString(),
+                        model = textInputCarModel.editText?.text.toString(),
+                        year = textInputCarYear.editText?.text.toString().toInt(),
+                        licensePlate = textInputCarLicencePlate.editText?.text.toString(),
+                        dateWhenBought = viewModel.pickedDate.value,
+                        priceWhenBought = textInputCarPriceWhenBought.editText?.text.toString()
+                            .toDoubleOrNull(),
+                        description = textInputDescription.editText?.text.toString()
                     ),
                     viewModel.lastOdometer.value,
                     textInputCarOdometer.editText?.text.toString().toDouble()
@@ -200,13 +207,31 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car) {
                         textInputDescription.editText?.text.toString(),
                         textInputCarPriceWhenBought.editText?.text.toString().toDoubleOrNull(),
                         viewModel.pickedDate.value,
-                        getString(R.string.pln_currency)
-                    ),
-                    textInputCarOdometer.editText?.text.toString().toDouble()
+                        getCurrencyTypeFromName(
+                            textInputCurrency.editText?.text.toString(), requireContext()
+                        )
+                    ), textInputCarOdometer.editText?.text.toString().toDouble()
                 )
             }
         }
     }
+
+    private fun checkIfDataChanged(
+        car: Car,
+        carBrand: String,
+        carModel: String,
+        productionYear: String,
+        licencePlate: String,
+        dateWhenBought: Long,
+        carPrice: String,
+        description: String
+    ) = carBrand != car.brand ||
+            carModel != car.model ||
+            productionYear.toInt() != car.year ||
+            licencePlate != car.licensePlate ||
+            dateWhenBought.toInt() != car.year ||
+            carPrice.toDoubleOrNull() != car.priceWhenBought ||
+            description != car.description
 
     private fun validateData(): Boolean {
         resetTextInputErrors()
@@ -249,8 +274,7 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car) {
         fun newInstance(car: Car?, title: String) = AddNewCarFragment().apply {
             arguments = car?.let { Pair(EXTRA_CAR, it) }?.let {
                 bundleOf(
-                    EXTRA_TITLE to title,
-                    it
+                    EXTRA_TITLE to title, it
                 )
             }
         }
