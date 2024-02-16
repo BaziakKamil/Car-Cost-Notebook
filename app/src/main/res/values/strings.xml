@@ -100,4 +100,7 @@
     <string name="no_maintenance_data_found">No maintenance data found</string>
     <string name="no_odometer_data_found">No odometer data found</string>
     <string name="nothing_to_export">Nothing to export</string>
+    <string name="discard_changes">Discard Changes</string>
+    <string name="unsaved_data">Unsaved Data</string>
+    <string name="do_you_want_to_discard_changes">Do You want to discard changes?</string>
 </resources>

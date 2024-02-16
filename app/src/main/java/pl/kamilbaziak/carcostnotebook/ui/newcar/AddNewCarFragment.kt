@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.view.*
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -31,8 +32,10 @@ import pl.kamilbaziak.carcostnotebook.model.Car
 import pl.kamilbaziak.carcostnotebook.name
 import pl.kamilbaziak.carcostnotebook.toDate
 import pl.kamilbaziak.carcostnotebook.toTwoDigits
+import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialog
+import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialogActions
 
-class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car) {
+class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car), MaterialAlertDialogActions {
 
     private val binding by lazy {
         FragmentAddNewCarBinding.inflate(layoutInflater)
@@ -43,12 +46,18 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car) {
     private val dateDialog =
         MaterialDatePicker.Builder.datePicker().setTitleText(R.string.choose_date_when_bought)
             .build()
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            handleOnBack()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val inflater = TransitionInflater.from(requireContext())
         enterTransition = inflater.inflateTransition(R.transition.slide_right)
         exitTransition = inflater.inflateTransition(R.transition.fade)
+        requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
     override fun onCreateView(
@@ -69,14 +78,15 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car) {
             setNavigationOnClickListener {
                 requireActivity().onBackPressedDispatcher.onBackPressed()
             }
-            menu.add(R.string.save).setIcon(R.drawable.ic_done)
-                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS).setOnMenuItemClickListener {
+            menu
+                .add(R.string.save)
+                .setIcon(R.drawable.ic_done)
+                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
+                .setOnMenuItemClickListener {
                     saveCar()
                     true
                 }
         }
-
-
 
         car?.let { car ->
             viewModel.apply {
@@ -132,12 +142,18 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car) {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.addNewCarEvent.collect { event ->
                 when (event) {
-                    AddNewCarViewModel.AddNewCarEvent.NavigateBack -> requireActivity().onBackPressedDispatcher.onBackPressed()
+                    AddNewCarViewModel.AddNewCarEvent.NavigateBack ->
+                        requireActivity().supportFragmentManager.popBackStack()
                 }
             }
         }
 
         return@run
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        onBackPressedCallback.remove()
     }
 
     private fun disableViewsWhenEditMode() = binding.run {
@@ -149,10 +165,9 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car) {
         textInputCurrency.isEnabled = !editMode
     }
 
-    @SuppressLint("ResourceAsColor")
     private fun editMode(car: Car) = binding.apply {
         toolbar.navigationIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_close)
-        toolbar.setNavigationIconTint(R.color.md_theme_error)
+        toolbar.setNavigationIconTint(ContextCompat.getColor(requireContext(),R.color.md_theme_error))
         layoutNonEditable.apply {
             sectionNonEditableItems.root.isVisible = false
             setPadding(0)
@@ -216,6 +231,34 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car) {
         }
     }
 
+    private fun handleOnBack() = binding.run {
+        val canGoBack = if (car != null) {
+            !checkIfDataChanged(
+                car!!,
+                textInputCarBrand.editText?.text.toString(),
+                textInputCarModel.editText?.text.toString(),
+                textInputCarYear.editText?.text.toString(),
+                textInputCarLicencePlate.editText?.text.toString(),
+                viewModel.pickedDate.value!!,
+                textInputCarPriceWhenBought.editText?.text.toString(),
+                textInputDescription.editText?.text.toString()
+            )
+        } else {
+            checkIfEssentialDataEmpty()
+        }
+
+        if (canGoBack) {
+            requireActivity().supportFragmentManager.popBackStack()
+        } else {
+            MaterialAlertDialog.show(
+                childFragmentManager,
+                getString(R.string.unsaved_data),
+                getString(R.string.do_you_want_to_discard_changes),
+                getString(R.string.discard_changes)
+            )
+        }
+    }
+
     private fun checkIfDataChanged(
         car: Car,
         carBrand: String,
@@ -232,6 +275,15 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car) {
             dateWhenBought.toInt() != car.year ||
             carPrice.toDoubleOrNull() != car.priceWhenBought ||
             description != car.description
+
+    private fun checkIfEssentialDataEmpty(): Boolean = binding.run {
+        return textInputCarBrand.editText?.text.toString().isEmpty() &&
+                textInputCarModel.editText?.text.toString().isEmpty() &&
+                textInputCarOdometer.editText?.text.toString().isEmpty() &&
+                textInputEngineType.editText?.text.toString().isEmpty() &&
+                textInputPetrolUnit.editText?.text.toString().isEmpty() &&
+                textInputUnit.editText?.text.toString().isEmpty()
+    }
 
     private fun validateData(): Boolean {
         resetTextInputErrors()
@@ -279,4 +331,12 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car) {
             }
         }
     }
+
+    override fun onPositiveButtonClicked() {
+        requireActivity().supportFragmentManager.popBackStack()
+    }
+
+    override fun onNegativeButtonClicked() { }
+
+    override fun getItemListItemTitle(title: String) { }
 }

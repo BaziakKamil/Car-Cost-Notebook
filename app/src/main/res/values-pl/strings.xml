@@ -93,4 +93,7 @@
     <string name="no_maintenance_data_found">Brak danych o obsłudze</string>
     <string name="no_odometer_data_found">Brak danych o przebiegu</string>
     <string name="nothing_to_export">Brak danych do eksportu</string>
+    <string name="discard_changes">Odrzuć zmiany</string>
+    <string name="unsaved_data">Nie zapisane dane</string>
+    <string name="do_you_want_to_discard_changes">Chcesz odrzuciś zmiany?</string>
 </resources>
