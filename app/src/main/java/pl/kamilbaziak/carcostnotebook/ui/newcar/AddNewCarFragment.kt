@@ -233,7 +233,7 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car), MaterialAlert
                             textInputCurrency.editText?.text.toString(), requireContext()
                         )
                     ), textInputCarOdometer.editText?.text.toString().toDouble(),
-                    textInputCarOdometerWhenBought.editText?.text.toString().toDouble()
+                    textInputCarOdometerWhenBought.editText?.text.toString().toDoubleOrNull()
                 )
             }
         }
