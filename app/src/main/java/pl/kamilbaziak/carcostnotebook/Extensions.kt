@@ -1,12 +1,16 @@
 package pl.kamilbaziak.carcostnotebook
 
+import android.app.Activity
 import android.content.Context
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import pl.kamilbaziak.carcostnotebook.enums.CurrencyEnum
 import pl.kamilbaziak.carcostnotebook.enums.PetrolUnitEnum
 import pl.kamilbaziak.carcostnotebook.enums.UnitEnum
 import pl.kamilbaziak.carcostnotebook.model.Car
 import java.text.DecimalFormat
+
 
 private const val EMPTY = ""
 private const val SPACE = " "
@@ -55,6 +59,7 @@ fun CurrencyEnum.extendedName(context: Context): String = context.getString(
 fun CurrencyEnum.formatForText(context: Context, text: String) = when (this) {
     CurrencyEnum.Dolar,
     CurrencyEnum.Euro -> "${this.shortcut(context)} $text"
+
     CurrencyEnum.Zloty -> "$text ${this.shortcut(context)}"
 }
 
@@ -64,3 +69,15 @@ fun Long.toTime(): String = DateUtils.formatTimeFromLong(this)
 fun Double.toTwoDigits(): String = DecimalFormat("#.##").format(this)
 
 fun Car.name() = "${this.brand} ${this.model}"
+
+fun Fragment.hideKeyboard() {
+    view?.let { activity?.hideKeyboard(it) }
+}
+
+fun Activity.hideKeyboard() {
+    hideKeyboard(currentFocus ?: View(this))
+}
+
+fun Context.hideKeyboard(view: View) =
+    (getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager)
+        .hideSoftInputFromWindow(view.windowToken, 0)

@@ -22,29 +22,23 @@ class TankFillViewModel(
     private val tankFillChannel = Channel<TankFillEvent>()
     val tankFillEvent = tankFillChannel.receiveAsFlow()
 
+    val tankFillData = tankFillDao.getTankFillLiveData(carId)
+
     private val _dataState = MutableLiveData<DataState>(DataState.Progress)
     val dataState: LiveData<DataState> = _dataState
 
     private val deleteTankFill = MutableLiveData<TankFill>()
 
-    init {
-        prepareTankFillData()
-    }
-
-    private fun prepareTankFillData() {
+    fun prepareTankFillData(tankFillFata: List<TankFill>) = viewModelScope.launch {
         _dataState.value = DataState.Progress
-        viewModelScope.launch {
-            tankFillDao.getTankFillData(carId).let { list ->
-                _dataState.value = if (list.isNotEmpty()) {
-                    DataState.Found(
-                        list.map { tankFill ->
-                            Pair(tankFill, odometerDao.getOdometerById(tankFill.odometerId))
-                        }
-                    )
-                } else {
-                    DataState.NotFound
+        _dataState.value = if (tankFillFata.isNotEmpty()) {
+            DataState.Found(
+                tankFillFata.map { tankFill ->
+                    Pair(tankFill, odometerDao.getOdometerById(tankFill.odometerId))
                 }
-            }
+            )
+        } else {
+            DataState.NotFound
         }
     }
 

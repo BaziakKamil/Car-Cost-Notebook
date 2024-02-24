@@ -22,23 +22,19 @@ class MaintenanceViewModel(
     private val maintenanceChannel = Channel<MaintenanceEvent>()
     val maintenanceEvent = maintenanceChannel.receiveAsFlow()
 
+    val maintenanceData = maintenanceDao.getMaintenanceLiveData(carId)
+
     private val deleteMaintenance = MutableLiveData<Maintenance>()
 
     private val _dataState = MutableLiveData<DataState>(DataState.Progress)
     val dataState: LiveData<DataState> = _dataState
 
-    init { prepareMaintenanceData() }
-
-    private fun prepareMaintenanceData()  {
+    fun prepareMaintenanceData(mainData: List<Maintenance>) {
         _dataState.value = DataState.Progress
-        viewModelScope.launch {
-            maintenanceDao.getMaintenanceData(carId).let { list ->
-                _dataState.value = if (list.isNotEmpty()) {
-                    DataState.Found(list.sortedByDescending { it.created })
-                } else {
-                    DataState.NotFound
-                }
-            }
+        _dataState.value = if (mainData.isNotEmpty()) {
+            DataState.Found(mainData.sortedByDescending { it.created })
+        } else {
+            DataState.NotFound
         }
     }
 
@@ -49,7 +45,8 @@ class MaintenanceViewModel(
     fun deleteMaintenance() = viewModelScope.launch {
         deleteMaintenance.value?.let { maintenance ->
             maintenanceDao.deleteMaintenance(maintenance)
-            val pairedOdometer = maintenance.odometerId?.let { odometerDao.getOdometerById(maintenance.odometerId) }
+            val pairedOdometer =
+                maintenance.odometerId?.let { odometerDao.getOdometerById(maintenance.odometerId) }
             pairedOdometer?.let { odometerDao.deleteOdometer(it) }
             maintenanceChannel.send(
                 MaintenanceEvent.ShowUndoDeleteMaintenanceMessage(

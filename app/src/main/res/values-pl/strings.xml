@@ -9,11 +9,12 @@
     <string name="petrol_type">Typ paliwa</string>
     <string name="petrol_unit">Jednostka paliwa</string>
     <string name="odometer">Stan licznika</string>
-    <string name="unit">Jednostka licznika</string>
+    <string name="odometer_unit">Jednostka licznika</string>
     <string name="odometer_when_bought">Stan licznika przy zakupie</string>
     <string name="date_when_bought">Data zakupu auta</string>
     <string name="insert_car_brand">Wprowadź markę auta</string>
     <string name="insert_car_model">Wprowadź model auta</string>
+    <string name="insert_production_year">Wprowadź rok produkcji</string>
     <string name="insert_car_mileage">Wprowadź ile przejechane</string>
     <string name="choose_petrol_type">Wybierz typ paliwa</string>
     <string name="choose_petrol_unit">Wybierz jednostkę paliwa</string>
@@ -96,4 +97,14 @@
     <string name="discard_changes">Odrzuć zmiany</string>
     <string name="unsaved_data">Nie zapisane dane</string>
     <string name="do_you_want_to_discard_changes">Chcesz odrzuciś zmiany?</string>
+    <string name="car_brand_title">Marka<font color="#cc0029">&#42;</font></string>
+    <string name="car_model_title">Model<font color="#cc0029">&#42;</font></string>
+    <string name="petrol_type_title">Typ paliwa<font color="#cc0029">&#42;</font></string>
+    <string name="petrol_unit_title">Jednostka paliwa<font color="#cc0029">&#42;</font></string>
+    <string name="odometer_title">Stan licznika<font color="#cc0029">&#42;</font></string>
+    <string name="odometer_unit_title">Jednostka licznika<font color="#cc0029">&#42;</font></string>
+    <string name="choose_currency">Wybierz walutę</string>
+    <string name="tank_fill">Tankowanie: %1$s</string>
+    <string name="currency_title">Waluta<font color="#cc0029">&#42;</font></string>
+    <string name="production_year_title">Rok produkcji<font color="#cc0029">&#42;</font></string>
 </resources>

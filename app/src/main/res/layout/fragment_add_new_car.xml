@@ -47,7 +47,7 @@
                 android:id="@+id/text_input_car_brand"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/car_brand"
+                android:hint="@string/car_brand_title"
                 app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -61,7 +61,7 @@
                 android:id="@+id/text_input_car_model"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/car_model"
+                android:hint="@string/car_model_title"
                 app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -84,7 +84,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="4dp"
                     android:layout_weight="1"
-                    android:hint="@string/production_year">
+                    android:hint="@string/production_year_title">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -137,7 +137,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="4dp"
                         android:layout_weight="1"
-                        android:hint="@string/odometer"
+                        android:hint="@string/odometer_title"
                         app:errorEnabled="true">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -148,13 +148,13 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/text_input_engine_type"
+                        android:id="@+id/text_input_unit"
                         style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
                         android:layout_weight="1"
-                        android:hint="@string/petrol_type"
+                        android:hint="@string/odometer_unit_title"
                         app:errorEnabled="true">
 
                         <AutoCompleteTextView
@@ -174,13 +174,13 @@
                     android:weightSum="2">
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/text_input_petrol_unit"
+                        android:id="@+id/text_input_engine_type"
                         style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="4dp"
                         android:layout_weight="1"
-                        android:hint="@string/petrol_unit"
+                        android:hint="@string/petrol_type_title"
                         app:errorEnabled="true">
 
                         <AutoCompleteTextView
@@ -192,13 +192,13 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/text_input_unit"
+                        android:id="@+id/text_input_petrol_unit"
                         style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
                         android:layout_weight="1"
-                        android:hint="@string/unit"
+                        android:hint="@string/petrol_unit_title"
                         app:errorEnabled="true">
 
                         <AutoCompleteTextView
@@ -208,7 +208,6 @@
                             tools:ignore="LabelFor" />
 
                     </com.google.android.material.textfield.TextInputLayout>
-
                 </LinearLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -217,7 +216,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:hint="@string/currency"
+                    android:hint="@string/currency_title"
                     app:errorEnabled="true">
 
                     <AutoCompleteTextView
@@ -235,7 +234,7 @@
                 layout="@layout/view_divider_with_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginVertical="8dp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_calendar_when_bought"
@@ -274,6 +273,22 @@
                     android:inputType="numberDecimal" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_car_odometer_when_bought"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/odometer_when_bought"
+                app:errorEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_description"

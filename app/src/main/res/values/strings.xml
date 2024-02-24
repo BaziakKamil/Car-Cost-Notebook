@@ -1,23 +1,32 @@
 <resources>
     <string name="app_name">Car Cost Notebook</string>
     <string name="car_brand">Car brand</string>
+    <string name="car_brand_title">Car brand<font color="#cc0029">&#42;</font></string>
     <string name="car_model">Car model</string>
+    <string name="car_model_title">Car model<font color="#cc0029">&#42;</font></string>
     <string name="car_price_when_bought">Car price when bought</string>
     <string name="car_deleted">Car deleted</string>
     <string name="petrol">Petrol</string>
     <string name="petrol_type">Petrol type</string>
+    <string name="petrol_type_title">Petrol type<font color="#cc0029">&#42;</font></string>
     <string name="petrol_unit">Petrol unit</string>
+    <string name="petrol_unit_title">Petrol unit<font color="#cc0029">&#42;</font></string>
     <string name="odometer">Odometer</string>
-    <string name="unit">Odometer unit</string>
+    <string name="odometer_title">Odometer<font color="#cc0029">&#42;</font></string>
+    <string name="odometer_unit">Odometer unit</string>
+    <string name="odometer_unit_title">Odometer unit<font color="#cc0029">&#42;</font></string>
     <string name="odometer_when_bought">Odometer when bought</string>
     <string name="date_when_bought">Date when bought</string>
     <string name="insert_car_brand">Insert car brand</string>
     <string name="insert_car_model">Insert car model</string>
+    <string name="insert_production_year">Insert production year</string>
     <string name="insert_car_mileage">Insert car mileage</string>
+    <string name="choose_currency">Choose currency</string>
     <string name="choose_petrol_type">Choose petrol type</string>
     <string name="choose_petrol_unit">Choose petrol unit</string>
     <string name="choose_odometer_unit">Choose odometer unit</string>
     <string name="production_year">Production year</string>
+    <string name="production_year_title">Production year<font color="#cc0029">&#42;</font></string>
     <string name="license_plate">License-plate</string>
     <string name="description">Description</string>
     <string name="add_new_car">Add new car</string>
@@ -78,6 +87,7 @@
     <string name="car_data_when_bought">Data when car was bought</string>
     <string name="non_editable_data">This data cannot be edited after car is added</string>
     <string name="currency">Currency</string>
+    <string name="currency_title">Currency<font color="#cc0029">&#42;</font></string>
     <string name="pln_currency" translatable="false">zł</string>
     <string name="dol_currency" translatable="false">$</string>
     <string name="eur_currency" translatable="false">€</string>
@@ -103,4 +113,5 @@
     <string name="discard_changes">Discard Changes</string>
     <string name="unsaved_data">Unsaved Data</string>
     <string name="do_you_want_to_discard_changes">Do You want to discard changes?</string>
+    <string name="tank_fill">Tank fill: %1$s</string>
 </resources>

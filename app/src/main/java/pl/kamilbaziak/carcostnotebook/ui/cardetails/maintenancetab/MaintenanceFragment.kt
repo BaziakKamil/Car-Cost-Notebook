@@ -66,6 +66,7 @@ class MaintenanceFragment : Fragment(), MaterialAlertDialogActions {
                             carId,
                             event.maintenance
                         )
+
                     is MaintenanceViewModel.MaintenanceEvent.ShowMaintenanceDeleteDialogMessage ->
                         MaterialAlertDialog.show(
                             childFragmentManager,
@@ -73,6 +74,7 @@ class MaintenanceFragment : Fragment(), MaterialAlertDialogActions {
                             getString(R.string.delete_dialog_message),
                             getString(R.string.delete)
                         )
+
                     is MaintenanceViewModel.MaintenanceEvent.ShowUndoDeleteMaintenanceMessage -> {
                         TextUtils.showSnackbarWithAction(
                             requireView(),
@@ -85,6 +87,7 @@ class MaintenanceFragment : Fragment(), MaterialAlertDialogActions {
                             )
                         }
                     }
+
                     is MaintenanceViewModel.MaintenanceEvent.ShowDeleteErrorSnackbar ->
                         TextUtils.showSnackbar(
                             requireView(),
@@ -94,12 +97,16 @@ class MaintenanceFragment : Fragment(), MaterialAlertDialogActions {
             }
         }
 
+        viewModel.maintenanceData.observe(viewLifecycleOwner) {
+            viewModel.prepareMaintenanceData(it)
+        }
+
         viewModel.dataState.observe(viewLifecycleOwner) { state ->
             progress.isVisible = state is DataState.Progress
             layoutNotFound.isVisible = state is DataState.NotFound
             recycler.isVisible = state is DataState.Found
 
-            if(state is DataState.Found) {
+            if (state is DataState.Found) {
                 adapter.submitList(state.list as List<Maintenance>)
             }
         }

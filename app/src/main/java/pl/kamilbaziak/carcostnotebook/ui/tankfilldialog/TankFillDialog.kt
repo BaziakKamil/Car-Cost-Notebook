@@ -6,9 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.whenStarted
+import androidx.lifecycle.withStarted
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -21,6 +28,7 @@ import pl.kamilbaziak.carcostnotebook.enums.PetrolEnum
 import pl.kamilbaziak.carcostnotebook.model.TankFill
 import pl.kamilbaziak.carcostnotebook.toDate
 import pl.kamilbaziak.carcostnotebook.toTwoDigits
+import pl.kamilbaziak.carcostnotebook.ui.DialogEvents
 
 class TankFillDialog : BottomSheetDialogFragment() {
 
@@ -44,6 +52,8 @@ class TankFillDialog : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = binding.run {
         super.onViewCreated(view, savedInstanceState)
+
+        (dialog as? BottomSheetDialog)?.behavior?.state = BottomSheetBehavior.STATE_EXPANDED
 
         tankFill?.let {
             textInputPetrolType.editText?.setText(it.petrolEnum.name)
@@ -73,7 +83,7 @@ class TankFillDialog : BottomSheetDialogFragment() {
                     textInputOdometer.editText?.setText(it.input.toTwoDigits())
                 }
             }
-            viewModel.currentCar.observe(viewLifecycleOwner) { car ->
+            currentCar.observe(viewLifecycleOwner) { car ->
                 if (car != null) {
                     val suitablePetrolForEngine = mutableListOf<PetrolEnum>()
                     when (car.engineEnum) {
@@ -100,6 +110,13 @@ class TankFillDialog : BottomSheetDialogFragment() {
                     )
                 }
             }
+            lifecycleScope.launch {
+                tankFillEvents.collectLatest {
+                    if (it != null && it is DialogEvents.Dismiss) {
+                        this@TankFillDialog.dismiss()
+                    }
+                }
+            }
         }
 
         buttonDone.setOnClickListener {
@@ -113,8 +130,8 @@ class TankFillDialog : BottomSheetDialogFragment() {
                 textInputPetrolStation.editText?.text.toString()
             )
         }
-        buttonCancel.setOnClickListener { dismiss() }
-        imageClose.setOnClickListener { dismiss() }
+        buttonCancel.setOnClickListener { this@TankFillDialog.dismiss() }
+        imageClose.setOnClickListener { this@TankFillDialog.dismiss() }
     }
 
     private fun validate(
@@ -140,7 +157,6 @@ class TankFillDialog : BottomSheetDialogFragment() {
             petrolStation!!,
             tankFill
         )
-        dismiss()
     }
 
     private fun validateData(

@@ -21,21 +21,17 @@ class OdometerViewModel(
 
     private val deleteOdometer = MutableLiveData<Odometer>()
 
+    val odometerData = odometerDao.getOdometerLiveData(carId)
+
     private val _dataState = MutableLiveData<DataState>(DataState.Progress)
     val dataState: LiveData<DataState> = _dataState
 
-    init { prepareOdometerData() }
-
-    private fun prepareOdometerData()  {
+    fun prepareOdometerData(odometerData: List<Odometer>) {
         _dataState.value = DataState.Progress
-        viewModelScope.launch {
-            odometerDao.getOdometerData(carId).let { list ->
-                _dataState.value = if (list.isNotEmpty()) {
-                    DataState.Found(list.sortedByDescending { it.created })
-                } else {
-                    DataState.NotFound
-                }
-            }
+        _dataState.value = if (odometerData.isNotEmpty()) {
+            DataState.Found(odometerData.sortedByDescending { it.created })
+        } else {
+            DataState.NotFound
         }
     }
 

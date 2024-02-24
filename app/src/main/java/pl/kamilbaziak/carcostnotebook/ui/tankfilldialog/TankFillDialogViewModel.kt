@@ -1,10 +1,15 @@
 package pl.kamilbaziak.carcostnotebook.ui.tankfilldialog
 
+import android.app.Application
+import android.content.Context
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.database.CarDao
 import pl.kamilbaziak.carcostnotebook.database.OdometerDao
 import pl.kamilbaziak.carcostnotebook.database.TankFillDao
@@ -13,14 +18,19 @@ import pl.kamilbaziak.carcostnotebook.enums.UnitEnum
 import pl.kamilbaziak.carcostnotebook.model.Car
 import pl.kamilbaziak.carcostnotebook.model.Odometer
 import pl.kamilbaziak.carcostnotebook.model.TankFill
+import pl.kamilbaziak.carcostnotebook.ui.DialogEvents
 import java.util.Date
 
 class TankFillDialogViewModel(
+    private val application: Application,
     private val carDao: CarDao,
     private val tankFillDao: TankFillDao,
     private val odometerDao: OdometerDao,
     private val carId: Long
-) : ViewModel() {
+) : AndroidViewModel(application) {
+
+    val context: Context
+        get() = application.applicationContext
 
     private val _pickedDate = MutableLiveData(Date().time)
     val pickedDate: LiveData<Long> = _pickedDate
@@ -29,6 +39,9 @@ class TankFillDialogViewModel(
     val odometerForTankFill: LiveData<Odometer> = _odometerForTankFill
 
     val currentCar: LiveData<Car?> = carDao.getCarById(carId)
+
+    private val _tankFillEvents = MutableStateFlow<DialogEvents?>(null)
+    val tankFillEvents = _tankFillEvents.asStateFlow()
 
     fun changePickedDate(long: Long) {
         _pickedDate.value = long
@@ -78,7 +91,7 @@ class TankFillDialogViewModel(
                         carDao.getCarById(carId).value?.unit ?: UnitEnum.Kilometers,
                         pickedDate.value ?: Date().time,
                         canBeDeleted = false,
-                        description = "Tank fill: $petrolStation"
+                        description = context.getString(R.string.tank_fill, petrolStation)
                     )
                 ),
                 computerReading,
@@ -86,6 +99,7 @@ class TankFillDialogViewModel(
                 pickedDate.value ?: Date().time
             )
         )
+        _tankFillEvents.emit(DialogEvents.Dismiss)
     }
 
     private fun editTankFill(
@@ -113,7 +127,7 @@ class TankFillDialogViewModel(
                         carDao.getCarById(tankFill.carId).value?.unit ?: UnitEnum.Kilometers,
                         pickedDate.value ?: Date().time,
                         canBeDeleted = false,
-                        description = "Tank fill: $petrolStation"
+                        description = context.getString(R.string.tank_fill, petrolStation)
                     )
                 ),
                 computerReading = computerReading,

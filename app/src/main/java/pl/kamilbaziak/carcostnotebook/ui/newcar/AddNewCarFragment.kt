@@ -28,6 +28,7 @@ import pl.kamilbaziak.carcostnotebook.enums.PetrolUnitEnum
 import pl.kamilbaziak.carcostnotebook.enums.UnitEnum
 import pl.kamilbaziak.carcostnotebook.extendedName
 import pl.kamilbaziak.carcostnotebook.extra
+import pl.kamilbaziak.carcostnotebook.hideKeyboard
 import pl.kamilbaziak.carcostnotebook.model.Car
 import pl.kamilbaziak.carcostnotebook.name
 import pl.kamilbaziak.carcostnotebook.toDate
@@ -106,10 +107,6 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car), MaterialAlert
             viewModel.changePickedDate(it)
         }
 
-        textInputCalendarWhenBought.editText?.setOnClickListener {
-            dateDialog.show(childFragmentManager, DATE_PICKER_TAG)
-        }
-
         activity?.actionBar?.title = title
 
         viewModel.apply {
@@ -146,6 +143,16 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car), MaterialAlert
                         requireActivity().supportFragmentManager.popBackStack()
                 }
             }
+        }
+
+        textInputCarOdometer.editText?.setOnClickListener { this@AddNewCarFragment.hideKeyboard() }
+        textInputUnit.editText?.setOnClickListener { this@AddNewCarFragment.hideKeyboard() }
+        textInputEngineType.editText?.setOnClickListener { this@AddNewCarFragment.hideKeyboard() }
+        textInputPetrolUnit.editText?.setOnClickListener { this@AddNewCarFragment.hideKeyboard() }
+        textInputCurrency.editText?.setOnClickListener { this@AddNewCarFragment.hideKeyboard() }
+        textInputCalendarWhenBought.editText?.setOnClickListener {
+            dateDialog.show(childFragmentManager, DATE_PICKER_TAG)
+            this@AddNewCarFragment.hideKeyboard()
         }
 
         return@run
@@ -225,7 +232,8 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car), MaterialAlert
                         getCurrencyTypeFromName(
                             textInputCurrency.editText?.text.toString(), requireContext()
                         )
-                    ), textInputCarOdometer.editText?.text.toString().toDouble()
+                    ), textInputCarOdometer.editText?.text.toString().toDouble(),
+                    textInputCarOdometerWhenBought.editText?.text.toString().toDouble()
                 )
             }
         }
@@ -282,7 +290,8 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car), MaterialAlert
                 textInputCarOdometer.editText?.text.toString().isEmpty() &&
                 textInputEngineType.editText?.text.toString().isEmpty() &&
                 textInputPetrolUnit.editText?.text.toString().isEmpty() &&
-                textInputUnit.editText?.text.toString().isEmpty()
+                textInputUnit.editText?.text.toString().isEmpty() &&
+                textInputCurrency.editText?.text.toString().isEmpty()
     }
 
     private fun validateData(): Boolean {
@@ -292,14 +301,18 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car), MaterialAlert
                 textInputCarBrand.error = getString(R.string.insert_car_brand)
             } else if (textInputCarModel.editText?.text.toString().isEmpty()) {
                 textInputCarModel.error = getString(R.string.insert_car_model)
+            } else if (textInputCarYear.editText?.text.toString().isEmpty()) {
+                textInputCarYear.error = getString(R.string.insert_production_year)
             } else if (textInputCarOdometer.editText?.text.toString().isEmpty()) {
                 textInputCarOdometer.error = getString(R.string.insert_car_mileage)
+            } else if (textInputUnit.editText?.text.toString().isEmpty()) {
+                textInputUnit.error = getString(R.string.choose_odometer_unit)
             } else if (textInputEngineType.editText?.text.toString().isEmpty()) {
                 textInputEngineType.error = getString(R.string.choose_petrol_type)
             } else if (textInputPetrolUnit.editText?.text.toString().isEmpty()) {
                 textInputPetrolUnit.error = getString(R.string.choose_petrol_unit)
-            } else if (textInputUnit.editText?.text.toString().isEmpty()) {
-                textInputUnit.error = getString(R.string.choose_odometer_unit)
+            } else if (textInputCurrency.editText?.text.toString().isEmpty()) {
+                textInputCurrency.error = getString(R.string.choose_currency)
             } else {
                 return true
             }
@@ -314,6 +327,8 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car), MaterialAlert
         textInputEngineType.error = null
         textInputPetrolUnit.error = null
         textInputUnit.error = null
+        textInputCurrency.error = null
+        textInputCarYear.error = null
     }
 
     companion object Factory {
