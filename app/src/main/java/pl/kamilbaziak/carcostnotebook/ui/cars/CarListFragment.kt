@@ -47,16 +47,6 @@ class CarListFragment : Fragment(), MaterialAlertDialogActions {
             { viewModel.onCarDelete(it) }
         )
     }
-    private val progressDialog by lazy {
-        AlertDialog.Builder(requireActivity()).apply {
-            setView(
-                DialogProgressBinding.inflate(layoutInflater).apply {
-                    textProgressDialog.text = "test if setting text is working aas intended"
-                }.root
-            )
-                .setCancelable(false)
-        }.create()
-    }
     private var showAlertDialog = false
     private val filePickerLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->

@@ -19,13 +19,15 @@ val viewModelsModule = module {
 
     viewModel { MainViewModel() }
     viewModel { CarsListViewModel(androidApplication(), get(), get(), get(), get()) }
-    viewModel { AddNewCarViewModel(get(), get()) }
-    viewModel { parameters -> CarDetailsViewModel(get(), get(), get(), parameters[0]) }
-    viewModel { parameters -> TankFillViewModel(get(), get(), parameters[0]) }
-    viewModel { parameters -> OdometerViewModel(get(), parameters[0]) }
-    viewModel { parameters -> MaintenanceViewModel(get(), get(), parameters[0]) }
-    viewModel { TankFillDialogViewModel(get(), get(), get()) }
-    viewModel { parameters -> OdometerDialogViewModel(get(), get(), parameters[0]) }
+    viewModel { AddNewCarViewModel(androidApplication(), get(), get()) }
+    viewModel { parameters -> CarDetailsViewModel(get(), get(), get(), parameters.get()) }
+    viewModel { parameters -> TankFillViewModel(get(), get(), parameters.get()) }
+    viewModel { parameters -> OdometerViewModel(get(), parameters.get()) }
+    viewModel { parameters -> MaintenanceViewModel(get(), get(), parameters.get()) }
+    viewModel { parameters ->
+        TankFillDialogViewModel(androidApplication() ,get(), get(), get(), parameters.get())
+    }
+    viewModel { parameters -> OdometerDialogViewModel(get(), get(), parameters.get()) }
     viewModel { MaintenanceDialogViewModel(get(), get(), get()) }
-    viewModel { parameters -> DetailsViewModel(get(), get(), get(), get(), parameters[0]) }
+    viewModel { parameters -> DetailsViewModel(get(), get(), get(), get(), parameters.get()) }
 }

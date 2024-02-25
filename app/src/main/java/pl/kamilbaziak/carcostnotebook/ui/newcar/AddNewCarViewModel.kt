@@ -1,12 +1,15 @@
 package pl.kamilbaziak.carcostnotebook.ui.newcar
 
+import android.app.Application
+import android.content.Context
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.database.CarDao
 import pl.kamilbaziak.carcostnotebook.database.OdometerDao
 import pl.kamilbaziak.carcostnotebook.model.Car
@@ -14,9 +17,13 @@ import pl.kamilbaziak.carcostnotebook.model.Odometer
 import java.util.*
 
 class AddNewCarViewModel(
+    private val application: Application,
     private val carDao: CarDao,
     private val odometerDao: OdometerDao
-) : ViewModel() {
+) : AndroidViewModel(application) {
+
+    val context: Context
+        get() = application.applicationContext
 
     private val _addNewCarChannel = Channel<AddNewCarEvent>()
     val addNewCarEvent = _addNewCarChannel.receiveAsFlow()
@@ -30,15 +37,29 @@ class AddNewCarViewModel(
     private val _pickedDate = MutableLiveData(Date().time)
     val pickedDate: LiveData<Long> = _pickedDate
 
-    fun addCar(car: Car, odometer: Double) = viewModelScope.launch {
+    fun addCar(car: Car, odometer: Double, odometerWhenBought: Double?) = viewModelScope.launch {
+        val carId = carDao.addCar(car)
+        odometerWhenBought?.let {
+            odometerDao.addOdometer(
+                Odometer(
+                    0,
+                    carId,
+                    it,
+                    car.unit,
+                    car.dateWhenBought ?: System.currentTimeMillis(),
+                    canBeDeleted = false,
+                    context.getString(R.string.odometer_when_bought)
+                )
+            )
+        }
         odometerDao.addOdometer(
             Odometer(
                 0,
-                carDao.addCar(car),
+                carId,
                 odometer,
                 car.unit,
                 System.currentTimeMillis(),
-                canBeDeleted = false
+                canBeDeleted = odometerWhenBought != null
             )
         )
         _addNewCarChannel.send(AddNewCarEvent.NavigateBack)

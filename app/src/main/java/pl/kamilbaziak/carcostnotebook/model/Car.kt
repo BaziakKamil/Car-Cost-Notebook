@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 import pl.kamilbaziak.carcostnotebook.Constants.CAR_TABLE
+import pl.kamilbaziak.carcostnotebook.enums.CurrencyEnum
 import pl.kamilbaziak.carcostnotebook.enums.EngineEnum
 import pl.kamilbaziak.carcostnotebook.enums.PetrolUnitEnum
 import pl.kamilbaziak.carcostnotebook.enums.UnitEnum
@@ -24,5 +25,5 @@ data class Car(
     val description: String,
     val priceWhenBought: Double? = null,
     val dateWhenBought: Long? = null,
-    val currency: String
+    val currency: CurrencyEnum
 ) : Parcelable

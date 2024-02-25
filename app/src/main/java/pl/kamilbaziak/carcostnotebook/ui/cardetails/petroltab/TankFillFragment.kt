@@ -64,6 +64,7 @@ class TankFillFragment : Fragment(), MaterialAlertDialogActions {
                             requireView(),
                             getString(R.string.tank_fill_added_correctly)
                         )
+
                     is TankFillViewModel.TankFillEvent.ShowUndoDeleteTankFillMessage ->
                         TextUtils.showSnackbarWithAction(
                             requireView(),
@@ -75,11 +76,13 @@ class TankFillFragment : Fragment(), MaterialAlertDialogActions {
                                 event.pairedOdometer
                             )
                         }
+
                     TankFillViewModel.TankFillEvent.ShowDeleteErrorSnackbar ->
                         TextUtils.showSnackbar(
                             requireView(),
                             getString(R.string.error_during_delete_process)
                         )
+
                     is TankFillViewModel.TankFillEvent.ShowTankFillDeleteDialogMessage ->
                         MaterialAlertDialog.show(
                             childFragmentManager,
@@ -87,6 +90,7 @@ class TankFillFragment : Fragment(), MaterialAlertDialogActions {
                             getString(R.string.delete_dialog_message),
                             getString(R.string.delete)
                         )
+
                     is TankFillViewModel.TankFillEvent.ShowTankFillEditDialogScreen ->
                         TankFillDialog.show(
                             childFragmentManager,
@@ -97,12 +101,16 @@ class TankFillFragment : Fragment(), MaterialAlertDialogActions {
             }
         }
 
+        viewModel.tankFillData.observe(viewLifecycleOwner) {
+            viewModel.prepareTankFillData(it)
+        }
+
         viewModel.dataState.observe(viewLifecycleOwner) { state ->
             progress.isVisible = state is DataState.Progress
             layoutNotFound.isVisible = state is DataState.NotFound
             recycler.isVisible = state is DataState.Found
 
-            if(state is DataState.Found) {
+            if (state is DataState.Found) {
                 adapter.submitList(state.list as List<Pair<TankFill, Odometer?>>)
             }
         }
