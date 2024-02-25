@@ -1,4 +1,4 @@
-package pl.kamilbaziak.carcostnotebook.ui.cars
+package pl.kamilbaziak.carcostnotebook.ui.carlist
 
 import android.app.Activity
 import android.content.Intent
@@ -12,7 +12,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -25,7 +24,6 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.kamilbaziak.carcostnotebook.Constants.BACKUP_DIRECTORY
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.TextUtils
-import pl.kamilbaziak.carcostnotebook.databinding.DialogProgressBinding
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentCarListBinding
 import pl.kamilbaziak.carcostnotebook.name
 import pl.kamilbaziak.carcostnotebook.ui.activity.MainViewModel

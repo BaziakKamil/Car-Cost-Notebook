@@ -9,5 +9,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/fragment_container"
-        android:name="pl.kamilbaziak.carcostnotebook.ui.cars.CarListFragment"/>
+        android:name="pl.kamilbaziak.carcostnotebook.ui.carlist.CarListFragment"/>
 </FrameLayout>
