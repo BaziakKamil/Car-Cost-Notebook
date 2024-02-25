@@ -59,7 +59,11 @@ class OdometerFragment : Fragment(), MaterialAlertDialogActions {
             viewModel.odometerEvent.collect { event ->
                 when (event) {
                     OdometerViewModel.OdometerEvent.ShowOdometerSavedConfirmationMessage ->
-                        TextUtils.showSnackbar(requireView(), getString(R.string.odometer_added_correctly))
+                        TextUtils.showSnackbar(
+                            requireView(),
+                            getString(R.string.odometer_added_correctly)
+                        )
+
                     is OdometerViewModel.OdometerEvent.ShowUndoDeleteOdometerMessage ->
                         TextUtils.showSnackbarWithAction(
                             requireView(),
@@ -68,11 +72,13 @@ class OdometerFragment : Fragment(), MaterialAlertDialogActions {
                         ) {
                             viewModel.onUndoDeleteOdometer(event.odometer)
                         }
+
                     is OdometerViewModel.OdometerEvent.ShowDeleteErrorSnackbar ->
                         TextUtils.showSnackbar(
                             requireView(),
                             getString(R.string.error_during_delete_process)
                         )
+
                     is OdometerViewModel.OdometerEvent.ShowOdometerDeleteDialogMessage ->
                         MaterialAlertDialog.show(
                             childFragmentManager,
@@ -80,10 +86,15 @@ class OdometerFragment : Fragment(), MaterialAlertDialogActions {
                             getString(R.string.delete_dialog_message),
                             getString(R.string.delete)
                         )
+
                     is OdometerViewModel.OdometerEvent.ShowOdometerEditDialogScreen ->
                         OdometerDialog.show(childFragmentManager, carId, event.odometer)
                 }
             }
+        }
+
+        viewModel.odometerData.observe(viewLifecycleOwner) {
+            viewModel.prepareOdometerData(it)
         }
 
         viewModel.dataState.observe(viewLifecycleOwner) { state ->
@@ -91,7 +102,7 @@ class OdometerFragment : Fragment(), MaterialAlertDialogActions {
             layoutNotFound.isVisible = state is DataState.NotFound
             recycler.isVisible = state is DataState.Found
 
-            if(state is DataState.Found) {
+            if (state is DataState.Found) {
                 adapter.submitList(state.list as List<Odometer>)
             }
         }

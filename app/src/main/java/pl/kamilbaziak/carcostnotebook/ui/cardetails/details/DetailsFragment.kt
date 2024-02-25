@@ -17,6 +17,8 @@ import org.koin.core.parameter.parametersOf
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.TextUtils
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentDetailsBinding
+import pl.kamilbaziak.carcostnotebook.extendedName
+import pl.kamilbaziak.carcostnotebook.formatForText
 import pl.kamilbaziak.carcostnotebook.name
 import pl.kamilbaziak.carcostnotebook.shortcut
 import pl.kamilbaziak.carcostnotebook.toDate
@@ -80,13 +82,14 @@ class DetailsFragment : Fragment(), MaterialAlertDialogActions {
                     )
                     textInputCarPriceWhenBought.editText?.setText(
                         car.priceWhenBought?.let {
-                            "${car.priceWhenBought?.toTwoDigits()} ${car.currency}"
+                            car.currency.formatForText(requireContext(), car.priceWhenBought.toTwoDigits())
                         } ?: getString(R.string.not_added)
                     )
                     allOdometerData.observe(viewLifecycleOwner) { list ->
                         if (list.isNotEmpty()) {
+                            val totalDistance = list.maxOf { it.input } - list.minOf { it.input }
                             textInputTotalDistanceMade.editText?.setText(
-                                "${(list.maxOf { it.input } - list.minOf { it.input }).toTwoDigits()} ${car.unit.shortcut()}"
+                                "${totalDistance.toTwoDigits()} ${car.unit.shortcut()}"
                             )
                         }
                     }
@@ -97,12 +100,12 @@ class DetailsFragment : Fragment(), MaterialAlertDialogActions {
                             list.sumOf { it.petrolPrice?.times(it.quantity) ?: 0.0 }.toTwoDigits()
 
                         textInputTotalFuelConsuption.editText?.setText("$totalFuelConsumption ${car.petrolUnit.shortcut()}")
-                        textInputTotalFuelPaid.editText?.setText("$totalFuelCost ${car.currency}")
+                        textInputTotalFuelPaid.editText?.setText(car.currency.formatForText(requireContext(), totalFuelCost))
                     }
 
                     allMaintenance.observe(viewLifecycleOwner) { list ->
                         val totalMaintenanceCost = list.sumOf { it.price ?: 0.0 }.toTwoDigits()
-                        textInputTotalMaintenancePaid.editText?.setText("$totalMaintenanceCost ${car.currency}")
+                        textInputTotalMaintenancePaid.editText?.setText(car.currency.formatForText(requireContext(), totalMaintenanceCost))
                     }
                 } ?: run {
                     TextUtils.showSnackbar(requireView(), getString(R.string.something_went_wrong))

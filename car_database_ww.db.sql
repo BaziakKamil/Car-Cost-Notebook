@@ -8,9 +8,9 @@ https://www.archon.pl/projekty-domow/projekt-dom-pod-katalpa-2-me6026ca2180ce
 https://www.archon.pl/projekty-domow/projekt-dom-pod-katalpa-2-me6026ca2180ce
 https://www.archon.pl/projekty-domow/projekt-dom-pod-katalpa-2-me6026ca2180ce
 https://www.archon.pl/projekty-domow/projekt-dom-pod-katalpa-2-me6026ca2180ce
-https://www.archon.pl/projekty-domow/projekt-dom-pod-katalpa-2-me6026ca2180ce',15000.0,1668038400000,'zł'),
-(4,'Peugeot','308',2007,'KN6687G','Diesel','Liter','Kilometers','Auto kupione dla Anety na komisie, fajne autko',12500.0,1662768000000,'zł'),
-(5,'KIA','CEE''D',2012,'KN2077H','Diesel','Liter','Kilometers','Auto kupione dla Anetki, zeby jej sie dobrze nowym autkiem jezdzilo',20800.0,1686787200000,'zł');
+https://www.archon.pl/projekty-domow/projekt-dom-pod-katalpa-2-me6026ca2180ce',15000.0,1668038400000,'Zloty'),
+(4,'Peugeot','308',2007,'KN6687G','Diesel','Liter','Kilometers','Auto kupione dla Anety na komisie, fajne autko',12500.0,1662768000000,'Zloty'),
+(5,'KIA','CEE''D',2012,'KN2077H','Diesel','Liter','Kilometers','Auto kupione dla Anetki, zeby jej sie dobrze nowym autkiem jezdzilo',20800.0,1686787200000,'Zloty');
 
 INSERT INTO "maintenance_table" VALUES 
 (5,3,'Ubezpieczenie',1040.0,20,1668470400000,1699920000000,0,'Tak jak w tytule, ubezpieczenie w Compensa wraz z szybami'),
