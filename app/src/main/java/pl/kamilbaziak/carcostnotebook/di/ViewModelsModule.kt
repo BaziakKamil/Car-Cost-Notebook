@@ -11,7 +11,7 @@ import pl.kamilbaziak.carcostnotebook.ui.cardetails.maintenancetab.MaintenanceVi
 import pl.kamilbaziak.carcostnotebook.ui.cardetails.odometertab.OdometerViewModel
 import pl.kamilbaziak.carcostnotebook.ui.cardetails.petroltab.TankFillViewModel
 import pl.kamilbaziak.carcostnotebook.ui.maintenancedialog.MaintenanceDialogViewModel
-import pl.kamilbaziak.carcostnotebook.ui.cars.CarsListViewModel
+import pl.kamilbaziak.carcostnotebook.ui.carlist.CarsListViewModel
 import pl.kamilbaziak.carcostnotebook.ui.odometerdialog.OdometerDialogViewModel
 import pl.kamilbaziak.carcostnotebook.ui.tankfilldialog.TankFillDialogViewModel
 
