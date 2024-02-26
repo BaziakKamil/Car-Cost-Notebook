@@ -108,8 +108,9 @@ class MaintenanceDialog : BottomSheetDialogFragment() {
         price: String?,
         odometer: String?,
         description: String?
-    ) {
+    ) = binding.run {
         if (name.isNullOrEmpty()) {
+            textInputName.error = getString(R.string.enter_maintenance_name)
             return
         }
         viewModel.addMaintenance(

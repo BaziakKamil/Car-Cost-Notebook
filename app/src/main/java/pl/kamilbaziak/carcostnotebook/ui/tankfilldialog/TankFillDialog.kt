@@ -53,8 +53,6 @@ class TankFillDialog : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = binding.run {
         super.onViewCreated(view, savedInstanceState)
 
-        (dialog as? BottomSheetDialog)?.behavior?.state = BottomSheetBehavior.STATE_EXPANDED
-
         tankFill?.let {
             textInputPetrolType.editText?.setText(it.petrolEnum.name)
             textInputPetrolQuantity.editText?.setText(it.quantity.toTwoDigits())
@@ -95,18 +93,11 @@ class TankFillDialog : BottomSheetDialogFragment() {
 
                         EngineEnum.Diesel -> suitablePetrolForEngine.add(PetrolEnum.Diesel)
                         EngineEnum.Electric -> suitablePetrolForEngine.add(PetrolEnum.Electric)
-                        EngineEnum.Hybrid -> suitablePetrolForEngine.apply {
-                            add(PetrolEnum.Petrol)
-                            add(PetrolEnum.Diesel)
-                            add(PetrolEnum.Electric)
-                        }
+                        EngineEnum.Hybrid -> suitablePetrolForEngine.addAll(PetrolEnum.entries)
                     }
                     EnumUtils.setEnumValuesToMaterialSpinner(
                         textInputPetrolType.editText as MaterialAutoCompleteTextView,
                         suitablePetrolForEngine.map { it.name }
-                    )
-                    textInputPetrolType.editText?.setText(
-                        suitablePetrolForEngine[0].name
                     )
                 }
             }
@@ -144,7 +135,7 @@ class TankFillDialog : BottomSheetDialogFragment() {
         petrolStation: String?
     ) {
         resetInputErrors()
-        if (!validateData(petrolQuantity, petrolPrice, odometer, petrolStation)) return
+        if (validateData(petrolQuantity, petrolPrice, odometer, petrolStation)) return
 
         viewModel.addTankFill(
             carId!!,
@@ -166,18 +157,18 @@ class TankFillDialog : BottomSheetDialogFragment() {
         petrolStation: String?
     ): Boolean {
         binding.apply {
-            if (petrolQuantity.isNullOrEmpty()) {
-                textInputPetrolQuantity.error = "Enter petrol quantity"
+            if (petrolStation.isNullOrEmpty()) {
+                textInputPetrolStation.error = getString(R.string.enter_petrol_station_name)
+            } else if (petrolQuantity.isNullOrEmpty()) {
+                textInputPetrolQuantity.error = getString(R.string.enter_petrol_quantity)
             } else if (petrolPrice.isNullOrEmpty()) {
-                textInputPetrolPrice.error = "Enter petrol price"
+                textInputPetrolPrice.error = getString(R.string.enter_petrol_price)
             } else if (odometer.isNullOrEmpty()) {
-                textInputOdometer.error = "Enter odometer value"
-            } else if (petrolStation.isNullOrEmpty()) {
-                textInputPetrolStation.error = "Enter petrol station name"
+                textInputOdometer.error = getString(R.string.enter_odometer_value)
             } else {
-                return true
+                return false
             }
-            return false
+            return true
         }
     }
 
