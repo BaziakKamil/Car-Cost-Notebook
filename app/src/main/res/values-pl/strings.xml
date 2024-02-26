@@ -107,4 +107,9 @@
     <string name="tank_fill">Tankowanie: %1$s</string>
     <string name="currency_title">Waluta<font color="#cc0029">&#42;</font></string>
     <string name="production_year_title">Rok produkcji<font color="#cc0029">&#42;</font></string>
+    <string name="enter_petrol_station_name">Wprowadź nazwę stacji</string>
+    <string name="enter_odometer_value">Wprowadź wartość licznika</string>
+    <string name="enter_petrol_price">Wprowadź cenę paliwa</string>
+    <string name="enter_petrol_quantity">Wprowadź ilość paliwa</string>
+    <string name="enter_maintenance_name">Wprowadź nazwę obsługi</string>
 </resources>

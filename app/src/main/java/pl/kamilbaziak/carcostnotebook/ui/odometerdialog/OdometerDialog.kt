@@ -80,11 +80,9 @@ class OdometerDialog : BottomSheetDialogFragment() {
     private fun validate(
         odometerTxt: String?,
         description: String?
-    ) {
+    ) = binding.run {
         if (odometerTxt.isNullOrEmpty()) {
-            return
-        }
-        if (odometerTxt.hasLetters()) {
+            textInputOdometer.error = getString(R.string.enter_odometer_value)
             return
         }
         odometer?.let {

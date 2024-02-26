@@ -114,4 +114,9 @@
     <string name="unsaved_data">Unsaved Data</string>
     <string name="do_you_want_to_discard_changes">Do You want to discard changes?</string>
     <string name="tank_fill">Tank fill: %1$s</string>
+    <string name="enter_petrol_station_name">Enter petrol station name</string>
+    <string name="enter_maintenance_name">Enter maintenance name</string>
+    <string name="enter_odometer_value">Enter odometer value</string>
+    <string name="enter_petrol_price">Enter petrol price</string>
+    <string name="enter_petrol_quantity">Enter petrol quantity</string>
 </resources>
