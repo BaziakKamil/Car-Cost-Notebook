@@ -8,6 +8,10 @@ plugins {
     id 'com.google.firebase.crashlytics'
 }
 
+def versionMajor = 0
+def versionMinor = 1
+def versionPatch = 7
+
 android {
     compileSdk 34
 
@@ -15,8 +19,8 @@ android {
         applicationId "pl.kamilbaziak.carcostnotebook"
         minSdk 33
         targetSdk 34
-        versionCode 7
-        versionName "0.1.6"
+        versionCode versionMajor * 100 + versionMinor * 10 + versionPatch
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
         manifestPlaceholders = [hostName:"www.kamilbaziak.pl"]
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -34,6 +38,12 @@ android {
         }
 
         debug {
+            debuggable true
+        }
+
+        qa {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             debuggable true
         }
 

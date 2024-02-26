@@ -5,8 +5,6 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 import pl.kamilbaziak.carcostnotebook.Constants.MAINTENANCE_TABLE
-import pl.kamilbaziak.carcostnotebook.empty
-import java.text.DateFormat
 
 @Entity(tableName = MAINTENANCE_TABLE)
 @Parcelize

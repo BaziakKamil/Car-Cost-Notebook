@@ -1,4 +1,4 @@
-package pl.kamilbaziak.carcostnotebook.ui.cars
+package pl.kamilbaziak.carcostnotebook.ui.carlist
 
 import android.app.Application
 import android.content.Context
