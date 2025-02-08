@@ -17,7 +17,6 @@ import org.koin.core.parameter.parametersOf
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.TextUtils
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentDetailsBinding
-import pl.kamilbaziak.carcostnotebook.extendedName
 import pl.kamilbaziak.carcostnotebook.formatForText
 import pl.kamilbaziak.carcostnotebook.name
 import pl.kamilbaziak.carcostnotebook.shortcut
