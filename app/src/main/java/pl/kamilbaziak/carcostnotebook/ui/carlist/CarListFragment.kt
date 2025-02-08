@@ -15,12 +15,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.TransitionInflater
 import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.kamilbaziak.carcostnotebook.Constants.BACKUP_DIRECTORY
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.TextUtils
@@ -33,7 +33,7 @@ import java.io.File
 
 class CarListFragment : Fragment(), MaterialAlertDialogActions {
 
-    private val mainViewModel by sharedViewModel<MainViewModel>()
+    private val mainViewModel by activityViewModels<MainViewModel>()
     private val viewModel: CarsListViewModel by inject()
     private val binding: FragmentCarListBinding by lazy {
         FragmentCarListBinding.inflate(layoutInflater)
