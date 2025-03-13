@@ -11,13 +11,12 @@ import androidx.core.os.bundleOf
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.TextUtils
 import pl.kamilbaziak.carcostnotebook.databinding.FragmentDetailsBinding
-import pl.kamilbaziak.carcostnotebook.extendedName
 import pl.kamilbaziak.carcostnotebook.formatForText
 import pl.kamilbaziak.carcostnotebook.name
 import pl.kamilbaziak.carcostnotebook.shortcut
@@ -37,7 +36,7 @@ class DetailsFragment : Fragment(), MaterialAlertDialogActions {
     private val viewModel: DetailsViewModel by viewModel {
         parametersOf(carId)
     }
-    private val mainViewModel by sharedViewModel<MainViewModel>()
+    private val mainViewModel by activityViewModel<MainViewModel>()
     private val menuProvider = object : MenuProvider {
         override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
             menuInflater.inflate(R.menu.details_menu_toolbar, menu)
