@@ -15,12 +15,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.TransitionInflater
 import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.kamilbaziak.carcostnotebook.Constants.BACKUP_DIRECTORY
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.TextUtils
@@ -30,10 +30,12 @@ import pl.kamilbaziak.carcostnotebook.ui.activity.MainViewModel
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialog
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialogActions
 import java.io.File
+import androidx.core.net.toUri
+import com.google.android.material.shape.MaterialShapeDrawable
 
 class CarListFragment : Fragment(), MaterialAlertDialogActions {
 
-    private val mainViewModel by sharedViewModel<MainViewModel>()
+    private val mainViewModel by activityViewModels<MainViewModel>()
     private val viewModel: CarsListViewModel by inject()
     private val binding: FragmentCarListBinding by lazy {
         FragmentCarListBinding.inflate(layoutInflater)
@@ -91,6 +93,8 @@ class CarListFragment : Fragment(), MaterialAlertDialogActions {
         super.onViewCreated(view, savedInstanceState)
 
         setOptionsMenu()
+
+        appBarLayout.statusBarForeground = MaterialShapeDrawable.createWithElevationOverlay(context)
 
         recycler.apply {
             adapter = this@CarListFragment.adapter
@@ -185,12 +189,10 @@ class CarListFragment : Fragment(), MaterialAlertDialogActions {
                 Intent(Intent.ACTION_GET_CONTENT).apply {
                     addCategory(Intent.CATEGORY_OPENABLE)
                     setDataAndType(
-                        Uri.parse(
-                            arrayOf(
-                                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).path,
-                                BACKUP_DIRECTORY
-                            ).joinToString(File.separator)
-                        ),
+                        arrayOf(
+                            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).path,
+                            BACKUP_DIRECTORY
+                        ).joinToString(File.separator).toUri(),
                         "*/*"
                     )
                 },

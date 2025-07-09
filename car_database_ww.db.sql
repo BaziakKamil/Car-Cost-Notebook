@@ -10,7 +10,17 @@ https://www.archon.pl/projekty-domow/projekt-dom-pod-katalpa-2-me6026ca2180ce
 https://www.archon.pl/projekty-domow/projekt-dom-pod-katalpa-2-me6026ca2180ce
 https://www.archon.pl/projekty-domow/projekt-dom-pod-katalpa-2-me6026ca2180ce',15000.0,1668038400000,'Zloty'),
 (4,'Peugeot','308',2007,'KN6687G','Diesel','Liter','Kilometers','Auto kupione dla Anety na komisie, fajne autko',12500.0,1662768000000,'Zloty'),
-(5,'KIA','CEE''D',2012,'KN2077H','Diesel','Liter','Kilometers','Auto kupione dla Anetki, zeby jej sie dobrze nowym autkiem jezdzilo',20800.0,1686787200000,'Zloty');
+(5,'KIA','CEE''D',2012,'KN2077H','Diesel','Liter','Kilometers','Auto kupione dla Anetki, zeby jej sie dobrze nowym autkiem jezdzilo',20800.0,1686787200000,'Zloty'),
+(6,'KIA','CEE''D',2012,'KN2077H','Diesel','Liter','Kilometers','Auto kupione dla Anetki, zeby jej sie dobrze nowym autkiem jezdzilo',20800.0,1686787200000,'Zloty'),
+(7,'Peugeot','308',2007,'KN6687G','Diesel','Liter','Kilometers','Auto kupione dla Anety na komisie, fajne autko',12500.0,1662768000000,'Zloty'),
+(8,'KIA','CEE''D',2012,'KN2077H','Diesel','Liter','Kilometers','Auto kupione dla Anetki, zeby jej sie dobrze nowym autkiem jezdzilo',20800.0,1686787200000,'Zloty'),
+(9,'Peugeot','308',2007,'KN6687G','Diesel','Liter','Kilometers','Auto kupione dla Anety na komisie, fajne autko',12500.0,1662768000000,'Zloty'),
+(10,'KIA','CEE''D',2012,'KN2077H','Diesel','Liter','Kilometers','Auto kupione dla Anetki, zeby jej sie dobrze nowym autkiem jezdzilo',20800.0,1686787200000,'Zloty'),
+(11,'Peugeot','308',2007,'KN6687G','Diesel','Liter','Kilometers','Auto kupione dla Anety na komisie, fajne autko',12500.0,1662768000000,'Zloty'),
+(12,'KIA','CEE''D',2012,'KN2077H','Diesel','Liter','Kilometers','Auto kupione dla Anetki, zeby jej sie dobrze nowym autkiem jezdzilo',20800.0,1686787200000,'Zloty'),
+(13,'Peugeot','308',2007,'KN6687G','Diesel','Liter','Kilometers','Auto kupione dla Anety na komisie, fajne autko',12500.0,1662768000000,'Zloty'),
+(14,'KIA','CEE''D',2012,'KN2077H','Diesel','Liter','Kilometers','Auto kupione dla Anetki, zeby jej sie dobrze nowym autkiem jezdzilo',20800.0,1686787200000,'Zloty');
+
 
 INSERT INTO "maintenance_table" VALUES 
 (5,3,'Ubezpieczenie',1040.0,20,1668470400000,1699920000000,0,'Tak jak w tytule, ubezpieczenie w Compensa wraz z szybami'),
@@ -18,7 +28,19 @@ INSERT INTO "maintenance_table" VALUES
 (7,4,'Opony + felgi',900.0,42,1665360000000,NULL,0,'Opony bieżniki nowe plus oryginalne felgi 15 do peugeota'),
 (8,4,'Dpf',375.0,43,1663632000000,NULL,0,''),
 (9,3,'Serwis olejowy',600.0,51,1678288710647,1709856000000,0,'Serwis olejów i filtrów, wymienione tylne klocki hamulcowe'),
-(10,5,'Zakup skorzanek kierownicy ',250.0,68,1686873600000,NULL,0,'Zakup kierownicy bo stara byla brzydka i bez skory');
+(10,5,'Zakup skorzanek kierownicy ',250.0,68,1686873600000,NULL,0,'Zakup kierownicy bo stara byla brzydka i bez skory'),
+(11,3,'Ubezpieczenie',1040.0,20,1668470400000,1699920000000,0,'Tak jak w tytule, ubezpieczenie w Compensa wraz z szybami'),
+(12,3,'Dywaniki',128.0,17,1668902400000,NULL,0,'Dywaniki gumowe na zimę'),
+(13,4,'Opony + felgi',900.0,42,1665360000000,NULL,0,'Opony bieżniki nowe plus oryginalne felgi 15 do peugeota'),
+(14,4,'Dpf',375.0,43,1663632000000,NULL,0,''),
+(15,3,'Serwis olejowy',600.0,51,1678288710647,1709856000000,0,'Serwis olejów i filtrów, wymienione tylne klocki hamulcowe'),
+(16,5,'Zakup skorzanek kierownicy ',250.0,68,1686873600000,NULL,0,'Zakup kierownicy bo stara byla brzydka i bez skory'),
+(17,3,'Ubezpieczenie',1040.0,20,1668470400000,1699920000000,0,'Tak jak w tytule, ubezpieczenie w Compensa wraz z szybami'),
+(18,3,'Dywaniki',128.0,17,1668902400000,NULL,0,'Dywaniki gumowe na zimę'),
+(19,4,'Opony + felgi',900.0,42,1665360000000,NULL,0,'Opony bieżniki nowe plus oryginalne felgi 15 do peugeota'),
+(20,4,'Dpf',375.0,43,1663632000000,NULL,0,''),
+(21,3,'Serwis olejowy',600.0,51,1678288710647,1709856000000,0,'Serwis olejów i filtrów, wymienione tylne klocki hamulcowe'),
+(22,5,'Zakup skorzanek kierownicy ',250.0,68,1686873600000,NULL,0,'Zakup kierownicy bo stara byla brzydka i bez skory');
 
 INSERT INTO "odometer_table" VALUES 
 (15,3,395704.0,'Kilometers',1668038400000,0,'Pierwszy licznik u mnie'),

@@ -18,8 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
-            app:navigationIconTint="@color/md_theme_onPrimaryContainer"
             app:navigationIcon="@drawable/ic_arrow_back"
+            app:navigationIconTint="@color/md_theme_onPrimaryContainer"
             app:title="@string/details" />
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -43,6 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:fitsSystemWindows="true"
         app:menu="@menu/car_bottom_navigation" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

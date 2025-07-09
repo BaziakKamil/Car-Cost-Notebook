@@ -3,12 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context=".ui.activity.MainActivity">
 
     <androidx.fragment.app.FragmentContainerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/fragment_container"
-        android:name="pl.kamilbaziak.carcostnotebook.ui.carlist.CarListFragment"/>
+        android:name="pl.kamilbaziak.carcostnotebook.ui.carlist.CarListFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </FrameLayout>
