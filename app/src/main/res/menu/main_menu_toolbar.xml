@@ -5,19 +5,20 @@
     <item
         android:id="@+id/menu_item_more"
         android:icon="@drawable/ic_more"
+        android:iconTint="@color/md_theme_onPrimaryContainer"
         android:title="@string/more"
-        app:showAsAction="ifRoom" >
+        app:showAsAction="ifRoom">
 
         <menu>
             <item
                 android:id="@+id/menu_export_database"
                 android:title="@string/export_data"
-                app:showAsAction="always"/>
+                app:showAsAction="always" />
 
             <item
                 android:id="@+id/menu_import_from_csv"
                 android:title="@string/import_data"
-                app:showAsAction="always"/>
+                app:showAsAction="always" />
         </menu>
 
     </item>

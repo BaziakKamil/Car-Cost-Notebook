@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import pl.kamilbaziak.carcostnotebook.Constants
 import pl.kamilbaziak.carcostnotebook.model.Maintenance
-import pl.kamilbaziak.carcostnotebook.model.TankFill
 
 @Dao
 interface MaintenanceDao {
@@ -13,7 +12,7 @@ interface MaintenanceDao {
     fun getMaintenanceLiveData(carId: Long): LiveData<List<Maintenance>>
 
     @Query("SELECT * FROM ${Constants.MAINTENANCE_TABLE} WHERE carId = :carId ORDER BY created DESC")
-    suspend fun getMaintenanceDataForCar(carId: Long): List<Maintenance>
+    suspend fun getMaintenanceData(carId: Long): List<Maintenance>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addMaintenance(maintenance: Maintenance)

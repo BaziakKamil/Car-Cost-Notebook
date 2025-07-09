@@ -6,18 +6,29 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.whenStarted
+import androidx.lifecycle.withStarted
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import pl.kamilbaziak.carcostnotebook.EnumUtils
 import pl.kamilbaziak.carcostnotebook.EnumUtils.getPetrolEnumFromName
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.databinding.DialogTankfillBinding
+import pl.kamilbaziak.carcostnotebook.enums.EngineEnum
 import pl.kamilbaziak.carcostnotebook.enums.PetrolEnum
 import pl.kamilbaziak.carcostnotebook.model.TankFill
 import pl.kamilbaziak.carcostnotebook.toDate
 import pl.kamilbaziak.carcostnotebook.toTwoDigits
+import pl.kamilbaziak.carcostnotebook.ui.DialogEvents
 
 class TankFillDialog : BottomSheetDialogFragment() {
 
@@ -26,7 +37,9 @@ class TankFillDialog : BottomSheetDialogFragment() {
     }
     private val carId by lazy { arguments?.getLong(EXTRA_CAR_ID) }
     private val tankFill by lazy { arguments?.get(EXTRA_TANK_FILL) as? TankFill }
-    private val viewModel: TankFillDialogViewModel by inject()
+    private val viewModel: TankFillDialogViewModel by viewModel {
+        parametersOf(carId)
+    }
     private val dateDialog = MaterialDatePicker.Builder.datePicker()
         .setTitleText(R.string.choose_date)
         .build()
@@ -51,15 +64,6 @@ class TankFillDialog : BottomSheetDialogFragment() {
             viewModel.changePickedDate(it.created)
         }
 
-        EnumUtils.setEnumValuesToMaterialSpinner(
-            textInputPetrolType.editText as MaterialAutoCompleteTextView,
-            buildList {
-                PetrolEnum.values().map {
-                    add(it.name)
-                }
-            }
-        )
-
         dateDialog.addOnPositiveButtonClickListener {
             viewModel.changePickedDate(it)
         }
@@ -77,6 +81,33 @@ class TankFillDialog : BottomSheetDialogFragment() {
                     textInputOdometer.editText?.setText(it.input.toTwoDigits())
                 }
             }
+            currentCar.observe(viewLifecycleOwner) { car ->
+                if (car != null) {
+                    val suitablePetrolForEngine = mutableListOf<PetrolEnum>()
+                    when (car.engineEnum) {
+                        EngineEnum.Petrol -> suitablePetrolForEngine.apply {
+                            add(PetrolEnum.Petrol)
+                            add(PetrolEnum.LPG)
+                            add(PetrolEnum.CNG)
+                        }
+
+                        EngineEnum.Diesel -> suitablePetrolForEngine.add(PetrolEnum.Diesel)
+                        EngineEnum.Electric -> suitablePetrolForEngine.add(PetrolEnum.Electric)
+                        EngineEnum.Hybrid -> suitablePetrolForEngine.addAll(PetrolEnum.entries)
+                    }
+                    EnumUtils.setEnumValuesToMaterialSpinner(
+                        textInputPetrolType.editText as MaterialAutoCompleteTextView,
+                        suitablePetrolForEngine.map { it.name }
+                    )
+                }
+            }
+            lifecycleScope.launch {
+                tankFillEvents.collectLatest {
+                    if (it != null && it is DialogEvents.Dismiss) {
+                        this@TankFillDialog.dismiss()
+                    }
+                }
+            }
         }
 
         buttonDone.setOnClickListener {
@@ -90,8 +121,8 @@ class TankFillDialog : BottomSheetDialogFragment() {
                 textInputPetrolStation.editText?.text.toString()
             )
         }
-        buttonCancel.setOnClickListener { dismiss() }
-        imageClose.setOnClickListener { dismiss() }
+        buttonCancel.setOnClickListener { this@TankFillDialog.dismiss() }
+        imageClose.setOnClickListener { this@TankFillDialog.dismiss() }
     }
 
     private fun validate(
@@ -104,7 +135,7 @@ class TankFillDialog : BottomSheetDialogFragment() {
         petrolStation: String?
     ) {
         resetInputErrors()
-        if (!validateData(petrolQuantity, petrolPrice, odometer, petrolStation)) return
+        if (validateData(petrolQuantity, petrolPrice, odometer, petrolStation)) return
 
         viewModel.addTankFill(
             carId!!,
@@ -117,7 +148,6 @@ class TankFillDialog : BottomSheetDialogFragment() {
             petrolStation!!,
             tankFill
         )
-        dismiss()
     }
 
     private fun validateData(
@@ -127,18 +157,18 @@ class TankFillDialog : BottomSheetDialogFragment() {
         petrolStation: String?
     ): Boolean {
         binding.apply {
-            if (petrolQuantity.isNullOrEmpty()) {
-                textInputPetrolQuantity.error = "Enter petrol quantity"
+            if (petrolStation.isNullOrEmpty()) {
+                textInputPetrolStation.error = getString(R.string.enter_petrol_station_name)
+            } else if (petrolQuantity.isNullOrEmpty()) {
+                textInputPetrolQuantity.error = getString(R.string.enter_petrol_quantity)
             } else if (petrolPrice.isNullOrEmpty()) {
-                textInputPetrolPrice.error = "Enter petrol price"
+                textInputPetrolPrice.error = getString(R.string.enter_petrol_price)
             } else if (odometer.isNullOrEmpty()) {
-                textInputOdometer.error = "Enter odometer value"
-            } else if (petrolStation.isNullOrEmpty()) {
-                textInputPetrolStation.error = "Enter petrol station name"
+                textInputOdometer.error = getString(R.string.enter_odometer_value)
             } else {
-                return true
+                return false
             }
-            return false
+            return true
         }
     }
 
