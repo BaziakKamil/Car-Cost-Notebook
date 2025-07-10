@@ -16,11 +16,11 @@ val versionPatch = 8
 
 android {
 
-    compileSdk = 35
+    compileSdk = 36
     defaultConfig {
         applicationId = "pl.kamilbaziak.carcostnotebook"
         minSdk = 33
-        targetSdk = 34
+        targetSdk = 36
         versionCode = versionMajor * 100 + versionMinor * 10 + versionPatch
         versionName = "${versionMajor}.${versionMinor}.${versionPatch}"
         manifestPlaceholders["hostName"] = "www.kamilbaziak.pl"

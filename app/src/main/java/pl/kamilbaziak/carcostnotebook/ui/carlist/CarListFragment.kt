@@ -30,6 +30,8 @@ import pl.kamilbaziak.carcostnotebook.ui.activity.MainViewModel
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialog
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialogActions
 import java.io.File
+import androidx.core.net.toUri
+import com.google.android.material.shape.MaterialShapeDrawable
 
 class CarListFragment : Fragment(), MaterialAlertDialogActions {
 
@@ -91,6 +93,8 @@ class CarListFragment : Fragment(), MaterialAlertDialogActions {
         super.onViewCreated(view, savedInstanceState)
 
         setOptionsMenu()
+
+        appBarLayout.statusBarForeground = MaterialShapeDrawable.createWithElevationOverlay(context)
 
         recycler.apply {
             adapter = this@CarListFragment.adapter
@@ -185,12 +189,10 @@ class CarListFragment : Fragment(), MaterialAlertDialogActions {
                 Intent(Intent.ACTION_GET_CONTENT).apply {
                     addCategory(Intent.CATEGORY_OPENABLE)
                     setDataAndType(
-                        Uri.parse(
-                            arrayOf(
-                                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).path,
-                                BACKUP_DIRECTORY
-                            ).joinToString(File.separator)
-                        ),
+                        arrayOf(
+                            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).path,
+                            BACKUP_DIRECTORY
+                        ).joinToString(File.separator).toUri(),
                         "*/*"
                     )
                 },
