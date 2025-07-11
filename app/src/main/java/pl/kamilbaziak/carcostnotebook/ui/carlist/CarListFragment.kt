@@ -94,8 +94,6 @@ class CarListFragment : Fragment(), MaterialAlertDialogActions {
 
         setOptionsMenu()
 
-        appBarLayout.statusBarForeground = MaterialShapeDrawable.createWithElevationOverlay(context)
-
         recycler.apply {
             adapter = this@CarListFragment.adapter
             layoutManager = LinearLayoutManager(requireContext())

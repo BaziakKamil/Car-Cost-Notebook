@@ -18,26 +18,15 @@ class MainActivity : AppCompatActivity() {
         ActivityMainBinding.inflate(layoutInflater)
     }
     private val viewModel by viewModel<MainViewModel>()
-    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
-        override fun handleOnBackPressed() {
-            if (supportFragmentManager.backStackEntryCount == 0) {
-                finish()
-            } else {
-                supportFragmentManager.popBackStack()
-            }
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
-
         lifecycleScope.launch {
             viewModel.mainViewModelEvents.collect { event ->
                 supportFragmentManager.commit {
-                    replace(
+                    add(
                         binding.fragmentContainer.id,
                         when (event) {
                             is MainActivityEvent.OpenAddNewCar -> AddNewCarFragment.newInstance(

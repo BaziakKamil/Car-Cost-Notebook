@@ -68,6 +68,8 @@ class DetailsFragment : Fragment(), MaterialAlertDialogActions {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = binding.run {
         super.onViewCreated(view, savedInstanceState)
 
+
+
         viewModel.apply {
             currentCarData.observe(viewLifecycleOwner) { c ->
                 c?.let { car ->
