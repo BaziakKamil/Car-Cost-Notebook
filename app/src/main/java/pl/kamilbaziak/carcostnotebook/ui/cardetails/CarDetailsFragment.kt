@@ -71,7 +71,7 @@ class CarDetailsFragment : Fragment() {
         toolbar.apply {
             title = carTitle
             setNavigationOnClickListener {
-                requireActivity().supportFragmentManager.popBackStack()
+                requireActivity().onBackPressedDispatcher.onBackPressed()
             }
         }
 

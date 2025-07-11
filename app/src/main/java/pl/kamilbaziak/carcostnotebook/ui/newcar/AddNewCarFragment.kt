@@ -330,7 +330,10 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car), MaterialAlert
         textInputCarYear.error = null
     }
 
-    private fun goBack() = requireActivity().supportFragmentManager.popBackStack()
+    private fun goBack() {
+        onBackPressedCallback.isEnabled = false
+        requireActivity().onBackPressedDispatcher.onBackPressed()
+    }
 
     companion object Factory {
 
