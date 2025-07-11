@@ -1,6 +1,5 @@
 package pl.kamilbaziak.carcostnotebook.ui.newcar
 
-import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.view.*
@@ -77,7 +76,7 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car), MaterialAlert
         toolbar.apply {
             title = car?.name() ?: getString(R.string.add_new_car)
             setNavigationOnClickListener {
-                requireActivity().onBackPressedDispatcher.onBackPressed()
+                handleOnBack()
             }
             menu
                 .add(R.string.save)
@@ -256,7 +255,7 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car), MaterialAlert
         }
 
         if (canGoBack) {
-            requireActivity().supportFragmentManager.popBackStack()
+            goBack()
         } else {
             MaterialAlertDialog.show(
                 childFragmentManager,
@@ -329,6 +328,11 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car), MaterialAlert
         textInputUnit.error = null
         textInputCurrency.error = null
         textInputCarYear.error = null
+    }
+
+    private fun goBack() {
+        onBackPressedCallback.isEnabled = false
+        requireActivity().onBackPressedDispatcher.onBackPressed()
     }
 
     companion object Factory {
