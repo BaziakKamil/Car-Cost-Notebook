@@ -28,6 +28,8 @@
 -keepattributes Signature
 -keep class com.google.gson.reflect.TypeToken { *; }
 -keep class * extends com.google.gson.reflect.TypeToken
+-keepattributes SourceFile,LineNumberTable        # Keep file names and line numbers.
+-keep public class * extends java.lang.Exception  # Optional: Keep custom exceptions.
 
 # Optional. For using GSON @Expose annotation
 -keepattributes AnnotationDefault,RuntimeVisibleAnnotations

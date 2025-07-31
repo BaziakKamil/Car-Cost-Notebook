@@ -2,9 +2,17 @@ package pl.kamilbaziak.carcostnotebook.ui.odometerdialog
 
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.test.core.app.ApplicationProvider
+import io.mockk.awaits
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.verify
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -18,6 +26,7 @@ import pl.kamilbaziak.carcostnotebook.database.CarDao
 import pl.kamilbaziak.carcostnotebook.database.OdometerDao
 import pl.kamilbaziak.carcostnotebook.di.viewModelsModule
 import pl.kamilbaziak.carcostnotebook.enums.UnitEnum
+import pl.kamilbaziak.carcostnotebook.model.Car
 import pl.kamilbaziak.carcostnotebook.model.Odometer
 import utils.CoroutineRule
 import java.util.Date
@@ -25,8 +34,8 @@ import java.util.Date
 @RunWith(JUnit4::class)
 class OdometerDialogViewModelTest : KoinTest {
 
-    private val viewModel: OdometerDialogViewModel = mockk()
-    private val odometerDao: OdometerDao = mockk()
+    private var viewModel: OdometerDialogViewModel = mockk()
+    private var odometerDao: OdometerDao = mockk()
     private lateinit var carDao: CarDao
 
     @Rule
@@ -50,10 +59,10 @@ class OdometerDialogViewModelTest : KoinTest {
         viewModel = OdometerDialogViewModel(odometerDao, carDao, 1L)
     }
 
-    @After
-    fun tearDown() {
-        testScope.cleanupTestCoroutines()
-    }
+//    @After
+//    fun tearDown() {
+//        testScope.cleanupTestCoroutines()
+//    }
 
     @Test
     fun `test changePickedDate`() {
@@ -95,7 +104,7 @@ class OdometerDialogViewModelTest : KoinTest {
         val car = mockk<Car>(relaxed = true)
 
         every { carDao.getCarById(carId) } returns MutableLiveData(car)
-        coEvery { odometerDao.addOdometer(any()) } just runs
+        coEvery { odometerDao.addOdometer(any()) } just awaits
 
         viewModel.addOdometer(odometerValue, description)
 
