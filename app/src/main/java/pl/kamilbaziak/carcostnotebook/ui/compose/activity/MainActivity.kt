@@ -1,12 +1,10 @@
-package pl.kamilbaziak.carcostnotebook.ui.activity
+package pl.kamilbaziak.carcostnotebook.ui.compose.activity
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -33,7 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.ui.compose.components.NoCarView
-import pl.kamilbaziak.carcostnotebook.ui.theme.CarCostNotebookTheme
+import pl.kamilbaziak.carcostnotebook.ui.compose.theme.CarCostNotebookTheme
 
 data class Car(
     val name: String,
@@ -134,7 +133,7 @@ fun CarListItem(car: Car) {
                         text = car.licensePlate,
                         modifier = Modifier
                             .clip(RoundedCornerShape(4.dp))
-                            .background(MaterialTheme.colorScheme.surfaceVariant)
+                            .background(Color(0xFFE0E0E0))
                             .padding(4.dp)
                     )
                 }

@@ -29,7 +29,6 @@ import pl.kamilbaziak.carcostnotebook.name
 import pl.kamilbaziak.carcostnotebook.ui.activity.MainViewModel
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialog
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialogActions
-import pl.kamilbaziak.carcostnotebook.ui.compose.activity.ComposeActivity
 import java.io.File
 import androidx.core.net.toUri
 import com.google.android.material.shape.MaterialShapeDrawable
@@ -117,10 +116,6 @@ class CarListFragment : Fragment(), MaterialAlertDialogActions {
 
         fabAddCar.setOnClickListener {
             viewModel.onAddNewCarClick()
-        }
-        fabAddCar.setOnLongClickListener {
-            startActivity(Intent(requireContext(), ComposeActivity::class.java))
-            false
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
