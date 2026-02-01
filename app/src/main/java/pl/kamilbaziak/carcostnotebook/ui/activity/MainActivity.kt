@@ -33,7 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.ui.compose.components.NoCarView
-import pl.kamilbaziak.carcostnotebook.ui.theme.CarCostNotebookTheme
+import pl.kamilbaziak.carcostnotebook.ui.compose.theme.CarCostNotebookTheme
 
 data class Car(
     val name: String,
