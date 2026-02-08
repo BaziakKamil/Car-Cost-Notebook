@@ -23,6 +23,7 @@
     <string name="license_plate">Tablica rejestracyjna</string>
     <string name="description">Opis</string>
     <string name="add_new_car">Dodaj nowe auto</string>
+    <string name="edit_car">Edytuj auto</string>
     <string name="no_car_added_yet">Nie dodano żadnego auta</string>
     <string name="add">Dodaj</string>
     <string name="petrol_fill">Tankowanie</string>
@@ -105,6 +106,7 @@
     <string name="odometer_unit_title">Jednostka licznika<font color="#cc0029">&#42;</font></string>
     <string name="choose_currency">Wybierz walutę</string>
     <string name="tank_fill">Tankowanie: %1$s</string>
+    <string name="tank_fills">Tankowania</string>
     <string name="currency_title">Waluta<font color="#cc0029">&#42;</font></string>
     <string name="production_year_title">Rok produkcji<font color="#cc0029">&#42;</font></string>
     <string name="enter_petrol_station_name">Wprowadź nazwę stacji</string>

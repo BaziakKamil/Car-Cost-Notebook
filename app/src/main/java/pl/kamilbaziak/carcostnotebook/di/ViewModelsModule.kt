@@ -19,7 +19,7 @@ val viewModelsModule = module {
 
     viewModel { MainViewModel() }
     viewModel { CarsListViewModel(androidApplication(), get(), get(), get(), get()) }
-    viewModel { AddNewCarViewModel(androidApplication(), get(), get()) }
+    viewModel { parameters -> AddNewCarViewModel(androidApplication(), get(), get(), parameters.getOrNull()) }
     viewModel { parameters -> CarDetailsViewModel(get(), get(), get(), parameters.get()) }
     viewModel { parameters -> TankFillViewModel(get(), get(), parameters.get()) }
     viewModel { parameters -> OdometerViewModel(get(), parameters.get()) }

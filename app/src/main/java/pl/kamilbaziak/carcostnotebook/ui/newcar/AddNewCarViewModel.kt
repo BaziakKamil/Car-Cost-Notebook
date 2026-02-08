@@ -19,7 +19,8 @@ import java.util.*
 class AddNewCarViewModel(
     private val application: Application,
     private val carDao: CarDao,
-    private val odometerDao: OdometerDao
+    private val odometerDao: OdometerDao,
+    private val carId: Long?
 ) : AndroidViewModel(application) {
 
     val context: Context
@@ -27,6 +28,8 @@ class AddNewCarViewModel(
 
     private val _addNewCarChannel = Channel<AddNewCarEvent>()
     val addNewCarEvent = _addNewCarChannel.receiveAsFlow()
+
+    val car: LiveData<Car?> = carId?.let { carDao.getCarById(it) } ?: MutableLiveData<Car?>(null)
 
     private val _lastOdometer = MutableLiveData<Odometer?>()
     val lastOdometer: LiveData<Odometer?> = _lastOdometer
@@ -65,21 +68,7 @@ class AddNewCarViewModel(
         _addNewCarChannel.send(AddNewCarEvent.NavigateBack)
     }
 
-    fun updateCar(car: Car, odometer: Odometer?, newOdometerValue: Double) = viewModelScope.launch {
-        odometer?.let {
-            odometerDao.updateOdometer(it.copy(input = newOdometerValue))
-        } ?: run {
-            odometerDao.addOdometer(
-                Odometer(
-                    0,
-                    car.id,
-                    newOdometerValue,
-                    car.unit,
-                    System.currentTimeMillis(),
-                    canBeDeleted = false
-                )
-            )
-        }
+    fun updateCar(car: Car) = viewModelScope.launch {
         carDao.updateCar(car)
         _addNewCarChannel.send(AddNewCarEvent.NavigateBack)
     }

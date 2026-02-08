@@ -28,8 +28,7 @@ class OldMainActivity : AppCompatActivity() {
                         binding.fragmentContainer.id,
                         when (event) {
                             is MainActivityEvent.OpenAddNewCar -> AddNewCarFragment.newInstance(
-                                event.car,
-                                event.title
+                                event.car
                             )
 
                             is MainActivityEvent.OpenCarDetails -> CarDetailsFragment.newInstance(

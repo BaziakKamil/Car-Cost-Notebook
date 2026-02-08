@@ -30,6 +30,7 @@
     <string name="license_plate">License-plate</string>
     <string name="description">Description</string>
     <string name="add_new_car">Add new car</string>
+    <string name="edit_car">Edit car</string>
     <string name="no_car_added_yet">No car added yet</string>
     <string name="add">Add</string>
     <string name="petrol_fill">Petrol fill</string>
@@ -114,6 +115,7 @@
     <string name="unsaved_data">Unsaved Data</string>
     <string name="do_you_want_to_discard_changes">Do You want to discard changes?</string>
     <string name="tank_fill">Tank fill: %1$s</string>
+    <string name="tank_fills">Tank fills</string>
     <string name="enter_petrol_station_name">Enter petrol station name</string>
     <string name="enter_maintenance_name">Enter maintenance name</string>
     <string name="enter_odometer_value">Enter odometer value</string>

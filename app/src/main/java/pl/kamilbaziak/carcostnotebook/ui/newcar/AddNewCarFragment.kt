@@ -210,9 +210,7 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car), MaterialAlert
                         priceWhenBought = textInputCarPriceWhenBought.editText?.text.toString()
                             .toDoubleOrNull(),
                         description = textInputDescription.editText?.text.toString()
-                    ),
-                    viewModel.lastOdometer.value,
-                    textInputCarOdometer.editText?.text.toString().toDouble()
+                    )
                 )
             } else {
                 viewModel.addCar(
@@ -342,12 +340,8 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car), MaterialAlert
         private const val EXTRA_CAR = "EXTRA_CAR"
         private const val EXTRA_TITLE = "EXTRA_TITLE"
 
-        fun newInstance(car: Car?, title: String) = AddNewCarFragment().apply {
-            arguments = car?.let { Pair(EXTRA_CAR, it) }?.let {
-                bundleOf(
-                    EXTRA_TITLE to title, it
-                )
-            }
+        fun newInstance(car: Car?) = AddNewCarFragment().apply {
+            arguments = car?.let { bundleOf(EXTRA_CAR to it) }
         }
     }
 

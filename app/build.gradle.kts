@@ -106,6 +106,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview:1.9.0")
     implementation("androidx.activity:activity-compose:1.10.1")
     debugImplementation("androidx.compose.ui:ui-tooling:1.9.0")
+    implementation("androidx.compose.runtime:runtime-livedata:1.9.0")
 
     // Material
     implementation("androidx.compose.material3:material3:1.3.2")
@@ -132,9 +133,11 @@ dependencies {
     // Navigation Components
     implementation("androidx.navigation:navigation-fragment-ktx:2.9.3")
     implementation("androidx.navigation:navigation-ui-ktx:2.9.3")
+    implementation("androidx.navigation:navigation-compose:2.9.7")
 
     // Koin for Android
-    implementation("io.insert-koin:koin-android:4.1.1")
+    implementation("io.insert-koin:koin-android:3.5.6")
+    implementation("io.insert-koin:koin-androidx-compose:3.5.6")
 
     // Crashlytics
     implementation(platform("com.google.firebase:firebase-bom:34.2.0"))
