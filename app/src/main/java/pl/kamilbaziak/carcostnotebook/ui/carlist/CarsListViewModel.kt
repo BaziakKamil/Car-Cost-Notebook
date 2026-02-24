@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Environment
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
@@ -46,9 +47,8 @@ class CarsListViewModel(
     private val gson = Gson()
 
     private val _cars = carDao.getAllCars()
-    val cars: LiveData<List<Car>> = _cars
 
-    private val _carsMapped = MutableLiveData<List<Pair<Car, Odometer?>>>()
+    private val _carsMapped = MediatorLiveData<List<Pair<Car, Odometer?>>>()
     val carsMapped: LiveData<List<Pair<Car, Odometer?>>> = _carsMapped
 
     private val deleteCar = MutableLiveData<Car>()
@@ -59,6 +59,16 @@ class CarsListViewModel(
     private var deletedTankFill = listOf<TankFill>()
     private var deletedMaintenance = listOf<Maintenance>()
     private var deletedOdometers = listOf<Odometer>()
+
+    init {
+        _carsMapped.addSource(_cars) { cars ->
+            viewModelScope.launch {
+                _carsMapped.value = cars?.map { car ->
+                    Pair(car, odometerDao.getLastCarOdometer(car.id))
+                }
+            }
+        }
+    }
 
     fun deleteCar() = viewModelScope.launch {
         saveDeletedCarData()
@@ -106,12 +116,6 @@ class CarsListViewModel(
     fun onCarDelete(car: Car) = viewModelScope.launch {
         deleteCar.value = car
         mainViewChannel.send(MainViewEvent.ShowCarDeleteDialogMessage(car))
-    }
-
-    fun setupCarMappedData(list: List<Car>?) = viewModelScope.launch {
-        _carsMapped.value = list?.map { car ->
-            Pair(car, odometerDao.getLastCarOdometer(car.id))
-        }
     }
 
     fun exportDatabase() = viewModelScope.launch {

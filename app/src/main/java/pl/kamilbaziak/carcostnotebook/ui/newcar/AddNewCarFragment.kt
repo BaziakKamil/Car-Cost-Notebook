@@ -65,7 +65,8 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car), MaterialAlert
     ): View = binding.root
 
     override fun onViewCreated(
-        view: View, savedInstanceState: Bundle?
+        view: View,
+        savedInstanceState: Bundle?
     ) = binding.run {
         super.onViewCreated(view, savedInstanceState)
 
@@ -140,6 +141,7 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car), MaterialAlert
                 when (event) {
                     AddNewCarViewModel.AddNewCarEvent.NavigateBack ->
                         requireActivity().supportFragmentManager.popBackStack()
+                    else -> Unit
                 }
             }
         }

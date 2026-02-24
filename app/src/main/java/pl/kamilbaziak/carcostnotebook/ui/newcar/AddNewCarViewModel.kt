@@ -66,6 +66,7 @@ class AddNewCarViewModel(
             )
         )
         _addNewCarChannel.send(AddNewCarEvent.NavigateBack)
+        _addNewCarChannel.send(AddNewCarEvent.CarAdded)
     }
 
     fun updateCar(car: Car) = viewModelScope.launch {
@@ -88,5 +89,6 @@ class AddNewCarViewModel(
     sealed class AddNewCarEvent {
 
         object NavigateBack : AddNewCarEvent()
+        object CarAdded : AddNewCarEvent()
     }
 }

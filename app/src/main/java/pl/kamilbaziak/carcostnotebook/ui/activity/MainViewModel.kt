@@ -31,4 +31,8 @@ class MainViewModel : ViewModel() {
             )
         )
     }
+
+    fun onCarAdded() = viewModelScope.launch {
+        _mainViewModelEvents.emit(MainActivityEvent.CarAdded)
+    }
 }

@@ -2,7 +2,6 @@ package pl.kamilbaziak.carcostnotebook.ui.carlist
 
 import android.app.Activity
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.view.LayoutInflater
@@ -31,7 +30,6 @@ import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialog
 import pl.kamilbaziak.carcostnotebook.ui.components.MaterialAlertDialogActions
 import java.io.File
 import androidx.core.net.toUri
-import com.google.android.material.shape.MaterialShapeDrawable
 
 class CarListFragment : Fragment(), MaterialAlertDialogActions {
 
@@ -47,7 +45,6 @@ class CarListFragment : Fragment(), MaterialAlertDialogActions {
             { viewModel.onCarDelete(it) }
         )
     }
-    private var showAlertDialog = false
     private val filePickerLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -103,15 +100,9 @@ class CarListFragment : Fragment(), MaterialAlertDialogActions {
             setHasFixedSize(true)
         }
 
-        viewModel.apply {
-            cars.observe(viewLifecycleOwner) {
-                viewModel.setupCarMappedData(it)
-            }
-
-            carsMapped.observe(viewLifecycleOwner) {
-                adapter.submitList(it)
-                noCarView.root.isVisible = it.isEmpty()
-            }
+        viewModel.carsMapped.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
+            noCarView.root.isVisible = it.isEmpty()
         }
 
         fabAddCar.setOnClickListener {
@@ -212,7 +203,6 @@ class CarListFragment : Fragment(), MaterialAlertDialogActions {
                 return when (menuItem.itemId) {
                     R.id.menu_export_database -> {
                         viewModel.exportDatabase()
-                        showAlertDialog = true
                         return true
                     }
 

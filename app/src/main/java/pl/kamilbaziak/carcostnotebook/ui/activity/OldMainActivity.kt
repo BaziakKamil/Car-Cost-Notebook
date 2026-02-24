@@ -23,23 +23,32 @@ class OldMainActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             viewModel.mainViewModelEvents.collect { event ->
-                supportFragmentManager.commit {
-                    add(
-                        binding.fragmentContainer.id,
-                        when (event) {
-                            is MainActivityEvent.OpenAddNewCar -> AddNewCarFragment.newInstance(
+                when (event) {
+                    is MainActivityEvent.OpenAddNewCar -> supportFragmentManager.commit {
+                        add(
+                            binding.fragmentContainer.id,
+                            AddNewCarFragment.newInstance(
                                 event.car
-                            )
+                            ),
+                            event.tag
+                        )
+                        addToBackStack(null)
+                    }
 
-                            is MainActivityEvent.OpenCarDetails -> CarDetailsFragment.newInstance(
+                    is MainActivityEvent.OpenCarDetails -> supportFragmentManager.commit {
+                        add(
+                            binding.fragmentContainer.id,
+                            CarDetailsFragment.newInstance(
                                 event.car,
                                 event.odometer,
                                 event.title
-                            )
-                        },
-                        event.tag
-                    )
-                    addToBackStack(null)
+                            ),
+                            event.tag
+                        )
+                        addToBackStack(null)
+                    }
+
+                    else -> Unit
                 }
             }
         }

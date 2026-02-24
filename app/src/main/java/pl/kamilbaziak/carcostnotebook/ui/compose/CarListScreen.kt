@@ -39,12 +39,15 @@ import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.model.Car
 import pl.kamilbaziak.carcostnotebook.model.Odometer
 import pl.kamilbaziak.carcostnotebook.name
+import pl.kamilbaziak.carcostnotebook.ui.activity.MainActivityEvent
+import pl.kamilbaziak.carcostnotebook.ui.activity.MainViewModel
 import pl.kamilbaziak.carcostnotebook.ui.carlist.CarsListViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CarListScreen(
     navController: NavController,
+    mainViewModel: MainViewModel,
     viewModel: CarsListViewModel = koinViewModel()
 ) {
     val cars by viewModel.carsMapped.observeAsState(initial = emptyList())
@@ -60,6 +63,17 @@ fun CarListScreen(
                 }
                 is CarsListViewModel.MainViewEvent.ShowCarEditDialogScreen -> {
                     navController.navigate(Screen.AddCar.createRoute(it.car.id))
+                }
+                else -> {}
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        mainViewModel.mainViewModelEvents.collectLatest {
+            when (it) {
+                is MainActivityEvent.CarAdded -> {
+                    // empty
                 }
                 else -> {}
             }
