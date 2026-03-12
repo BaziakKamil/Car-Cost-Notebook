@@ -31,7 +31,7 @@ class TankFillDialog : BottomSheetDialogFragment() {
         DialogTankfillBinding.inflate(layoutInflater)
     }
     private val carId by lazy { arguments?.getLong(EXTRA_CAR_ID) }
-    private val tankFill by lazy { arguments?.get(EXTRA_TANK_FILL) as? TankFill }
+    private val tankFill by lazy { arguments?.getParcelable(EXTRA_TANK_FILL, TankFill::class.java) }
     private val viewModel: TankFillDialogViewModel by viewModel {
         parametersOf(carId)
     }

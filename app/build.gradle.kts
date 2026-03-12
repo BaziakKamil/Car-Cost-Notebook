@@ -11,8 +11,8 @@ plugins {
 }
 
 val versionMajor = 0
-val versionMinor = 1
-val versionPatch = 9
+val versionMinor = 2
+val versionPatch = 0
 
 android {
 
@@ -79,7 +79,7 @@ android {
     }
 
     namespace = "pl.kamilbaziak.carcostnotebook"
-    packagingOptions {
+    packaging {
         resources {
             excludes.add("META-INF/LICENSE.md")
             excludes.add("META-INF/LICENSE-notice.md")
@@ -96,7 +96,6 @@ dependencies {
     implementation("com.google.code.gson:gson:2.13.1")
     implementation("androidx.activity:activity:1.10.1")
     implementation("androidx.fragment:fragment-ktx:1.8.8")
-    implementation("androidx.core:core-splashscreen:1.0.1")
 
     // Material
     implementation("androidx.compose.material3:material3:1.3.2")

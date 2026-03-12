@@ -7,8 +7,11 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import pl.kamilbaziak.carcostnotebook.R
@@ -51,48 +54,50 @@ class MaintenanceFragment : Fragment(), MaterialAlertDialogActions {
             setHasFixedSize(false)
         }
 
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.maintenanceEvent.collect { event ->
-                when (event) {
-                    MaintenanceViewModel.MaintenanceEvent.ShowMaintenanceSavedConfirmationMessage ->
-                        TextUtils.showSnackbar(
-                            requireView(),
-                            getString(R.string.maintenance_added_correctly)
-                        )
-
-                    is MaintenanceViewModel.MaintenanceEvent.ShowCarEditDialogScreen ->
-                        MaintenanceDialog.show(
-                            childFragmentManager,
-                            carId,
-                            event.maintenance
-                        )
-
-                    is MaintenanceViewModel.MaintenanceEvent.ShowMaintenanceDeleteDialogMessage ->
-                        MaterialAlertDialog.show(
-                            childFragmentManager,
-                            getString(R.string.delete_dialog_title, event.maintenance.name),
-                            getString(R.string.delete_dialog_message),
-                            getString(R.string.delete)
-                        )
-
-                    is MaintenanceViewModel.MaintenanceEvent.ShowUndoDeleteMaintenanceMessage -> {
-                        TextUtils.showSnackbarWithAction(
-                            requireView(),
-                            getString(R.string.maintenace_deleted, event.maintenance.name),
-                            getString(R.string.undo)
-                        ) {
-                            viewModel.onUndoDeleteMaintenance(
-                                event.maintenance,
-                                event.pairedOdometer
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.maintenanceEvent.collect { event ->
+                    when (event) {
+                        MaintenanceViewModel.MaintenanceEvent.ShowMaintenanceSavedConfirmationMessage ->
+                            TextUtils.showSnackbar(
+                                requireView(),
+                                getString(R.string.maintenance_added_correctly)
                             )
-                        }
-                    }
 
-                    is MaintenanceViewModel.MaintenanceEvent.ShowDeleteErrorSnackbar ->
-                        TextUtils.showSnackbar(
-                            requireView(),
-                            getString(R.string.error_during_delete_process)
-                        )
+                        is MaintenanceViewModel.MaintenanceEvent.ShowCarEditDialogScreen ->
+                            MaintenanceDialog.show(
+                                childFragmentManager,
+                                carId,
+                                event.maintenance
+                            )
+
+                        is MaintenanceViewModel.MaintenanceEvent.ShowMaintenanceDeleteDialogMessage ->
+                            MaterialAlertDialog.show(
+                                childFragmentManager,
+                                getString(R.string.delete_dialog_title, event.maintenance.name),
+                                getString(R.string.delete_dialog_message),
+                                getString(R.string.delete)
+                            )
+
+                        is MaintenanceViewModel.MaintenanceEvent.ShowUndoDeleteMaintenanceMessage -> {
+                            TextUtils.showSnackbarWithAction(
+                                requireView(),
+                                getString(R.string.maintenace_deleted, event.maintenance.name),
+                                getString(R.string.undo)
+                            ) {
+                                viewModel.onUndoDeleteMaintenance(
+                                    event.maintenance,
+                                    event.pairedOdometer
+                                )
+                            }
+                        }
+
+                        is MaintenanceViewModel.MaintenanceEvent.ShowDeleteErrorSnackbar ->
+                            TextUtils.showSnackbar(
+                                requireView(),
+                                getString(R.string.error_during_delete_process)
+                            )
+                    }
                 }
             }
         }

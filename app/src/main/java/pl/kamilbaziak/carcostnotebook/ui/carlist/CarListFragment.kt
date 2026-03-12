@@ -18,7 +18,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.coroutines.launch
 import androidx.transition.TransitionInflater
 import org.koin.android.ext.android.inject
 import pl.kamilbaziak.carcostnotebook.Constants.BACKUP_DIRECTORY
@@ -115,65 +117,67 @@ class CarListFragment : Fragment(), MaterialAlertDialogActions {
             viewModel.onAddNewCarClick()
         }
 
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.mainViewEvent.collect { event ->
-                when (event) {
-                    CarsListViewModel.MainViewEvent.AddNewCar ->
-                        mainViewModel.openAddNewCar(getString(R.string.add_new_car))
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.mainViewEvent.collect { event ->
+                    when (event) {
+                        CarsListViewModel.MainViewEvent.AddNewCar ->
+                            mainViewModel.openAddNewCar(getString(R.string.add_new_car))
 
-                    is CarsListViewModel.MainViewEvent.NavigateToCarDetails ->
-                        mainViewModel.openCarDetails(
-                            car = event.car,
-                            odometer = event.odometer,
-                            title = "${event.car.brand} ${event.car.model} ${event.car.year}"
-                        )
+                        is CarsListViewModel.MainViewEvent.NavigateToCarDetails ->
+                            mainViewModel.openCarDetails(
+                                car = event.car,
+                                odometer = event.odometer,
+                                title = "${event.car.brand} ${event.car.model} ${event.car.year}"
+                            )
 
-                    is CarsListViewModel.MainViewEvent.ShowCarEditDialogScreen ->
-                        mainViewModel.openAddNewCar(
-                            title = event.car.name(),
-                            car = event.car
-                        )
+                        is CarsListViewModel.MainViewEvent.ShowCarEditDialogScreen ->
+                            mainViewModel.openAddNewCar(
+                                title = event.car.name(),
+                                car = event.car
+                            )
 
-                    is CarsListViewModel.MainViewEvent.ShowCarDeleteDialogMessage ->
-                        MaterialAlertDialog.show(
-                            childFragmentManager,
-                            getString(R.string.delete_dialog_title, event.car.name()),
-                            getString(R.string.cannot_be_undone),
-                            getString(R.string.delete)
-                        )
+                        is CarsListViewModel.MainViewEvent.ShowCarDeleteDialogMessage ->
+                            MaterialAlertDialog.show(
+                                childFragmentManager,
+                                getString(R.string.delete_dialog_title, event.car.name()),
+                                getString(R.string.cannot_be_undone),
+                                getString(R.string.delete)
+                            )
 
-                    is CarsListViewModel.MainViewEvent.ShowUndoDeleteCarMessage ->
-                        TextUtils.showSnackbarWithAction(
-                            requireView(),
-                            getString(R.string.car_deleted),
-                            getString(R.string.undo)
-                        ) {
-                            viewModel.onUndoDeleteCar()
+                        is CarsListViewModel.MainViewEvent.ShowUndoDeleteCarMessage ->
+                            TextUtils.showSnackbarWithAction(
+                                requireView(),
+                                getString(R.string.car_deleted),
+                                getString(R.string.undo)
+                            ) {
+                                viewModel.onUndoDeleteCar()
+                            }
+
+                        is CarsListViewModel.MainViewEvent.ShowDeleteErrorMessage ->
+                            TextUtils.showSnackbar(
+                                requireView(),
+                                getString(R.string.error_during_delete_process)
+                            )
+
+                        is CarsListViewModel.MainViewEvent.ShowErrorDialogMessage -> {
+                            MaterialAlertDialog.show(
+                                childFragmentManager,
+                                getString(R.string.something_went_wrong),
+                                event.message,
+                                getString(R.string.accept)
+                            )
                         }
 
-                    is CarsListViewModel.MainViewEvent.ShowDeleteErrorMessage ->
-                        TextUtils.showSnackbar(
-                            requireView(),
-                            getString(R.string.error_during_delete_process)
-                        )
+                        is CarsListViewModel.MainViewEvent.ShowSnackbarMessage ->
+                            TextUtils.showSnackbar(
+                                requireView(),
+                                event.message
+                            )
 
-                    is CarsListViewModel.MainViewEvent.ShowErrorDialogMessage -> {
-                        MaterialAlertDialog.show(
-                            childFragmentManager,
-                            getString(R.string.something_went_wrong),
-                            event.message,
-                            getString(R.string.accept)
-                        )
+                        CarsListViewModel.MainViewEvent.OpenFilePicker ->
+                            openFilePickerOnBackupFolder()
                     }
-
-                    is CarsListViewModel.MainViewEvent.ShowSnackbarMessage ->
-                        TextUtils.showSnackbar(
-                            requireView(),
-                            event.message
-                        )
-
-                    CarsListViewModel.MainViewEvent.OpenFilePicker ->
-                        openFilePickerOnBackupFolder()
                 }
             }
         }

@@ -51,70 +51,73 @@ class MaintenanceDialogViewModel(
         viewModelScope.launch {
             maintenance?.let {
                 editMaintenance(name, price, odometer, description, it)
-            } ?: maintenanceDao.addMaintenance(
-                Maintenance(
-                    0,
-                    carId,
-                    name,
-                    price,
-                    odometer?.let {
-                        odometerDao.addOdometer(
-                            Odometer(
-                                0,
-                                carId,
-                                odometer,
-                                carDao.getCarById(carId).value?.unit ?: UnitEnum.Kilometers,
-                                pickedDate.value ?: Date().time,
-                                canBeDeleted = false,
-                                description = name
+            } ?: run {
+                val car = carDao.getCarByIdSuspend(carId)
+                maintenanceDao.addMaintenance(
+                    Maintenance(
+                        0,
+                        carId,
+                        name,
+                        price,
+                        odometer?.let {
+                            odometerDao.addOdometer(
+                                Odometer(
+                                    0,
+                                    carId,
+                                    odometer,
+                                    car?.unit ?: UnitEnum.Kilometers,
+                                    pickedDate.value ?: Date().time,
+                                    canBeDeleted = false,
+                                    description = name
+                                )
                             )
-                        )
-                    },
-                    pickedDate.value ?: Date().time,
-                    pickedDueDate.value,
-                    false,
-                    description
+                        },
+                        pickedDate.value ?: Date().time,
+                        pickedDueDate.value,
+                        false,
+                        description
+                    )
                 )
-            )
+            }
         }
 
-    private fun editMaintenance(
+    private suspend fun editMaintenance(
         name: String,
         price: Double?,
         odometer: Double?,
         description: String?,
         maintenance: Maintenance
-    ) =
-        viewModelScope.launch {
-            var addedOdometerId: Long? = null
+    ) {
+        var addedOdometerId: Long? = null
 
-            maintenance.odometerId?.let {
-                odometerDao.deleteOdometerById(it)
-            }
+        maintenance.odometerId?.let {
+            odometerDao.deleteOdometerById(it)
+        }
 
-            odometer?.let {
-                addedOdometerId = odometerDao.addOdometer(
-                    Odometer(
-                        0,
-                        maintenance.carId,
-                        it,
-                        carDao.getCarById(maintenance.carId).value?.unit ?: UnitEnum.Kilometers,
-                        pickedDate.value ?: Date().time,
-                        canBeDeleted = false,
-                        description = name
-                    )
-                )
-            }
-
-            maintenanceDao.updateMaintenance(
-                maintenance.copy(
-                    name = name,
-                    price = price,
-                    odometerId = addedOdometerId,
-                    description = description,
-                    created = pickedDate.value ?: Date().time,
-                    dueDate = pickedDueDate.value,
+        odometer?.let {
+            val car = carDao.getCarByIdSuspend(maintenance.carId)
+            addedOdometerId = odometerDao.addOdometer(
+                Odometer(
+                    0,
+                    maintenance.carId,
+                    it,
+                    car?.unit ?: UnitEnum.Kilometers,
+                    pickedDate.value ?: Date().time,
+                    canBeDeleted = false,
+                    description = name
                 )
             )
         }
+
+        maintenanceDao.updateMaintenance(
+            maintenance.copy(
+                name = name,
+                price = price,
+                odometerId = addedOdometerId,
+                description = description,
+                created = pickedDate.value ?: Date().time,
+                dueDate = pickedDueDate.value,
+            )
+        )
+    }
 }

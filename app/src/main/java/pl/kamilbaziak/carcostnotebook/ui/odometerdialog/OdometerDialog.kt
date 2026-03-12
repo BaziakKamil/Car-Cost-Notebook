@@ -27,7 +27,7 @@ class OdometerDialog : BottomSheetDialogFragment() {
         arguments?.getLong(EXTRA_CAR_ID)
     }
     private val odometer by lazy {
-        arguments?.get(EXTRA_ODOMETER) as? Odometer
+        arguments?.getParcelable(EXTRA_ODOMETER, Odometer::class.java)
     }
     private val viewModel: OdometerDialogViewModel by viewModel {
         parametersOf(carId)

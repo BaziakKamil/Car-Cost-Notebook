@@ -10,7 +10,10 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -112,11 +115,12 @@ class DetailsFragment : Fragment(), MaterialAlertDialogActions {
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            viewModel.detailsViewEvent.collect { event ->
-                when (event) {
-                    is DetailsViewModel.DetailsViewEvent.CarDeleted ->
-                        requireActivity().onBackPressedDispatcher.onBackPressed()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
+                viewModel.detailsViewEvent.collect { event ->
+                    when (event) {
+                        is DetailsViewModel.DetailsViewEvent.CarDeleted ->
+                            requireActivity().onBackPressedDispatcher.onBackPressed()
 
                     is DetailsViewModel.DetailsViewEvent.ErrorDuringDeleteProcedure ->
                         TextUtils.showSnackbar(
@@ -140,6 +144,7 @@ class DetailsFragment : Fragment(), MaterialAlertDialogActions {
                             title = event.car!!.name(),
                             car = event.car
                         )
+                    }
                 }
             }
         }

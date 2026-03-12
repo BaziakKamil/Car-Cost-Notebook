@@ -42,12 +42,13 @@ class OdometerDialogViewModel(
         odometer: Double,
         description: String?
     ) = viewModelScope.launch {
+        val car = carDao.getCarByIdSuspend(carId)
         odometerDao.addOdometer(
             Odometer(
                 0,
                 carId = carId,
                 input = odometer,
-                unit = carDao.getCarById(carId).value?.unit ?: UnitEnum.Kilometers,
+                unit = car?.unit ?: UnitEnum.Kilometers,
                 created = _pickedDate.value ?: Date().time,
                 canBeDeleted = true,
                 description = description

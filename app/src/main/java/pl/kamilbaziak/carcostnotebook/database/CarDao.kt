@@ -14,6 +14,9 @@ interface CarDao {
     @Query("SELECT * FROM $CAR_TABLE WHERE id = :carId LIMIT 1")
     fun getCarById(carId: Long): LiveData<Car?>
 
+    @Query("SELECT * FROM $CAR_TABLE WHERE id = :carId LIMIT 1")
+    suspend fun getCarByIdSuspend(carId: Long): Car?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addCar(car: Car): Long
 

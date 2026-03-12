@@ -26,7 +26,7 @@ class MaintenanceDialog : BottomSheetDialogFragment() {
         arguments?.getLong(EXTRA_CAR_ID)
     }
     private val maintenance by lazy {
-        arguments?.get(EXTRA_MAINTENANCE) as? Maintenance
+        arguments?.getParcelable(EXTRA_MAINTENANCE, Maintenance::class.java)
     }
     private val viewModel: MaintenanceDialogViewModel by inject()
     private val dateDialog = MaterialDatePicker.Builder.datePicker()

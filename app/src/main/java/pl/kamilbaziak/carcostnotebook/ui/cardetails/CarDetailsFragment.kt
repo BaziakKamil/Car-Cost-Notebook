@@ -35,17 +35,19 @@ class CarDetailsFragment : Fragment() {
     private val odometer by extra<Odometer>(EXTRA_ODOMETER)
     private val carTitle by extra<String>(EXTRA_TITLE)
     private val viewModel: CarDetailsViewModel by viewModel {
-        parametersOf(car.id)
+        parametersOf(car?.id ?: 0L)
     }
     private val animFadeIn = AlphaAnimation(0.0f, 1.0f).apply { duration = 300 }
     private val animFadeOut = AlphaAnimation(1.0f, 0.0f).apply { duration = 50 }
 
     private val viewPagerAdapter by lazy {
         ViewPagerAdapter(childFragmentManager, lifecycle).apply {
-            addFragment(DetailsFragment.newInstance(car.id))
-            addFragment(TankFillFragment.newInstance(car.id, car.petrolUnit))
-            addFragment(MaintenanceFragment.newInstance(car.id))
-            addFragment(OdometerFragment.newInstance(car.id, car.unit))
+            car?.let {
+                addFragment(DetailsFragment.newInstance(it.id))
+                addFragment(TankFillFragment.newInstance(it.id, it.petrolUnit))
+                addFragment(MaintenanceFragment.newInstance(it.id))
+                addFragment(OdometerFragment.newInstance(it.id, it.unit))
+            }
         }
     }
 
@@ -114,21 +116,21 @@ class CarDetailsFragment : Fragment() {
             fabAddPetrol.setOnClickListener {
                 viewPager.setCurrentItem(0, true)
                 bottomNavigation.selectedItemId = R.id.menu_petrol
-                TankFillDialog.show(childFragmentManager, car.id)
+                TankFillDialog.show(childFragmentManager, car?.id)
                 extendAddFab(false)
             }
 
             fabAddMaintenance.setOnClickListener {
                 viewPager.setCurrentItem(1, true)
                 bottomNavigation.selectedItemId = R.id.menu_maintenance
-                MaintenanceDialog.show(childFragmentManager, car.id)
+                MaintenanceDialog.show(childFragmentManager, car?.id)
                 extendAddFab(false)
             }
 
             fabAddOdometer.setOnClickListener {
                 viewPager.setCurrentItem(2, true)
                 bottomNavigation.selectedItemId = R.id.menu_odometer
-                OdometerDialog.show(childFragmentManager, car.id)
+                OdometerDialog.show(childFragmentManager, car?.id)
                 extendAddFab(false)
             }
         }

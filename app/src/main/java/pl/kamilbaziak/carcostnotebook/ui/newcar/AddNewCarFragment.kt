@@ -6,11 +6,15 @@ import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
-import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.transition.TransitionInflater
+import kotlinx.coroutines.launch
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import org.koin.android.ext.android.inject
@@ -52,6 +56,15 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car), MaterialAlert
         }
     }
 
+    // Store pending scroll operations to prevent memory leaks
+    private val pendingScrollRunnables = mutableListOf<Runnable>()
+
+    // Store original padding to preserve it when keyboard appears/disappears
+    private var originalBottomPadding = 0
+
+    // Reusable buffer for location calculations to avoid allocations
+    private val locationBuffer = IntArray(2)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val inflater = TransitionInflater.from(requireContext())
@@ -68,6 +81,15 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car), MaterialAlert
         view: View, savedInstanceState: Bundle?
     ) = binding.run {
         super.onViewCreated(view, savedInstanceState)
+
+        // Store original padding before applying insets (only if not already set)
+        // This preserves the value across configuration changes
+        if (originalBottomPadding == 0) {
+            originalBottomPadding = nestedScrollView.paddingBottom
+        }
+
+        // Handle window insets for edge-to-edge
+        setupWindowInsets()
 
         sectionCarData.textDivider.text = getString(R.string.car_data)
         sectionCarWhenBought.textDivider.text = getString(R.string.car_data_when_bought)
@@ -135,11 +157,13 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car), MaterialAlert
         setEnumValuesToMaterialSpinner(textInputCurrency.editText as MaterialAutoCompleteTextView,
             CurrencyEnum.entries.map { it.extendedName(requireContext()) })
 
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.addNewCarEvent.collect { event ->
-                when (event) {
-                    AddNewCarViewModel.AddNewCarEvent.NavigateBack ->
-                        requireActivity().supportFragmentManager.popBackStack()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.addNewCarEvent.collect { event ->
+                    when (event) {
+                        AddNewCarViewModel.AddNewCarEvent.NavigateBack ->
+                            requireActivity().supportFragmentManager.popBackStack()
+                    }
                 }
             }
         }
@@ -154,7 +178,17 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car), MaterialAlert
             this@AddNewCarFragment.hideKeyboard()
         }
 
+        // Setup keyboard handling - scroll to focused field
+        setupKeyboardHandling()
+
         return@run
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        // Cancel all pending scroll operations to prevent memory leaks
+        pendingScrollRunnables.forEach { binding.root.removeCallbacks(it) }
+        pendingScrollRunnables.clear()
     }
 
     override fun onDestroy() {
@@ -176,7 +210,7 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car), MaterialAlert
         toolbar.setNavigationIconTint(ContextCompat.getColor(requireContext(),R.color.md_theme_error))
         layoutNonEditable.apply {
             sectionNonEditableItems.root.isVisible = false
-            setPadding(0)
+            setPadding(0, 0, 0, 0)
             setBackgroundColor(Color.TRANSPARENT)
         }
         textInputCarBrand.editText?.setText(car.brand)
@@ -335,12 +369,129 @@ class AddNewCarFragment : Fragment(R.layout.fragment_add_new_car), MaterialAlert
         requireActivity().onBackPressedDispatcher.onBackPressed()
     }
 
+    /**
+     * Sets up WindowInsets listener to handle edge-to-edge display.
+     *
+     * This function:
+     * - Applies top padding to AppBarLayout to avoid status bar overlap
+     * - Applies bottom padding to NestedScrollView to avoid keyboard overlap
+     * - Preserves original padding from XML layout
+     */
+    private fun setupWindowInsets() = binding.run {
+        ViewCompat.setOnApplyWindowInsetsListener(coordinatorLayout) { _, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val ime = insets.getInsets(WindowInsetsCompat.Type.ime())
+
+            // Apply top padding to AppBarLayout for status bar
+            appBarLayout.setPadding(0, systemBars.top, 0, 0)
+
+            // Apply bottom padding to NestedScrollView for keyboard
+            // Preserve original padding and add keyboard height
+            nestedScrollView.setPadding(
+                nestedScrollView.paddingLeft,
+                nestedScrollView.paddingTop,
+                nestedScrollView.paddingRight,
+                originalBottomPadding + ime.bottom
+            )
+
+            insets
+        }
+    }
+
+    /**
+     * Sets up automatic scrolling when EditText receives focus.
+     *
+     * This function:
+     * - Listens for focus changes on all input fields
+     * - Cancels any pending scroll operations to prevent race conditions
+     * - Scrolls the focused field into view with padding from top
+     * - Ensures the field is visible above the keyboard
+     */
+    private fun setupKeyboardHandling() = binding.run {
+        val editTexts = listOf(
+            textInputCarBrand.editText,
+            textInputCarModel.editText,
+            textInputCarYear.editText,
+            textInputCarLicencePlate.editText,
+            textInputCarPriceWhenBought.editText,
+            textInputDescription.editText
+        )
+
+        editTexts.forEach { editText ->
+            editText?.setOnFocusChangeListener { view, hasFocus ->
+                if (hasFocus) {
+                    // Cancel previous scroll operations to prevent race conditions
+                    cancelPendingScrolls()
+
+                    // Create runnable for delayed scroll operation
+                    val scrollRunnable = object : Runnable {
+                        override fun run() {
+                            // Safety check: ensure views are still attached to window
+                            if (!view.isAttachedToWindow || !nestedScrollView.isAttachedToWindow) {
+                                pendingScrollRunnables.remove(this)
+                                return
+                            }
+
+                            // Get the position of the focused view using reusable buffer
+                            nestedScrollView.getLocationOnScreen(locationBuffer)
+                            val scrollViewY = locationBuffer[1]
+
+                            view.getLocationOnScreen(locationBuffer)
+                            val viewY = locationBuffer[1]
+
+                            // Calculate the relative position
+                            val relativeTop = viewY - scrollViewY + nestedScrollView.scrollY
+
+                            // Scroll so the field is visible with padding from top
+                            val targetScroll = relativeTop - SCROLL_PADDING_DP.dpToPx()
+
+                            nestedScrollView.smoothScrollTo(0, targetScroll.coerceAtLeast(0))
+
+                            // Remove from pending list after execution
+                            pendingScrollRunnables.remove(this)
+                        }
+                    }
+
+                    // Store runnable to allow cleanup
+                    pendingScrollRunnables.add(scrollRunnable)
+
+                    // Delay to wait for keyboard to appear and insets to be applied
+                    view.postDelayed(scrollRunnable, KEYBOARD_ANIMATION_DELAY_MS)
+                }
+            }
+        }
+    }
+
+    /**
+     * Cancels all pending scroll operations.
+     * Used to prevent race conditions when user quickly switches between fields.
+     */
+    private fun cancelPendingScrolls() {
+        pendingScrollRunnables.forEach { binding.root.removeCallbacks(it) }
+        pendingScrollRunnables.clear()
+    }
+
+    /**
+     * Converts density-independent pixels (DP) to actual pixels (PX).
+     *
+     * @return The pixel value based on the current screen density
+     */
+    private fun Int.dpToPx(): Int {
+        return (this * resources.displayMetrics.density).toInt()
+    }
+
     companion object Factory {
 
         const val DATE_PICKER_TAG = "AddNewCarFragment.DATE_PICKER_TAG"
         const val TAG = "AddNewCarFragment"
         private const val EXTRA_CAR = "EXTRA_CAR"
         private const val EXTRA_TITLE = "EXTRA_TITLE"
+
+        // Keyboard handling constants
+        /** Delay in milliseconds to wait for keyboard animation to complete */
+        private const val KEYBOARD_ANIMATION_DELAY_MS = 300L
+        /** Padding in DP from top of screen when scrolling to focused field */
+        private const val SCROLL_PADDING_DP = 64
 
         fun newInstance(car: Car?, title: String) = AddNewCarFragment().apply {
             arguments = car?.let { Pair(EXTRA_CAR, it) }?.let {

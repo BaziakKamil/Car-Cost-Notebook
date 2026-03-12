@@ -7,8 +7,11 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import pl.kamilbaziak.carcostnotebook.EnumUtils.getUnitTypeFromName
@@ -55,40 +58,42 @@ class OdometerFragment : Fragment(), MaterialAlertDialogActions {
             setHasFixedSize(false)
         }
 
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.odometerEvent.collect { event ->
-                when (event) {
-                    OdometerViewModel.OdometerEvent.ShowOdometerSavedConfirmationMessage ->
-                        TextUtils.showSnackbar(
-                            requireView(),
-                            getString(R.string.odometer_added_correctly)
-                        )
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.odometerEvent.collect { event ->
+                    when (event) {
+                        OdometerViewModel.OdometerEvent.ShowOdometerSavedConfirmationMessage ->
+                            TextUtils.showSnackbar(
+                                requireView(),
+                                getString(R.string.odometer_added_correctly)
+                            )
 
-                    is OdometerViewModel.OdometerEvent.ShowUndoDeleteOdometerMessage ->
-                        TextUtils.showSnackbarWithAction(
-                            requireView(),
-                            getString(R.string.odometer_deleted),
-                            getString(R.string.undo)
-                        ) {
-                            viewModel.onUndoDeleteOdometer(event.odometer)
-                        }
+                        is OdometerViewModel.OdometerEvent.ShowUndoDeleteOdometerMessage ->
+                            TextUtils.showSnackbarWithAction(
+                                requireView(),
+                                getString(R.string.odometer_deleted),
+                                getString(R.string.undo)
+                            ) {
+                                viewModel.onUndoDeleteOdometer(event.odometer)
+                            }
 
-                    is OdometerViewModel.OdometerEvent.ShowDeleteErrorSnackbar ->
-                        TextUtils.showSnackbar(
-                            requireView(),
-                            getString(R.string.error_during_delete_process)
-                        )
+                        is OdometerViewModel.OdometerEvent.ShowDeleteErrorSnackbar ->
+                            TextUtils.showSnackbar(
+                                requireView(),
+                                getString(R.string.error_during_delete_process)
+                            )
 
-                    is OdometerViewModel.OdometerEvent.ShowOdometerDeleteDialogMessage ->
-                        MaterialAlertDialog.show(
-                            childFragmentManager,
-                            getString(R.string.delete_dialog_odometer_title),
-                            getString(R.string.delete_dialog_message),
-                            getString(R.string.delete)
-                        )
+                        is OdometerViewModel.OdometerEvent.ShowOdometerDeleteDialogMessage ->
+                            MaterialAlertDialog.show(
+                                childFragmentManager,
+                                getString(R.string.delete_dialog_odometer_title),
+                                getString(R.string.delete_dialog_message),
+                                getString(R.string.delete)
+                            )
 
-                    is OdometerViewModel.OdometerEvent.ShowOdometerEditDialogScreen ->
-                        OdometerDialog.show(childFragmentManager, carId, event.odometer)
+                        is OdometerViewModel.OdometerEvent.ShowOdometerEditDialogScreen ->
+                            OdometerDialog.show(childFragmentManager, carId, event.odometer)
+                    }
                 }
             }
         }

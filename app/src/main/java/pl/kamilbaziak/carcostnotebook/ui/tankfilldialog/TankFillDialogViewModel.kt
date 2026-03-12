@@ -75,34 +75,37 @@ class TankFillDialogViewModel(
                 petrolStation,
                 it
             )
-        } ?: tankFillDao.addTankFill(
-            TankFill(
-                0,
-                carId,
-                petrolEnum,
-                quantity,
-                petrolPrice,
-                distanceFromLastFill,
-                odometerDao.addOdometer(
-                    Odometer(
-                        0,
-                        carId,
-                        odometer,
-                        carDao.getCarById(carId).value?.unit ?: UnitEnum.Kilometers,
-                        pickedDate.value ?: Date().time,
-                        canBeDeleted = false,
-                        description = context.getString(R.string.tank_fill, petrolStation)
-                    )
-                ),
-                computerReading,
-                petrolStation,
-                pickedDate.value ?: Date().time
+        } ?: run {
+            val car = carDao.getCarByIdSuspend(carId)
+            tankFillDao.addTankFill(
+                TankFill(
+                    0,
+                    carId,
+                    petrolEnum,
+                    quantity,
+                    petrolPrice,
+                    distanceFromLastFill,
+                    odometerDao.addOdometer(
+                        Odometer(
+                            0,
+                            carId,
+                            odometer,
+                            car?.unit ?: UnitEnum.Kilometers,
+                            pickedDate.value ?: Date().time,
+                            canBeDeleted = false,
+                            description = context.getString(R.string.tank_fill, petrolStation)
+                        )
+                    ),
+                    computerReading,
+                    petrolStation,
+                    pickedDate.value ?: Date().time
+                )
             )
-        )
+        }
         _tankFillEvents.emit(DialogEvents.Dismiss)
     }
 
-    private fun editTankFill(
+    private suspend fun editTankFill(
         petrolEnum: PetrolEnum,
         quantity: Double,
         petrolPrice: Double?,
@@ -111,8 +114,9 @@ class TankFillDialogViewModel(
         computerReading: Double?,
         petrolStation: String,
         tankFill: TankFill
-    ) = viewModelScope.launch {
+    ) {
         odometerDao.deleteOdometerById(tankFill.odometerId)
+        val car = carDao.getCarByIdSuspend(tankFill.carId)
         tankFillDao.updateTankFill(
             tankFill.copy(
                 petrolEnum = petrolEnum,
@@ -124,7 +128,7 @@ class TankFillDialogViewModel(
                         0,
                         tankFill.carId,
                         odometer,
-                        carDao.getCarById(tankFill.carId).value?.unit ?: UnitEnum.Kilometers,
+                        car?.unit ?: UnitEnum.Kilometers,
                         pickedDate.value ?: Date().time,
                         canBeDeleted = false,
                         description = context.getString(R.string.tank_fill, petrolStation)

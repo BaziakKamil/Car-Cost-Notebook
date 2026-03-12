@@ -7,8 +7,11 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import pl.kamilbaziak.carcostnotebook.EnumUtils.getPetrolUnitFromName
@@ -56,47 +59,49 @@ class TankFillFragment : Fragment(), MaterialAlertDialogActions {
             setHasFixedSize(false)
         }
 
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.tankFillEvent.collect { event ->
-                when (event) {
-                    TankFillViewModel.TankFillEvent.ShowTankFillSavedConfirmationMessage ->
-                        TextUtils.showSnackbar(
-                            requireView(),
-                            getString(R.string.tank_fill_added_correctly)
-                        )
-
-                    is TankFillViewModel.TankFillEvent.ShowUndoDeleteTankFillMessage ->
-                        TextUtils.showSnackbarWithAction(
-                            requireView(),
-                            getString(R.string.tank_fill_deleted),
-                            getString(R.string.undo)
-                        ) {
-                            viewModel.onUndoDeleteTankFill(
-                                event.tankFill,
-                                event.pairedOdometer
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.tankFillEvent.collect { event ->
+                    when (event) {
+                        TankFillViewModel.TankFillEvent.ShowTankFillSavedConfirmationMessage ->
+                            TextUtils.showSnackbar(
+                                requireView(),
+                                getString(R.string.tank_fill_added_correctly)
                             )
-                        }
 
-                    TankFillViewModel.TankFillEvent.ShowDeleteErrorSnackbar ->
-                        TextUtils.showSnackbar(
-                            requireView(),
-                            getString(R.string.error_during_delete_process)
-                        )
+                        is TankFillViewModel.TankFillEvent.ShowUndoDeleteTankFillMessage ->
+                            TextUtils.showSnackbarWithAction(
+                                requireView(),
+                                getString(R.string.tank_fill_deleted),
+                                getString(R.string.undo)
+                            ) {
+                                viewModel.onUndoDeleteTankFill(
+                                    event.tankFill,
+                                    event.pairedOdometer
+                                )
+                            }
 
-                    is TankFillViewModel.TankFillEvent.ShowTankFillDeleteDialogMessage ->
-                        MaterialAlertDialog.show(
-                            childFragmentManager,
-                            getString(R.string.delete_dialog_title),
-                            getString(R.string.delete_dialog_message),
-                            getString(R.string.delete)
-                        )
+                        TankFillViewModel.TankFillEvent.ShowDeleteErrorSnackbar ->
+                            TextUtils.showSnackbar(
+                                requireView(),
+                                getString(R.string.error_during_delete_process)
+                            )
 
-                    is TankFillViewModel.TankFillEvent.ShowTankFillEditDialogScreen ->
-                        TankFillDialog.show(
-                            childFragmentManager,
-                            carId,
-                            event.tankFill
-                        )
+                        is TankFillViewModel.TankFillEvent.ShowTankFillDeleteDialogMessage ->
+                            MaterialAlertDialog.show(
+                                childFragmentManager,
+                                getString(R.string.delete_dialog_title),
+                                getString(R.string.delete_dialog_message),
+                                getString(R.string.delete)
+                            )
+
+                        is TankFillViewModel.TankFillEvent.ShowTankFillEditDialogScreen ->
+                            TankFillDialog.show(
+                                childFragmentManager,
+                                carId,
+                                event.tankFill
+                            )
+                    }
                 }
             }
         }
