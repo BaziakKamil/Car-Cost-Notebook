@@ -13,6 +13,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import org.koin.android.ext.android.inject
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.databinding.DialogMaintenanceBinding
+import pl.kamilbaziak.carcostnotebook.getParcelableCompat
 import pl.kamilbaziak.carcostnotebook.model.Maintenance
 import pl.kamilbaziak.carcostnotebook.toDate
 import pl.kamilbaziak.carcostnotebook.toTwoDigits
@@ -26,7 +27,7 @@ class MaintenanceDialog : BottomSheetDialogFragment() {
         arguments?.getLong(EXTRA_CAR_ID)
     }
     private val maintenance by lazy {
-        arguments?.getParcelable(EXTRA_MAINTENANCE, Maintenance::class.java)
+        arguments?.getParcelableCompat(EXTRA_MAINTENANCE, Maintenance::class.java)
     }
     private val viewModel: MaintenanceDialogViewModel by inject()
     private val dateDialog = MaterialDatePicker.Builder.datePicker()

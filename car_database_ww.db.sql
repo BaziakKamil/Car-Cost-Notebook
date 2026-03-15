@@ -42,6 +42,7 @@ INSERT INTO "maintenance_table" VALUES
 (21,3,'Serwis olejowy',600.0,51,1678288710647,1709856000000,0,'Serwis olejów i filtrów, wymienione tylne klocki hamulcowe'),
 (22,5,'Zakup skorzanek kierownicy ',250.0,68,1686873600000,NULL,0,'Zakup kierownicy bo stara byla brzydka i bez skory');
 
+
 INSERT INTO "odometer_table" VALUES 
 (15,3,395704.0,'Kilometers',1668038400000,0,'Pierwszy licznik u mnie'),
 (17,3,396400.0,'Kilometers',1668902400000,0,'Dywaniki'),
@@ -84,6 +85,7 @@ INSERT INTO "odometer_table" VALUES
 (69,5,271589.0,'Kilometers',1686873600000,0,'Tank fill: Orlen Chelmiec'),
 (71,5,271988.0,'Kilometers',1688169600000,0,'Tank fill: Mol Nawojowska'),
 (72,5,271650.0,'Kilometers',1687046400000,0,'Tank fill: Mol Nawojowska');
+
 
 INSERT INTO "tank_fill_table" VALUES 
 (3,3,'Diesel',41.36,7.88,0.0,22,0.0,'Lotos Nawojowska',1668211200000),

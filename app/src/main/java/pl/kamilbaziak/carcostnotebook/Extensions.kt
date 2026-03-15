@@ -2,8 +2,11 @@ package pl.kamilbaziak.carcostnotebook
 
 import android.app.Activity
 import android.content.Context
+import android.os.Bundle
+import android.os.Parcelable
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.core.os.BundleCompat
 import androidx.fragment.app.Fragment
 import pl.kamilbaziak.carcostnotebook.enums.CurrencyEnum
 import pl.kamilbaziak.carcostnotebook.enums.PetrolUnitEnum
@@ -28,6 +31,12 @@ fun String.hasLetters(): Boolean {
 
 @Suppress("UNCHECKED_CAST")
 fun <T> Fragment.extra(key: String) = lazy { arguments?.get(key) as? T }
+
+/**
+ * Bezpieczne pobieranie Parcelable wstecznie kompatybilne z wersjami poniżej API 33
+ */
+fun <T : Parcelable> Bundle.getParcelableCompat(key: String, clazz: Class<T>): T? =
+    BundleCompat.getParcelable(this, key, clazz)
 
 fun UnitEnum.shortcut(): String = when (this) {
     UnitEnum.Kilometers -> "km"

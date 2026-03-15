@@ -33,3 +33,10 @@
 
 # Optional. For using GSON @Expose annotation
 -keepattributes AnnotationDefault,RuntimeVisibleAnnotations
+
+# Fix for java.lang.NoClassDefFoundError: Failed resolution of: Landroid/window/OnBackInvokedCallback;
+# This happens on devices below API 33 when using Predictive Back features
+-dontwarn android.window.OnBackInvokedCallback
+-dontwarn android.window.OnBackInvokedDispatcher
+-keep class android.window.OnBackInvokedCallback { *; }
+-keep class android.window.OnBackInvokedDispatcher { *; }

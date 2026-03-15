@@ -20,6 +20,7 @@ import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.databinding.DialogTankfillBinding
 import pl.kamilbaziak.carcostnotebook.enums.EngineEnum
 import pl.kamilbaziak.carcostnotebook.enums.PetrolEnum
+import pl.kamilbaziak.carcostnotebook.getParcelableCompat
 import pl.kamilbaziak.carcostnotebook.model.TankFill
 import pl.kamilbaziak.carcostnotebook.toDate
 import pl.kamilbaziak.carcostnotebook.toTwoDigits
@@ -31,7 +32,7 @@ class TankFillDialog : BottomSheetDialogFragment() {
         DialogTankfillBinding.inflate(layoutInflater)
     }
     private val carId by lazy { arguments?.getLong(EXTRA_CAR_ID) }
-    private val tankFill by lazy { arguments?.getParcelable(EXTRA_TANK_FILL, TankFill::class.java) }
+    private val tankFill by lazy { arguments?.getParcelableCompat(EXTRA_TANK_FILL, TankFill::class.java) }
     private val viewModel: TankFillDialogViewModel by viewModel {
         parametersOf(carId)
     }

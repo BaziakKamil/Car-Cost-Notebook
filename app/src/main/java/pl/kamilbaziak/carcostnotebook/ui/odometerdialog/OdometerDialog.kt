@@ -14,6 +14,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import pl.kamilbaziak.carcostnotebook.R
 import pl.kamilbaziak.carcostnotebook.databinding.DialogOdometerBinding
+import pl.kamilbaziak.carcostnotebook.getParcelableCompat
 import pl.kamilbaziak.carcostnotebook.model.Odometer
 import pl.kamilbaziak.carcostnotebook.toDate
 import pl.kamilbaziak.carcostnotebook.toTwoDigits
@@ -27,7 +28,7 @@ class OdometerDialog : BottomSheetDialogFragment() {
         arguments?.getLong(EXTRA_CAR_ID)
     }
     private val odometer by lazy {
-        arguments?.getParcelable(EXTRA_ODOMETER, Odometer::class.java)
+        arguments?.getParcelableCompat(EXTRA_ODOMETER, Odometer::class.java)
     }
     private val viewModel: OdometerDialogViewModel by viewModel {
         parametersOf(carId)
