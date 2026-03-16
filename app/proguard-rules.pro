@@ -5,21 +5,6 @@
 # For more details, see
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
-
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
-
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
-
 # Application classes that will be serialized/deserialized over Gson
 -keep class pl.kamilbaziak.carcostnotebook.model.** { *; }
 
@@ -35,8 +20,18 @@
 -keepattributes AnnotationDefault,RuntimeVisibleAnnotations
 
 # Fix for java.lang.NoClassDefFoundError: Failed resolution of: Landroid/window/OnBackInvokedCallback;
-# This happens on devices below API 33 when using Predictive Back features
+# We must be very aggressive here to prevent R8 from breaking the compatibility layer.
 -dontwarn android.window.OnBackInvokedCallback
 -dontwarn android.window.OnBackInvokedDispatcher
+-dontwarn android.window.BackEvent
+-dontwarn android.window.OnBackAnimationCallback
+
 -keep class android.window.OnBackInvokedCallback { *; }
 -keep class android.window.OnBackInvokedDispatcher { *; }
+-keep class android.window.BackEvent { *; }
+-keep class android.window.OnBackAnimationCallback { *; }
+
+# Additionally, keep the activity methods that might trigger this
+-keepclassmembers class androidx.activity.ComponentActivity {
+    *** onBackPressedDispatcher;
+}
