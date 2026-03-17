@@ -4,7 +4,6 @@
 
     <application
         android:name=".MainApplication"
-        android:enableOnBackInvokedCallback="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -13,12 +12,6 @@
         <meta-data
             android:name="firebase_crashlytics_collection_enabled"
             android:value="${crashlyticsCollectionEnabled}" />
-
-        <!-- Fix for Firebase Sessions crash on devices below API 33 -->
-        <service
-            android:name="com.google.firebase.sessions.SessionLifecycleService"
-            android:enabled="false"
-            tools:node="replace" />
 
         <activity
             android:name=".ui.activity.MainActivity"

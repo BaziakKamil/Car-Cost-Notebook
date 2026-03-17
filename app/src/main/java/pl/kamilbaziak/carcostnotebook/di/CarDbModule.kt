@@ -18,7 +18,7 @@ val carDatabase = module {
 //            Migrations.MIGRATION_2_3,
 //            Migrations.MIGRATION_3_4
         )
-        .fallbackToDestructiveMigration()
+        .fallbackToDestructiveMigration(dropAllTables = true)
         .build()
 
     fun provideCarDao(database: CarDatabase) = database.carDao

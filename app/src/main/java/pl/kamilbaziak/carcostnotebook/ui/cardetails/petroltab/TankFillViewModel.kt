@@ -29,11 +29,11 @@ class TankFillViewModel(
 
     private val deleteTankFill = MutableLiveData<TankFill>()
 
-    fun prepareTankFillData(tankFillFata: List<TankFill>) = viewModelScope.launch {
+    fun prepareTankFillData(tankFillData: List<TankFill>) = viewModelScope.launch {
         _dataState.value = DataState.Progress
-        _dataState.value = if (tankFillFata.isNotEmpty()) {
+        _dataState.value = if (tankFillData.isNotEmpty()) {
             DataState.Found(
-                tankFillFata.map { tankFill ->
+                tankFillData.map { tankFill ->
                     Pair(tankFill, odometerDao.getOdometerById(tankFill.odometerId))
                 }
             )

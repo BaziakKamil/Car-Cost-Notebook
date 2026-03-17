@@ -24,6 +24,6 @@ object TextUtils {
             Snackbar.LENGTH_LONG
         )
             .setAction(actionText) {
-                Unit.apply(action)
+                action(Unit)
             }.show()
 }

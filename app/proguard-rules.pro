@@ -18,20 +18,3 @@
 
 # Optional. For using GSON @Expose annotation
 -keepattributes AnnotationDefault,RuntimeVisibleAnnotations
-
-# Fix for java.lang.NoClassDefFoundError: Failed resolution of: Landroid/window/OnBackInvokedCallback;
-# We must be very aggressive here to prevent R8 from breaking the compatibility layer.
--dontwarn android.window.OnBackInvokedCallback
--dontwarn android.window.OnBackInvokedDispatcher
--dontwarn android.window.BackEvent
--dontwarn android.window.OnBackAnimationCallback
-
--keep class android.window.OnBackInvokedCallback { *; }
--keep class android.window.OnBackInvokedDispatcher { *; }
--keep class android.window.BackEvent { *; }
--keep class android.window.OnBackAnimationCallback { *; }
-
-# Additionally, keep the activity methods that might trigger this
--keepclassmembers class androidx.activity.ComponentActivity {
-    *** onBackPressedDispatcher;
-}
