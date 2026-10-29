@@ -1,3 +1,5 @@
+import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -10,7 +12,7 @@ plugins {
 
 val versionMajor = 0
 val versionMinor = 2
-val versionPatch = 4
+val versionPatch = 5
 
 android {
 
@@ -27,7 +29,6 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-        signingConfig = signingConfigs.getByName("debug")
     }
 
     buildTypes {
@@ -97,7 +98,6 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:1.8.8")
 
     // Material
-    implementation("androidx.compose.material3:material3:1.3.2")
     implementation("com.google.android.material:material:1.12.0")
 
     // Architectural Components

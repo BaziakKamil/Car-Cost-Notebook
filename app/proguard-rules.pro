@@ -18,3 +18,11 @@
 
 # Optional. For using GSON @Expose annotation
 -keepattributes AnnotationDefault,RuntimeVisibleAnnotations
+
+-dontwarn android.window.OnBackInvokedCallback
+-dontwarn android.window.OnBackInvokedDispatcher
+-dontwarn android.window.BackEvent
+-dontwarn android.window.OnBackAnimationCallback
+-dontwarn com.google.firebase.sessions.SessionLifecycleService
+-dontwarn android.content.Intent
+-keep class android.window.** { *; }
