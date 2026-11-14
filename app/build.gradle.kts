@@ -41,6 +41,12 @@ android {
                 "proguard-rules.pro"
             )
             isDebuggable = false
+            
+            // Dołączenie symboli debugowania kodu natywnego (np. dla SQLite używanego przez Room) 
+            // by zlikwidować ostrzeżenie w Google Play
+            ndk {
+                debugSymbolLevel = "FULL"
+            }
         }
 
         getByName("debug") {
